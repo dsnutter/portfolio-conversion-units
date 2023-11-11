@@ -1,8 +1,8 @@
 import pytest
 
-from axion_challenge.helpers import Enums
-from axion_challenge.controller.Response_Controller import Response_Controller
-from axion_challenge.model.Response import Response
+from flexion_challenge.helpers import Enums
+from flexion_challenge.controller.Response_Controller import Response_Controller
+from flexion_challenge.model.Response import Response
 
 class Test_Response_Controller:
 

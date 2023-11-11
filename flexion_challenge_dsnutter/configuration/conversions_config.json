@@ -1,0 +1,33 @@
+{
+    "temperature":
+    {
+            "Farenheit":
+            {
+                "Celsius": "(x-32) * (5/9)",
+                "Kelvin": "((x-32) * (5/9)) + 273.15", 
+                "Rankine": "x + 459.67"
+            },
+            "Celsius":
+            {
+                "Farenheit": "(x * (9/5)) + 32",
+                "Kelvin": "x + 273.15",
+                "Rankine": "(x + 273.15) * 9/5"
+            },
+            "Kelvin":
+            {
+                "Farenheit": "((x-273.15) * (9/5)) + 32",
+                "Celsius": "x - 273.15",
+                "Rankine": "x * 9/5"
+            },
+            "Rankine":
+            {
+                "Farenheit": "x - 459.67",
+                "Celsius": "(x * 5/9) - 273.15",
+                "Kelvin": "x * 5/9"
+            },
+            "TestDifferent":
+            {
+                "Kelvin": "x + 1"
+            }
+    }
+}

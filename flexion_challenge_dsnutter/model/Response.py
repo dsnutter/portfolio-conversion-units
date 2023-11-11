@@ -3,7 +3,7 @@ from ..helpers.Enums import GradeTypes
 class Response:   
     _grade = GradeTypes.INCORRECT
     # answer is a string since it could contain invalid responses
-    _answer = ""
+    _answer = ''
 
     def __init__(self, answer):
         self._answer = answer   
