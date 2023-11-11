@@ -16,28 +16,33 @@ class Conversions_Many:
         self._config = config[conversion_type]
         self._conversion_type = conversion_type
 
-        for fromType in self._config:
-            if fromType not in self._storage:
-                self._storage[fromType] = {}
-            for toType in self._config[fromType]:
+        for from_type in self._config:
+            if from_type not in self._storage:
+                self._storage[from_type] = {}
+            for to_type in self._config[from_type]:
                 # DSN Notes: eq will be converted to py meth lambda function
                 # fnEq = lambda x: meth(eq)
                 # will not use eval() here due to security reasons of being able to shell out to host os
                 #   and delete files for instance
-                eq = self._config[fromType][toType]
-                obj = self._conversion_factory(fromType, toType, eq)
-                self._storage[fromType][toType] = obj
+                eq = self._config[from_type][to_type]
+                obj = self._conversion_factory(from_type, to_type, eq)
+                self._storage[from_type][to_type] = obj
 
-    def get_all(self):
+    @property
+    def all(self):
         return self._storage
 
-    def get_all_from_types(self):
+    @property
+    def all_from_types(self):
         return self._storage.keys()
 
-    def get_all_to_types(self, fromType) -> List:
+    def all_to_types(self, from_type) -> List:
         list = []
         # print(self._storage)
-        for item in self._storage[fromType]:
+        for item in self._storage[from_type]:
             list.append(item)
             # print(item)
         return list
+
+    def conversion(self, from_type, to_type):
+        return self._storage[from_type][to_type]

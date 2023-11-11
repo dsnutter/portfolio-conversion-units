@@ -1,6 +1,7 @@
 from ..helpers.Enums import GradeTypes
 from ..model import Response
 
+# controls operations on the reponse models, and persistance
 class Response_Controller:
 
     def __init__(self, response):
