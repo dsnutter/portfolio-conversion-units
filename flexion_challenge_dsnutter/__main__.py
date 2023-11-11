@@ -1,22 +1,15 @@
 from dsnutter_conversion_units.di.Conversion_Container import Conversion_Container
-from dsnutter_conversion_units.helpers.helpers import to_json
 from dsnutter_conversion_units.view import Conversion_View
+from dsnutter_conversion_units.controller import Conversion_Controller, Import_Controller
 
+import_con = Import_Controller.Import_Controller('dsnutter_conversion_units/configuration/conversions_config.json')
 
-config_file = 'dsnutter_conversion_units/configuration/conversions_config.json'
+config = import_con.get_conversions_config
+# setups up injection of temperature conversion models derived from JSON files
+temperature = Conversion_Container(config={'item': 'temperature', 'definitions': config})
 
-conversions_config = to_json(config_file)
-
-# conversions_con = Conversion_Container(config={'definitions': temperature_config})
-
-temperature = Conversion_Container(config={'item': 'temperature', 'definitions': conversions_config})
-
-# print(temperature)
-
-# conversion = temperature.conversions_many
-
-# print(str(conversion))
-
+# wires the views to the models, and depenency injection auto-creates the models when they are neededd
 temperature.wire(modules=[Conversion_View.All_Possible_Types])
 
+# execute the view
 Conversion_View.All_Possible_Types()
