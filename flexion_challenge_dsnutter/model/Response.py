@@ -1,19 +1,32 @@
 from ..helpers.Enums import GradeTypes
+from .Base_Model import Base_Model
 
-class Response:   
-    _grade = GradeTypes.INCORRECT
-    # answer is a string since it could contain invalid responses
-    _answer = ''
+class Response(Base_Model):
 
-    def __init__(self, answer):
+    def __init__(self, answer: str, student_id: str) -> None:
         self._answer = answer   
+        self._grade = GradeTypes.INCORRECT
+        self._student_id = student_id
 
-    def set_grade(self, grade):
-        self._grade = grade
-
-    def get_grade(self):
+    @property
+    def grade(self) -> GradeTypes:
         return self._grade
 
-    def get_answer(self):
+    @grade.setter
+    def grade(self, value: str) -> None:
+        self._grade = value
+
+    @property
+    def answer(self) -> str:
         return self._answer
+
+    @answer.setter
+    def answer(self, value: str) -> None:
+        self._answer = value
+
+    def __str__(self) -> str:
+        result = 'Answer: {}\n'.format(self._answer)
+        result += 'Grade: {}\n'.format(self._grade)
+        return result
+
 

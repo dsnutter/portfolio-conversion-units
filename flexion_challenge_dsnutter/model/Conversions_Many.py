@@ -1,48 +1,32 @@
 from typing import Callable
 from .Conversion import Conversion
-import json
-from enum import Enum
-from typing import List
+from .Base_Model import Base_Model
 
 # is DI singleton
-class Conversions_Many:
+class Conversions_Many(Base_Model):
 
-    def __init__(self, conversion_type: str, config: json, conversion_factory: Callable[..., Conversion]) -> None:
-        # print('type of many conversion: {}\n'.format(conversion_type))
-        # print('configuration JSON: {}\n'.format(config))
-
-        self._storage = {}
+    def __init__(self, conversion_type: str, config: dict, conversion_factory: Callable[..., Conversion]) -> None:
         self._conversion_factory = conversion_factory
-        self._config = config[conversion_type]
+        self._storage = config[conversion_type]
         self._conversion_type = conversion_type
-
-        for from_type in self._config:
-            if from_type not in self._storage:
-                self._storage[from_type] = {}
-            for to_type in self._config[from_type]:
-                # DSN Notes: eq will be converted to py meth lambda function
-                # fnEq = lambda x: meth(eq)
-                # will not use eval() here due to security reasons of being able to shell out to host os
-                #   and delete files for instance
-                eq = self._config[from_type][to_type]
-                obj = self._conversion_factory(from_type, to_type, eq)
-                self._storage[from_type][to_type] = obj
-
+        
     @property
-    def all(self):
-        return self._storage
-
-    @property
-    def all_from_types(self):
+    def all_from_types(self) -> list:
         return self._storage.keys()
 
-    def all_to_types(self, from_type) -> List:
-        list = []
-        # print(self._storage)
-        for item in self._storage[from_type]:
-            list.append(item)
-            # print(item)
-        return list
+    def all_to_types(self, from_type: str) -> list:
+        return self._storage[from_type].keys()
 
-    def conversion(self, from_type, to_type):
-        return self._storage[from_type][to_type]
+    # we are only creating the conversions with the factory when needed and not all of them initially
+    #  allows for less boilerplate code anad decoupling
+    def conversion(self, from_type: str, to_type: str) -> Conversion:
+        eq = self._storage[from_type][to_type]["eq"]
+
+        self._storage[from_type][to_type]["obj"] = self._conversion_factory(from_type, to_type, eq)
+
+        return self._storage[from_type][to_type]["obj"]
+
+    def __str__(self) -> str:
+        result = 'Conversion Type: {}\n'.format(self._conversion_type)
+        result += '\tInternal Storage: {}\n'.format(self._storage)
+        return result

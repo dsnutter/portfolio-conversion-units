@@ -1,92 +1,92 @@
 import pytest
 
-from dsnutter_challenge.helpers import Enums
-from dsnutter_challenge.controller.Response_Controller import Response_Controller
-from dsnutter_challenge.model.Response import Response
+from dsnutter_conversion_units.helpers import Enums
+from dsnutter_conversion_units.controller.Response_Controller import Response_Controller
+from dsnutter_conversion_units.model.Response import Response
 
 class Test_Response_Controller:
 
     def test_invalid(self):
 
-        resp = Response('a')
+        resp = Response('a', '1234')
         c = Response_Controller(resp)
 
-        c.grade(0)
-        result = resp.get_grade()
+        c.grade_answer(0)
+        result = resp.grade
         assert result == Enums.GradeTypes.INVALID
 
     def test_correct(self):
 
-        resp = Response('1.2')
+        resp = Response('1.2', '1234')
         c = Response_Controller(resp)
 
-        c.grade(1.2)
-        result = resp.get_grade()
+        c.grade_answer(1.2)
+        result = resp.grade
         assert result == Enums.GradeTypes.CORRECT
 
     def test_incorrect(self):
 
-        resp = Response('1.2')
+        resp = Response('1.2', '1234')
         c = Response_Controller(resp)
 
-        c.grade(1.1)
+        c.grade_answer(1.1)
 
-        result = resp.get_grade()
+        result = resp.grade
         assert result == Enums.GradeTypes.INCORRECT
 
     def test_correct_rounded(self):
 
-        resp = Response('1.256')
+        resp = Response('1.256', '1234')
         c = Response_Controller(resp)
 
-        c.grade(1.278)
-        result = resp.get_grade()
+        c.grade_answer(1.278)
+        result = resp.grade
         assert result == Enums.GradeTypes.CORRECT
 
     def test_incorrect_rounded(self):
 
-        resp = Response('1.256')
+        resp = Response('1.256', '1234')
         c = Response_Controller(resp)
 
-        c.grade(1.1222)
+        c.grade_answer(1.1222)
 
-        result = resp.get_grade()
+        result = resp.grade
         assert result == Enums.GradeTypes.INCORRECT
 
     def test_correct_negative(self):
 
-        resp = Response('-1.2')
+        resp = Response('-1.2', '1234')
         c = Response_Controller(resp)
 
-        c.grade(-1.2)
-        result = resp.get_grade()
+        c.grade_answer(-1.2)
+        result = resp.grade
         assert result == Enums.GradeTypes.CORRECT
 
     def test_incorrect_negative(self):
 
-        resp = Response('-1.2')
+        resp = Response('-1.2', '1234')
         c = Response_Controller(resp)
 
-        c.grade(-1.1)
+        c.grade_answer(-1.1)
 
-        result = resp.get_grade()
+        result = resp.grade
         assert result == Enums.GradeTypes.INCORRECT
 
     def test_correct_rounded_negative(self):
 
-        resp = Response('-1.256')
+        resp = Response('-1.256', '1234')
         c = Response_Controller(resp)
 
-        c.grade(-1.278)
-        result = resp.get_grade()
+        c.grade_answer(-1.278)
+        result = resp.grade
         assert result == Enums.GradeTypes.CORRECT
 
     def test_incorrect_rounded_negative(self):
 
-        resp = Response('-1.256')
+        resp = Response('-1.256', '1234')
         c = Response_Controller(resp)
 
-        c.grade(-1.1222)
+        c.grade_answer(-1.1222)
 
-        result = resp.get_grade()
+        result = resp.grade
         assert result == Enums.GradeTypes.INCORRECT
