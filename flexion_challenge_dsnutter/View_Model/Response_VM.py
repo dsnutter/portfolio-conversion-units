@@ -1,9 +1,9 @@
 from ..helpers.Enums import GradeTypes
-from ..model import Response
-from .Base_Controller import Base_Controller
+from ..Model import Response
+from .Base_VM import Base_VM
 
-# controls operations on the reponse models, and persistance
-class Response_Controller(Base_Controller):
+# controls operations on the reponse Models, and persistance
+class Response_VM(Base_VM):
 
     def __init__(self, response: Response.Response) -> None:
         self._response = response

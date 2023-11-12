@@ -1,18 +1,24 @@
 import pytest
-from dsnutter_conversion_units.controller.Conversion_Controller import Conversion_Controller
-from dsnutter_conversion_units.model.Conversion import Conversion
+from dsnutter_conversion_units.View_Model.Conversion_VM import Conversion_VM
+from dsnutter_conversion_units.Model.Conversion import Conversion
 
-class Test_Conversion_Controller:
+class Test_Conversion_VM:
 
-    def test_convert(self):
-        fn = "x + 1"
 
+    @pytest.mark.parametrize('fn, value, converted', 
+            [
+                ("x + 1", 33, 34),
+                ("x * 2", 33, 66),
+                ("x / 2", 8, 4),
+                ("x - 2", 4, 2)
+            ])
+    def test_convert(self, fn, value, converted):
         conv = Conversion('Fahrenheit', 'Celsius', fn )
 
-        controller = Conversion_Controller(conv)
-        result = controller.convert(32)
+        controller = Conversion_VM(conv)
+        result = controller.convert(value)
 
-        assert result == 33
+        assert result == converted
 
     def test_convert_invalid_equation(self):
         with pytest.raises(ValueError) as resultError:
@@ -21,7 +27,7 @@ class Test_Conversion_Controller:
 
             conv = Conversion('Fahrenheit', 'Celsius', fn )
 
-            controller = Conversion_Controller(conv)
+            controller = Conversion_VM(conv)
             result = controller.convert(32)
 
         assert resultError.match("Conversion function is not valid")
@@ -34,7 +40,7 @@ class Test_Conversion_Controller:
 
             conv = Conversion('Fahrenheit', 'Celsius', fn )
 
-            controller = Conversion_Controller(conv)
+            controller = Conversion_VM(conv)
             result = controller.convert(32)
 
         assert resultError.match("Conversion function is not valid")
@@ -46,7 +52,7 @@ class Test_Conversion_Controller:
 
             conv = Conversion('Fahrenheit', 'Celsius', fn )
 
-            controller = Conversion_Controller(conv)
+            controller = Conversion_VM(conv)
             result = controller.convert(32)
 
         assert resultError.match("unmatched '\)'")

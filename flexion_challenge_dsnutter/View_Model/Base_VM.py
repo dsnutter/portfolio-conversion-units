@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Base_Controller(ABC):
+class Base_VM(ABC):
 
     def __init__(self) -> None:
         pass
