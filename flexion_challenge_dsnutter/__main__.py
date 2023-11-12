@@ -1,15 +1,17 @@
 from flexion_challenge_dsnutter.di.Conversion_Container import Conversion_Container
 from flexion_challenge_dsnutter.view import Conversion_View
-from flexion_challenge_dsnutter.controller import Conversion_Controller, Import_Controller
+from flexion_challenge_dsnutter.controller import Conversion_Controller, ImportExport_Controller
+from flexion_challenge_dsnutter.helpers.Enums import FileTypes
 
-import_con = Import_Controller.Import_Controller('flexion_challenge_dsnutter/configuration/conversions_config.json')
+import_con = ImportExport_Controller.Import_Export_Config_Controller(FileTypes.JSON, 'flexion_challenge_dsnutter/configuration/conversions_config.json', None)
 
-config = import_con.get_conversions_config
+config = import_con.conversions
+
 # setups up injection of temperature conversion models derived from JSON files
 temperature = Conversion_Container(config={'item': 'temperature', 'definitions': config})
 
 # wires the views to the models, and depenency injection auto-creates the models when they are neededd
-temperature.wire(modules=[Conversion_View.All_Possible_Types])
+temperature.wire(modules=[Conversion_View.Conversion_View.All_Possible_Types])
 
 # execute the view
-Conversion_View.All_Possible_Types()
+Conversion_View.Conversion_View.All_Possible_Types()

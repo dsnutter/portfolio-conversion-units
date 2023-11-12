@@ -1,6 +1,4 @@
-from typing import Any, Union
 from dependency_injector import containers, providers
-from dependency_injector.providers import Provider
 from ..model import Conversion, Conversions_Many
 
 #
