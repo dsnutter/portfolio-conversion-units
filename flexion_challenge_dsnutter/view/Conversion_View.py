@@ -1,20 +1,20 @@
 from dependency_injector.wiring import Provide, inject
-from ..di import Conversions_Management
-from ..di import Conversion_Container
+from ..di import Container
+from ..View_Model import Conversion_VM
 
 # DSN Notes, switch this to be class instead of separate methods?
 
 class Conversion_View:
     @inject
-    def All_Possible_Types(many: Conversions_Management.Conversions_Management = Provide(Conversion_Container.Conversion_Container.conversions_management)) -> None:
-        items = many.all_from_types
+    def All_Possible_Types(vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)) -> None:
+        items = vm.all_from_types
         print('All the possible conversion types:')
         for c in items:
             print('From Type: {}'.format(c))
-            convertTypes = many.all_to_types(c)
+            convertTypes = vm.all_to_types(c)
             for c2 in convertTypes:
-                obj = many.conversion(c, c2)
+                obj = vm.conversion(c, c2)
                 print('\tCan be converted to Type: {}'.format(c2))
-                print('\tEquation: {}'.format(obj.fn))
+                print('\tEquation: {}'.format(obj.equation))
                 
 

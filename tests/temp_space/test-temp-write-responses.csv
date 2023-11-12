@@ -1,0 +1,6 @@
+TypeResponses,student_id,response,answer,from_type,to_type,grade,timestamp
+students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM
+students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM
+students,ABC123,111.554,317.33,Kelvin,Farenheit,incorrect,2023-10-01 09:01 AM
+students,ABC1233,0,32,Farenheit,Celsius,correct,2023-10-02 10:00 AM
+students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM

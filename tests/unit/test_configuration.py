@@ -8,8 +8,8 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename, file_type, header, content', 
             [
-                ('tests/temp_space/test-read.json', FileTypes.JSON,'',"{ \n\"temperature\":\n { \"Farenheit\": { \"Celsius\": \"x + 1\", \n\"Kelvin\": \"x + 2\" \n} \n} \n}"),
-                ('tests/temp_space/test-read.csv', FileTypes.CSV,"TypeConversion,From,To,equation","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2")
+                ('tests/temp_space/test-read-conversions.json', FileTypes.JSON,'',"{ \n\"temperature\":\n { \"Farenheit\": { \"Celsius\": \"x + 1\", \n\"Kelvin\": \"x + 2\" \n} \n} \n}"),
+                ('tests/temp_space/test-read-conversions.csv', FileTypes.CSV,"TypeConversion,From,To,equation","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2")
             ])
     def test_conversions_file_to_dict(self, filename: str, file_type: FileTypes, header: str, content: str):
 
@@ -31,8 +31,8 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type', 
             [
-                ('tests/temp_space/test-write.json', 'tests/temp_space/test-temp-write.json', FileTypes.JSON),
-                ('tests/temp_space/test-write.csv', 'tests/temp_space/test-temp-write.csv', FileTypes.CSV)
+                ('tests/temp_space/test-write-conversions.json', 'tests/temp_space/test-temp-write-conversions.json', FileTypes.JSON),
+                ('tests/temp_space/test-write-conversions.csv', 'tests/temp_space/test-temp-write-conversions.csv', FileTypes.CSV)
             ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: FileTypes):
 
@@ -45,13 +45,95 @@ class Test_Configuration:
 
         assert same_after_saving == original
 
-    # DSN Notes: needs implements when reponses is implemnted
-    # def test_responses_file_to_dict(sfilename: str, file_type: FileTypes) -> dict:
-    def test_responses_file_to_dict(self):
+    @pytest.mark.parametrize('filename, file_type, header, content', 
+            [
+                ('tests/temp_space/test-read-responses.json', FileTypes.JSON,'',"""{
+    "students": {
+        "ABC123": [
+            {
+                "response": "32.0",
+                "answer": "0",
+                "from_type": "Celsius",
+                "to_type": "Farenheit",
+                "grade": "correct",
+                "timestamp": "2023-10-01 04:00 PM"
+            },
+            {
+                "response": "84.2",
+                "answer": "543.94",
+                "from_type": "Farenheit",
+                "to_type": "Rankine",
+                "grade": "correct",
+                "timestamp": "2023-10-02 01:00 PM"
+            },
+            {
+                "response": "111.554",
+                "answer": "317.33",
+                "from_type": "Kelvin",
+                "to_type": "Farenheit",
+                "grade": "incorrect",
+                "timestamp": "2023-10-01 09:01 AM"
+            }
+        ],
+        "ABC1233": [
+            {
+                "response": "0",
+                "answer": "32",
+                "from_type": "Farenheit",
+                "to_type": "Celsius",
+                "grade": "correct",
+                "timestamp": "2023-10-02 10:00 AM"
+            },
+            {
+                "response": "dog",
+                "answer": "6.5",
+                "from_type": "Farenheit",
+                "to_type": "Rankine",
+                "grade": "incorrect",
+                "timestamp": "2023-10-03 03:00 PM"
+            }
+        ]
+    }
+}"""),
+                ('tests/temp_space/test-read-responses.csv', FileTypes.CSV,"TypeResponses,student_id,response,answer,from_type,to_type,grade,timestamp","""
+students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM
+students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM
+students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM
+students,ABC123,111.554,317.33,Kelvin,Farenheit,incorrect,2023-10-01 09:01 AM
+students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM
+""")
+            ])
+    def test_responses_file_to_dict(self, filename: str, file_type: FileTypes, header: str, content: str):
+#"Students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM"
+        # recreate a sample file
+        with open(file=filename, mode='w+') as file:
+            file.writelines(header + "\n")
+            file.writelines(content + "\n")
 
-        assert 1 == 1
+        result = Configurations.Configurations.responses_file_to_dict(filename, file_type)
 
-    # DSN Notes: needs implements when reponses is implemnted
-    # def test_save_responses_config(self, filename: str, file_type: FileTypes):
-    def test_save_responses_config(self):
-        assert 1 == 1
+        assert 'students' in result
+        assert len(result['students'].keys()) == 2
+        assert 'ABC123' in result['students'].keys()
+        assert len(result['students']['ABC123']) == 3
+        assert 'response' in result['students']['ABC123'][0].keys()
+        assert 'timestamp' in result['students']['ABC123'][0].keys()
+        assert float(result['students']['ABC123'][0]['response']) == float('32')
+        assert float(result['students']['ABC123'][0]['answer']) == float('0')
+        assert result['students']['ABC123'][0]['grade'] == 'correct'
+
+    @pytest.mark.parametrize('filename_read, filename_save, file_type', 
+            [
+                ('tests/temp_space/test-write-responses.json', 'tests/temp_space/test-temp-write-responses.json', FileTypes.JSON),
+                ('tests/temp_space/test-write-responses.csv', 'tests/temp_space/test-temp-write-responses.csv', FileTypes.CSV)
+            ])
+    def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: FileTypes):
+
+        obj = Configurations.Configurations(file_type, None, filename_read)
+        original = obj.responses_config
+
+        obj.save_responses_dict_to_file(filename_save, file_type)
+
+        same_after_saving = Configurations.Configurations.responses_file_to_dict(filename_save, file_type)
+
+        assert same_after_saving == original

@@ -1,92 +1,43 @@
 import pytest
 
-from dsnutter_conversion_units.helpers import Enums
+from dsnutter_conversion_units.helpers.Enums import GradeTypes
 from dsnutter_conversion_units.View_Model.Response_VM import Response_VM
 from dsnutter_conversion_units.Model.Response import Response
+from datetime import datetime
 
 class Test_Response_VM:
 
-    def test_invalid(self):
+    @pytest.mark.parametrize('response, answer, grade', 
+        [
+            ("1", 0, GradeTypes.INCORRECT),
+            ("1.2", 1.2, GradeTypes.CORRECT),
+            ("1.2", 1.1, GradeTypes.INCORRECT),
+            # rounded
+            ("1.256", 1.278, GradeTypes.CORRECT),
+            ("1.256", 1.1222, GradeTypes.INCORRECT),
+            # negative
+            ("-1.2", -1.2, GradeTypes.CORRECT),
+            ("-1.2", -1.1, GradeTypes.INCORRECT),
+            # rounded negative
+            ("-1.256", -1.278, GradeTypes.CORRECT),
+            ("-1.256", -1.1222, GradeTypes.INCORRECT),
+        ])
+    def test_grade(self, response, answer, grade):
 
-        resp = Response('a', '1234')
-        c = Response_VM(resp)
+        c = Response_VM('students', {
+    "students": {
+        "ABC123": [
+            {
+                "response": response,
+                "answer": answer,
+                "from_type": "Celsius",
+                "to_type": "Farenheit",
+                "grade": grade,
+                "timestamp": "2023-10-01 04:00 PM"
+            }
+        ]}}, Response, True)
 
-        c.grade_answer(0)
-        result = resp.grade
-        assert result == Enums.GradeTypes.INVALID
+        c.grade_answer(response, answer)
+        result = c.get_response('Celsius', 'Farenheit', 'ABC123', '2023-10-01 04:00 PM')
+        assert result.grade == grade
 
-    def test_correct(self):
-
-        resp = Response('1.2', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(1.2)
-        result = resp.grade
-        assert result == Enums.GradeTypes.CORRECT
-
-    def test_incorrect(self):
-
-        resp = Response('1.2', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(1.1)
-
-        result = resp.grade
-        assert result == Enums.GradeTypes.INCORRECT
-
-    def test_correct_rounded(self):
-
-        resp = Response('1.256', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(1.278)
-        result = resp.grade
-        assert result == Enums.GradeTypes.CORRECT
-
-    def test_incorrect_rounded(self):
-
-        resp = Response('1.256', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(1.1222)
-
-        result = resp.grade
-        assert result == Enums.GradeTypes.INCORRECT
-
-    def test_correct_negative(self):
-
-        resp = Response('-1.2', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(-1.2)
-        result = resp.grade
-        assert result == Enums.GradeTypes.CORRECT
-
-    def test_incorrect_negative(self):
-
-        resp = Response('-1.2', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(-1.1)
-
-        result = resp.grade
-        assert result == Enums.GradeTypes.INCORRECT
-
-    def test_correct_rounded_negative(self):
-
-        resp = Response('-1.256', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(-1.278)
-        result = resp.grade
-        assert result == Enums.GradeTypes.CORRECT
-
-    def test_incorrect_rounded_negative(self):
-
-        resp = Response('-1.256', '1234')
-        c = Response_VM(resp)
-
-        c.grade_answer(-1.1222)
-
-        result = resp.grade
-        assert result == Enums.GradeTypes.INCORRECT

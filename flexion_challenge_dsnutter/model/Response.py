@@ -1,20 +1,33 @@
 from ..helpers.Enums import GradeTypes
 from .Base_Model import Base_Model
+from .Conversion import Conversion
 
 class Response(Base_Model):
 
-    def __init__(self, answer: str, student_id: str) -> None:
-        self._answer = answer   
-        self._grade = GradeTypes.INCORRECT
+    def __init__(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, grade: GradeTypes) -> None:
+        self._response = response   
         self._student_id = student_id
+        self._answer = answer
+        self._from_type = from_type
+        self._to_type = to_type
+        self._grade = grade
+        self._timestamp = timestamp
 
     @property
     def grade(self) -> GradeTypes:
         return self._grade
 
     @grade.setter
-    def grade(self, value: str) -> None:
+    def grade(self, value: GradeTypes) -> None:
         self._grade = value
+
+    @property
+    def response(self) -> str:
+        return self._response
+
+    @response.setter
+    def response(self, value: str) -> None:
+        self._response = value
 
     @property
     def answer(self) -> str:
@@ -24,9 +37,45 @@ class Response(Base_Model):
     def answer(self, value: str) -> None:
         self._answer = value
 
+    @property
+    def from_type(self) -> str:
+        return self._from_type
+
+    @from_type.setter
+    def from_type(self, value: str) -> None:
+        self._from_type = value
+
+    @property
+    def to_type(self) -> str:
+        return self._to_type
+
+    @to_type.setter
+    def to_type(self, value: str) -> None:
+        self._to_type = value
+
+    @property
+    def timestamp(self) -> str:
+        return self._timestamp
+
+    @timestamp.setter
+    def timestamp(self, value: str) -> None:
+        self._timestamp = value
+
+    @property
+    def student_id(self) -> str:
+        return self._student_id
+
+    @timestamp.setter
+    def student_id(self, value: str) -> None:
+        self._student_id = value
+
+    # if needed later
+    # @property
+    # def timestamp_as_ticks(self) ->:
+    #     return self._timestamp
+
     def __str__(self) -> str:
-        result = 'Answer: {}\n'.format(self._answer)
+        result = 'Response: {}\n'.format(self._response)
         result += 'Grade: {}\n'.format(self._grade)
         return result
-
 

@@ -6,12 +6,17 @@ class Conversion(Base_Model):
     def __init__(self, from_type: str, to_type: str, equation: str) -> None:
         self._from_type = from_type
         self._to_type = to_type
-        if Functions.is_equation_valid(equation):
-            self._equation = equation
-            temp = "lambda x: {}".format(self._equation)
-            self._equation_lambda = eval(temp)
+        self._equation = equation
+        self._equation_lambda = Conversion.get_lambda(equation)
+
+    @staticmethod
+    def get_lambda(equation):
+        if Functions.does_equation_pass_whitelist(equation):
+            temp = "lambda x: {}".format(equation)
+            equation_lambda = eval(temp)
         else:
             raise ValueError("Conversion function is not valid")
+        return equation_lambda
 
     @property
     def from_type(self) -> str:
@@ -20,6 +25,15 @@ class Conversion(Base_Model):
     @property
     def to_type(self) -> str:
         return self._to_type
+
+    @property
+    def equation(self):
+         return self._equation
+
+    # @equation.setter
+    # def equation(self, value):
+    #      self._equation = value
+    #      self._equation_lambda = Conversion.get_lambda(value)
 
     @property
     def equation_lambda(self):
