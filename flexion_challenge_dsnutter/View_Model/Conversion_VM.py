@@ -1,8 +1,8 @@
-from ..model import Conversion
-from .Base_Controller import Base_Controller
+from ..Model import Conversion
+from .Base_VM import Base_VM
 
-# controls operationss on the conversion models, and persistance
-class Conversion_Controller(Base_Controller):
+# controls operationss on the conversion Models, and persistance
+class Conversion_VM(Base_VM):
 
     def __init__(self, conversion: Conversion.Conversion) -> None:
         self._conversion = conversion

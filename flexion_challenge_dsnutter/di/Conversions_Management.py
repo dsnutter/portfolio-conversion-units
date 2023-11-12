@@ -1,9 +1,8 @@
 from typing import Callable
-from .Conversion import Conversion
-from .Base_Model import Base_Model
+from ..Model.Conversion import Conversion
 
 # is DI singleton
-class Conversions_Many(Base_Model):
+class Conversions_Management():
 
     def __init__(self, conversion_type: str, config: dict, conversion_factory: Callable[..., Conversion]) -> None:
         self._conversion_factory = conversion_factory

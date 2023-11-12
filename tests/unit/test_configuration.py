@@ -1,10 +1,9 @@
 import pytest
-from flexion_challenge_dsnutter.controller.Import_Export_Config_Controller import Import_Export_Config_Controller
-from flexion_challenge_dsnutter.model.Conversion import Conversion
+from flexion_challenge_dsnutter.di import Configurations
+from flexion_challenge_dsnutter.Model.Conversion import Conversion
 from flexion_challenge_dsnutter.helpers.Enums import FileTypes
 
-class Test_Import_Export_Config_Controller:
-
+class Test_Configuration:
 
 
     @pytest.mark.parametrize('filename, file_type, header, content', 
@@ -19,7 +18,7 @@ class Test_Import_Export_Config_Controller:
             file.writelines(header + "\n")
             file.writelines(content + "\n")
 
-        result = Import_Export_Config_Controller.conversions_file_to_dict(filename, file_type)
+        result = Configurations.Configurations.conversions_file_to_dict(filename, file_type)
 
         assert 'temperature' in result
         assert len(result['temperature'].keys()) == 1
@@ -37,12 +36,12 @@ class Test_Import_Export_Config_Controller:
             ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: FileTypes):
 
-        obj = Import_Export_Config_Controller(file_type, filename_read, None)
+        obj = Configurations.Configurations(file_type, filename_read, None)
         original = obj.conversions_config
 
         obj.save_conversion_dict_to_file(filename_save, file_type)
 
-        same_after_saving = Import_Export_Config_Controller.conversions_file_to_dict(filename_save, file_type)
+        same_after_saving = Configurations.Configurations.conversions_file_to_dict(filename_save, file_type)
 
         assert same_after_saving == original
 

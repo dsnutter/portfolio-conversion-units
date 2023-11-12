@@ -1,20 +1,17 @@
 import json, csv
-from .Base_Controller import Base_Controller
 from ..helpers.Enums import FileTypes
 
 #
-# for importing configurations for conversions and old responses
-#  that have been saved as JSON. This layer will allow replacement with
-#  some type of data store/db in the future if we want it
+# for importing configurations from datastores for di
 #
-class Import_Export_Config_Controller(Base_Controller):
+class Configurations():
     def __init__(self, file_type: FileTypes, filename_conversions: str, filename_responses: str) -> None:
         self._conversions_config_file = filename_conversions
         self._responses_config_file = filename_responses
         self._file_type = file_type
 
-        self._conversions_config = Import_Export_Config_Controller.conversions_file_to_dict(filename_conversions, file_type)
-        self._responses_config = Import_Export_Config_Controller.responses_file_to_dict(filename_responses, file_type)
+        self._conversions_config = Configurations.conversions_file_to_dict(filename_conversions, file_type)
+        self._responses_config = Configurations.responses_file_to_dict(filename_responses, file_type)
 
     @property
     def file_type(self):
