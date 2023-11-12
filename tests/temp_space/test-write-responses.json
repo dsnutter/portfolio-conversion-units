@@ -1,0 +1,8 @@
+
+{ 
+"temperature":
+ { "Farenheit": { "Celsius": "x + 1", 
+"Kelvin": "x + 2" 
+} 
+} 
+}

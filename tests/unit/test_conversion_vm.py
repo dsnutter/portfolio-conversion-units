@@ -1,6 +1,8 @@
 import pytest
 from flexion_challenge_dsnutter.View_Model.Conversion_VM import Conversion_VM
 from flexion_challenge_dsnutter.Model.Conversion import Conversion
+from dependency_injector import containers, providers
+from typing import Callable
 
 class Test_Conversion_VM:
 
@@ -12,11 +14,21 @@ class Test_Conversion_VM:
                 ("x / 2", 8, 4),
                 ("x - 2", 4, 2)
             ])
-    def test_convert(self, fn, value, converted):
-        conv = Conversion('Fahrenheit', 'Celsius', fn )
+    def test_convert(self, fn: str, value: float, converted: float):
 
-        controller = Conversion_VM(conv)
-        result = controller.convert(value)
+        vm = Conversion_VM("temperature", {
+    "temperature":
+    {
+            "ThinkDifferent":
+            {
+                "Kelvin": { "eq": fn }
+            }
+    }
+}, Conversion)
+
+
+        conversion = vm.conversion('ThinkDifferent', 'Kelvin')
+        result = vm.convert(value, 'ThinkDifferent', 'Kelvin')
 
         assert result == converted
 
@@ -25,10 +37,18 @@ class Test_Conversion_VM:
         
             fn = "x * y + 1"
 
-            conv = Conversion('Fahrenheit', 'Celsius', fn )
+            vm = Conversion_VM("temperature", {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn }
+                }
+        }
+    }, Conversion)
 
-            controller = Conversion_VM(conv)
-            result = controller.convert(32)
+            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
+            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
 
         assert resultError.match("Conversion function is not valid")
 
@@ -38,10 +58,18 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            conv = Conversion('Fahrenheit', 'Celsius', fn )
+            vm = Conversion_VM("temperature", {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn }
+                }
+        }
+    }, Conversion)
 
-            controller = Conversion_VM(conv)
-            result = controller.convert(32)
+            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
+            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
 
         assert resultError.match("Conversion function is not valid")
 
@@ -50,9 +78,18 @@ class Test_Conversion_VM:
         
             fn = "x )( 1"
 
-            conv = Conversion('Fahrenheit', 'Celsius', fn )
+            vm = Conversion_VM("temperature", {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn }
+                }
+        }
+    }, Conversion)
 
-            controller = Conversion_VM(conv)
-            result = controller.convert(32)
+            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
+            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
 
+        # DSN Notes: does this work?
         assert resultError.match("unmatched '\)'")

@@ -9,6 +9,7 @@ class Test_Helper_Functions:
                 ("x / 2", True),
                 ("x - 2", True),
                 ("(x - 2) * 2", True),
+                ("x + 2.1", True),
                 ("x", True),
                 ("(x + 1)", True),
                 ("(x + 1))", False),
@@ -16,6 +17,6 @@ class Test_Helper_Functions:
                 ("+a+", False)
             ])
     def test_convert(self, eq, result):
-        temp = Functions.is_equation_valid(eq)
+        temp = Functions.does_equation_pass_whitelist(eq)
 
         assert temp == result
