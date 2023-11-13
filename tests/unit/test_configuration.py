@@ -8,8 +8,21 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename, file_type, header, content', 
             [
-                ('tests/temp_space/test-read-conversions.json', FileTypes.JSON,'',"{ \n\"temperature\":\n { \"Farenheit\": { \"Celsius\": \"x + 1\", \n\"Kelvin\": \"x + 2\" \n} \n} \n}"),
-                ('tests/temp_space/test-read-conversions.csv', FileTypes.CSV,"TypeConversion,From,To,equation","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2")
+                ('tests/temp_space/test-read-conversions.json', FileTypes.JSON,'', """
+
+{
+    "temperature":
+    {
+            "Farenheit":
+            {
+                "Celsius": { "eq": "x + 1", "ID": null },
+                "Kelvin": { "eq": "x + 2", "ID": null }
+            }
+    }
+}
+
+"""),
+                ('tests/temp_space/test-read-conversions.csv', FileTypes.CSV,"TypeConversion,From,To,equation,ID","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2,")
             ])
     def test_conversions_file_to_dict(self, filename: str, file_type: FileTypes, header: str, content: str):
 
@@ -26,8 +39,10 @@ class Test_Configuration:
         assert len(result['temperature']['Farenheit'].keys()) == 2
         assert 'Kelvin' in result['temperature']['Farenheit'].keys()
         assert 'Celsius' in result['temperature']['Farenheit'].keys()
-        assert result['temperature']['Farenheit']['Celsius'] == 'x + 1'
-        assert result['temperature']['Farenheit']['Kelvin'] == 'x + 2'
+        assert result['temperature']['Farenheit']['Celsius']['eq'] == 'x + 1' 
+        assert result['temperature']['Farenheit']['Kelvin']['eq'] == 'x + 2'
+        assert 'ID' in result['temperature']['Farenheit']['Celsius']
+        assert 'ID' in result['temperature']['Farenheit']['Kelvin']
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type', 
             [
@@ -39,7 +54,7 @@ class Test_Configuration:
         obj = Configurations.Configurations(file_type, filename_read, None)
         original = obj.conversions_config
 
-        obj.save_conversion_dict_to_file(filename_save, file_type)
+        Configurations.Configurations.save_conversion_dict_to_file(original, filename_save, file_type)
 
         same_after_saving = Configurations.Configurations.conversions_file_to_dict(filename_save, file_type)
 
@@ -56,7 +71,8 @@ class Test_Configuration:
                 "from_type": "Celsius",
                 "to_type": "Farenheit",
                 "grade": "correct",
-                "timestamp": "2023-10-01 04:00 PM"
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": null
             },
             {
                 "response": "84.2",
@@ -64,7 +80,8 @@ class Test_Configuration:
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "correct",
-                "timestamp": "2023-10-02 01:00 PM"
+                "timestamp": "2023-10-02 01:00 PM",
+                "ID": null
             },
             {
                 "response": "111.554",
@@ -72,7 +89,8 @@ class Test_Configuration:
                 "from_type": "Kelvin",
                 "to_type": "Farenheit",
                 "grade": "incorrect",
-                "timestamp": "2023-10-01 09:01 AM"
+                "timestamp": "2023-10-01 09:01 AM",
+                "ID": null
             }
         ],
         "ABC1233": [
@@ -82,7 +100,8 @@ class Test_Configuration:
                 "from_type": "Farenheit",
                 "to_type": "Celsius",
                 "grade": "correct",
-                "timestamp": "2023-10-02 10:00 AM"
+                "timestamp": "2023-10-02 10:00 AM",
+                "ID": null
             },
             {
                 "response": "dog",
@@ -90,21 +109,22 @@ class Test_Configuration:
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "incorrect",
-                "timestamp": "2023-10-03 03:00 PM"
+                "timestamp": "2023-10-03 03:00 PM",
+                "ID": null
             }
         ]
     }
 }"""),
-                ('tests/temp_space/test-read-responses.csv', FileTypes.CSV,"TypeResponses,student_id,response,answer,from_type,to_type,grade,timestamp","""
-students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM
-students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM
-students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM
-students,ABC123,111.554,317.33,Kelvin,Farenheit,incorrect,2023-10-01 09:01 AM
-students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM
+                ('tests/temp_space/test-read-responses.csv', FileTypes.CSV,"TypeResponses,student_id,response,answer,from_type,to_type,grade,timestamp,ID","""
+students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
+students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,
+students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,
+students,ABC123,111.554,317.33,Kelvin,Farenheit,incorrect,2023-10-01 09:01 AM,
+students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
 """)
             ])
     def test_responses_file_to_dict(self, filename: str, file_type: FileTypes, header: str, content: str):
-#"Students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM"
+#"temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM"
         # recreate a sample file
         with open(file=filename, mode='w+') as file:
             file.writelines(header + "\n")
@@ -132,7 +152,7 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM
         obj = Configurations.Configurations(file_type, None, filename_read)
         original = obj.responses_config
 
-        obj.save_responses_dict_to_file(filename_save, file_type)
+        Configurations.Configurations.save_responses_dict_to_file(original, filename_save, file_type)
 
         same_after_saving = Configurations.Configurations.responses_file_to_dict(filename_save, file_type)
 

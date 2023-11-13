@@ -1,0 +1,6 @@
+{
+    "class": {
+        "ABC123": ["Math", "Chemistry"],
+        "ABC1233": ["Math Bowl", "Physics", "Science Bowl"]
+    }
+}

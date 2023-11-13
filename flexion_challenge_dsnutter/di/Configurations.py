@@ -51,13 +51,14 @@ class Configurations():
                 result = {}
                 for items in lines:
                     # DSN Notes: not totally sure this is the correct way to do this
-                    if result == {}:
+                    if items["TypeConversion"] not in result == {}:
                         result[items["TypeConversion"]] = {}
-                    if result[items["TypeConversion"]] == {}:
+                    if items["From"] not in result[items["TypeConversion"]]:
                         result[items["TypeConversion"]][items["From"]] = {}
-                    if result[items["TypeConversion"]][items["From"]] == {}:
-                        result[items["TypeConversion"]][items["From"]][items["To"]] = ""
-                    result[items["TypeConversion"]][items["From"]][items["To"]] = items["equation"]
+                    if items["To"] not in result[items["TypeConversion"]][items["From"]]:
+                        result[items["TypeConversion"]][items["From"]][items["To"]] = {}
+                    result[items["TypeConversion"]][items["From"]][items["To"]]['eq'] = items["equation"]
+                    result[items["TypeConversion"]][items["From"]][items["To"]]['ID'] = items["ID"]
                 return result
         elif file_type == FileTypes.JSON:
             result = json.load(open(filename))
@@ -84,7 +85,8 @@ class Configurations():
                         "from_type": items["from_type"],
                         "to_type": items["to_type"],
                         "grade": items["grade"],
-                        "timestamp": items["timestamp"]
+                        "timestamp": items["timestamp"],
+                        "ID": items["ID"]
                     })
                 return result
         elif file_type == FileTypes.JSON:
@@ -94,30 +96,32 @@ class Configurations():
 
         return result
 
-    def save_conversion_dict_to_file(self, filename: str, file_type: FileTypes) -> dict:
+    @staticmethod
+    def save_conversion_dict_to_file(config: dict, filename: str, file_type: FileTypes) -> dict:
         if file_type == FileTypes.JSON:
             with open(filename, 'w+') as file:
-                json.dump(obj=self._conversions_config, fp=file, indent=4)
+                json.dump(obj=config, fp=file, indent=4)
         elif file_type == FileTypes.CSV:
-            with open(filename, 'w+') as file:
-                lines = csv.DictWriter(file, [ 'TypeConversion', 'From', 'To', 'equation' ])
+            with open(filename, 'w+', newline='') as file:
+                lines = csv.DictWriter(file, [ 'TypeConversion', 'From', 'To', 'equation', 'ID' ])
                 lines.writeheader()
-                for cname in self._conversions_config:
-                    for from_c in self._conversions_config[cname]:
-                        for to_c in self._conversions_config[cname][from_c]:
-                            lines.writerow({ 'TypeConversion': cname, 'From': from_c, 'To': to_c, 'equation': self._conversions_config[cname][from_c][to_c] })
+                for cname in config:
+                    for from_c in config[cname]:
+                        for to_c in config[cname][from_c]:
+                            lines.writerow({ 'TypeConversion': cname, 'From': from_c, 'To': to_c, 'equation': config[cname][from_c][to_c]['eq'], 'ID': config[cname][from_c][to_c]['ID'] })
 
-    def save_responses_dict_to_file(self, filename: str, file_type: FileTypes):
+    @staticmethod
+    def save_responses_dict_to_file(config: dict, filename: str, file_type: FileTypes):
         if file_type == FileTypes.JSON:
             with open(filename, 'w+') as file:
-                json.dump(obj=self._responses_config, fp=file, indent=4)
+                json.dump(obj=config, fp=file, indent=4)
         elif file_type == FileTypes.CSV:
             with open(filename, 'w+') as file:
-                lines = csv.DictWriter(file, [ 'TypeResponses','student_id','response','answer','from_type','to_type','grade','timestamp' ])
+                lines = csv.DictWriter(file, [ 'TypeResponses','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
                 lines.writeheader()
-                for cname in self._responses_config:
-                    for student_id in self._responses_config[cname]:
-                        for obj in self._responses_config[cname][student_id]:
+                for cname in config:
+                    for student_id in config[cname]:
+                        for obj in config[cname][student_id]:
                             lines.writerow({ 'TypeResponses': cname, 
                                                 'student_id': student_id, 
                                                 'response': obj['response'], 
@@ -126,7 +130,6 @@ class Configurations():
                                                 'to_type': obj['to_type'], 
                                                 'grade': obj['grade'], 
                                                 'timestamp': obj['timestamp'] })
-                            # lines.writerow(cname, student_id, obj['response'], obj['answer'], obj['from_type'], obj['to_type'], obj['grade'], obj['timestamp'])
 
     def __str__(self) -> str:
         result = 'Import/Export Controller'

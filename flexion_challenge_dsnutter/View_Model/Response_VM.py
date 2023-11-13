@@ -9,7 +9,10 @@ class Response_VM(Base_VM):
 
     def __init__(self, response_type: str, config: dict, factory: Callable[..., Response.Response], load_preexisting: bool = False) -> None:
         self._response_type = response_type
-        self._config = config[response_type]
+        if response_type in config:
+            self._config = config[response_type]
+        else:
+            self._config = {}
         self._response_factory = factory
         self._storage = {}
         self._load_preexisting = load_preexisting
