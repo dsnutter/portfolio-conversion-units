@@ -1,8 +1,14 @@
 {
     "temperature": {
         "Farenheit": {
-            "Celsius": "x + 1",
-            "Kelvin": "x + 2"
+            "Celsius": {
+                "eq": "x + 1",
+                "ID": null
+            },
+            "Kelvin": {
+                "eq": "x + 2",
+                "ID": null
+            }
         }
     }
 }

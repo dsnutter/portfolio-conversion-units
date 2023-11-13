@@ -7,7 +7,10 @@ class Conversion_VM(Base_VM):
 
     def __init__(self, conversion_type: str, config: dict, factory: Callable[..., Conversion]) -> None:
         self._conversion_factory = factory
-        self._storage = config[conversion_type]
+        if conversion_type in config:
+            self._storage = config[conversion_type]
+        else:
+            self._storage = {}
         self._conversion_type = conversion_type
     
     @property
