@@ -1,7 +1,8 @@
 
 from dependency_injector.wiring import Provide, inject
 from ..di import Container
-from ..View_Model import Response_VM
+from ..View_Model import Response_VM, Conversion_VM
+from ..helpers.functions import Functions
 
 class Response_View:
 
@@ -9,14 +10,68 @@ class Response_View:
     # Input view functions
     #
     @inject
-    def Entry_Of_Single_Reponse():
-        pass
-
-
+    def Entry_Of_Single_Reponse(type: str, 
+                                r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
+                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        #
+        # this template defines what to print when gathering reponse inputs and how to validate that input
+        #
+        template = {
+            'student_id': { 
+                'text': 'student\'s ID', 
+                'depends_on_previous': False,
+                'valid_args': 'text',
+                'valid': lambda x: Functions.is_valid_string(x)
+            },
+            'answer': {
+                'text': 'input numerical value', 
+                'depends_on_previous': False,
+                'valid_args': 'float',
+                'valid': lambda x: Functions.is_valid_float(x)
+            },
+            'from_type': {
+                'text': 'input unit of measure',
+                'depends_on_previous': False,
+                'valid_args': f'an item that is one of {c_vm.all_from_types}',
+                'valid': lambda x: x in c_vm.all_from_types
+            },
+            'to_type': {
+                'text': 'target unit of measure',
+                'depends_on_previous': True,
+                'valid_args': lambda x: f'an item that is one of {c_vm.all_to_types(x)}',
+                'valid': lambda entered, previous: entered in c_vm.all_to_types(previous)
+            },
+            'response': {
+                'text': 'student response',
+                'depends_on_previous': False,
+                'valid_args': 'float',
+                'valid': lambda x: Functions.is_valid_float(x)
+            }
+        }
+        r = {}
+        print(f'For the reponse to a {type} conversion:')
+        for item in template:
+            entered = None
+            valid_entered = False
+            valid_entered_with_previous = False
+            while entered is None or (not valid_entered and not valid_entered_with_previous):
+                if entered is not None:
+                    if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):
+                        valid_args = template[item]['valid_args'](previous)
+                    else:
+                        valid_args = template[item]['valid_args']
+                    print(f"There was an error with your input it must be: {(valid_args)}")
+                entered = input(f"What was the {template[item]['text']}: ")
+                valid_entered = (not(template[item]['depends_on_previous']) and template[item]['valid'](entered))
+                valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
+            r[item] = entered
+            previous = entered
+        r_vm.add_reponse(r)
 
     #
     # Output view functions
     #
+    # this view is mainly for dev test purposes to see all responses that have been persisted already
     @inject
     def Display_Of_All_Responses(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
         vm.generate_preexisting_responses()

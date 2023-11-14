@@ -1,5 +1,8 @@
 import json, csv
 from ..helpers.Enums import FileTypes
+from ..di.Container import Container
+from ..View import Conversion_View, Response_View
+from ..helpers.Enums import FileTypes
 
 #
 # for importing configurations from datastores for di
@@ -42,6 +45,23 @@ class Configurations():
     @property
     def responses_config(self):
         return self._responses_config
+    
+    #
+    # sample use for dev testing of app, we want to be able to have existing responses to dev test with
+    #  so that we don't have to enter the responses every time to test the backend. we also want to be able to
+    #  save any responses we enter to CSV/JSON for later testing and loading
+    #
+    # convert the CSV config to JSON
+    #hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.csv', FileTypes.CSV)
+    #Configurations.save_conversion_dict_to_file(hash, './temp.json', FileTypes.JSON)
+
+    # convert the JSON confg to CSV
+    #hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.json', FileTypes.JSON)
+    #Configurations.save_conversion_dict_to_file(hash, './temp.csv', FileTypes.CSV)
+
+    # Responses, CSV to JSON
+    #hash = Configurations.responses_file_to_dict('dsnutter_conversion_units/configuration/responses_config.csv', FileTypes.CSV)
+    #Configurations.save_responses_dict_to_file(hash, './temp.json', FileTypes.JSON)
 
     @staticmethod
     def conversions_file_to_dict(filename: str, file_type: FileTypes) -> dict:
@@ -131,6 +151,21 @@ class Configurations():
                                                 'grade': obj['grade'], 
                                                 'timestamp': obj['timestamp'],
                                                 'ID': obj['ID']  })
+
+    def wire_up(self, type: str):
+
+        # setups up injection of temperature/responses conversion Models derived from JSON files
+        container = Container(config_conversions={'item': type, 'definitions': self._conversions_config},
+                                config_responses={'item': type, 'definitions': self._responses_config})
+
+        # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
+        container.wire(modules=[Conversion_View.Conversion_View.All_Possible_Types])
+
+        # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
+        container.wire(modules=[Response_View.Response_View.Display_Of_All_Responses])
+
+        return container
+
 
     def __str__(self) -> str:
         result = 'Import/Export Controller'
