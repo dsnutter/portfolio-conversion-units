@@ -47,12 +47,16 @@ Conversion_View.Conversion_View.All_Possible_Types()
 Response_View.Response_View.Display_Of_All_Responses()
 
 # convert the CSV config to JSON
-# hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.csv', FileTypes.CSV)
-# Configurations.save_conversion_dict_to_file(hash, './temp.json', FileTypes.JSON)
+#hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.csv', FileTypes.CSV)
+#Configurations.save_conversion_dict_to_file(hash, './temp.json', FileTypes.JSON)
 
 # convert the JSON confg to CSV
-# hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.json', FileTypes.JSON)
-# Configurations.save_conversion_dict_to_file(hash, './temp.csv', FileTypes.CSV)
+#hash = Configurations.conversions_file_to_dict('dsnutter_conversion_units/configuration/conversions_config.json', FileTypes.JSON)
+#Configurations.save_conversion_dict_to_file(hash, './temp.csv', FileTypes.CSV)
+
+# Responses, CSV to JSON
+#hash = Configurations.responses_file_to_dict('dsnutter_conversion_units/configuration/responses_config.csv', FileTypes.CSV)
+#Configurations.save_responses_dict_to_file(hash, './temp.json', FileTypes.JSON)
 
 
 # c_csv = Configurations(FileTypes.CSV, 

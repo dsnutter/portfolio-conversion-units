@@ -1,136 +1,77 @@
 {
-    "volume": {
-        "Liters": {
-            "Tablespoons": {
-                "eq": "x * (67 + 2/3)",
-                "ID": null
+    "temperature": {
+        "ABC123": [
+            {
+                "response": "32.0",
+                "answer": "0",
+                "from_type": "Celsius",
+                "to_type": "Farenheit",
+                "grade": "correct",
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ""
             },
-            "Cubic_inches": {
-                "eq": "x * 61.023744",
-                "ID": null
+            {
+                "response": "84.2",
+                "answer": "543.94",
+                "from_type": "Farenheit",
+                "to_type": "Rankine",
+                "grade": "correct",
+                "timestamp": "2023-10-02 01:00 PM",
+                "ID": ""
             },
-            "Cups": {
-                "eq": "x * 4.2267528377",
-                "ID": null
-            },
-            "Cubic_feet": {
-                "eq": "x * 0.035315",
-                "ID": null
-            },
-            "Gallons": {
-                "eq": "x * 0.264172",
-                "ID": null
+            {
+                "response": "111.554",
+                "answer": "317.33",
+                "from_type": "Kelvin",
+                "to_type": "Farenheit",
+                "grade": "incorrect",
+                "timestamp": "2023-10-01 09:01 AM",
+                "ID": ""
             }
-        },
-        "Tablespoons": {
-            "Liters": {
-                "eq": "x / (67 + 2/3)",
-                "ID": null
+        ],
+        "ABC1233": [
+            {
+                "response": "0",
+                "answer": "32",
+                "from_type": "Farenheit",
+                "to_type": "Celsius",
+                "grade": "correct",
+                "timestamp": "2023-10-02 10:00 AM",
+                "ID": ""
             },
-            "Cubic_inches": {
-                "eq": "x *  0.902344",
-                "ID": null
-            },
-            "Cups": {
-                "eq": "x * (1/16)",
-                "ID": null
-            },
-            "Cubic_feet": {
-                "eq": "x * 0.000522",
-                "ID": null
-            },
-            "Gallons": {
-                "eq": "x * 0.003906",
-                "ID": null
+            {
+                "response": "dog",
+                "answer": "6.5",
+                "from_type": "Farenheit",
+                "to_type": "Rankine",
+                "grade": "incorrect",
+                "timestamp": "2023-10-03 03:00 PM",
+                "ID": ""
             }
-        },
-        "Cubic_inches": {
-            "Liters": {
-                "eq": "x / 61.023744",
-                "ID": null
-            },
-            "Tablespoons": {
-                "eq": "x /  0.902344",
-                "ID": null
-            },
-            "Cups": {
-                "eq": "x * (1/16)",
-                "ID": null
-            },
-            "Cubic_feet": {
-                "eq": "x * 0.000579",
-                "ID": null
-            },
-            "Gallons": {
-                "eq": "x * 0.004329",
-                "ID": null
+        ]
+    },
+    "volumme": {
+        "ABC123": [
+            {
+                "response": "6.1",
+                "answer": "25.6",
+                "from_type": "Cups",
+                "to_type": "Liters",
+                "grade": "correct",
+                "timestamp": "2023-10-06 08:19 PM",
+                "ID": ""
             }
-        },
-        "Cups": {
-            "Liters": {
-                "eq": "x / 4.2267528377",
-                "ID": null
-            },
-            "Tablespoons": {
-                "eq": "x / (1/16)",
-                "ID": null
-            },
-            "Cubic_inches": {
-                "eq": "x / (1/16)",
-                "ID": null
-            },
-            "Cubic_feet": {
-                "eq": "x * 0.008355",
-                "ID": null
-            },
-            "Gallons": {
-                "eq": "x * 0.0625",
-                "ID": null
+        ],
+        "ABC1233": [
+            {
+                "response": "19.4",
+                "answer": "73.12",
+                "from_type": "Gallons",
+                "to_type": "Kelvin",
+                "grade": "invalid",
+                "timestamp": "2023-10-06 08:19 PM",
+                "ID": ""
             }
-        },
-        "Cubic_feet": {
-            "Liters": {
-                "eq": "x / 0.035315",
-                "ID": null
-            },
-            "Tablespoons": {
-                "eq": "x / 0.000522",
-                "ID": null
-            },
-            "Cubic_inches": {
-                "eq": "x / 0.000579",
-                "ID": null
-            },
-            "Cups": {
-                "eq": "x / 0.008355",
-                "ID": null
-            },
-            "Gallons": {
-                "eq": "x * 7.480519",
-                "ID": null
-            }
-        },
-        "Gallons": {
-            "Liters": {
-                "eq": "x / 0.264172",
-                "ID": null
-            },
-            "Tablespoons": {
-                "eq": "x / 0.003906",
-                "ID": null
-            },
-            "Cubic_inches": {
-                "eq": "x / 0.004329",
-                "ID": null
-            },
-            "Cups": {
-                "eq": "x / 0.0625",
-                "ID": null
-            },
-            "Cubic_feet": {
-                "eq": "x / 7.480519",
-                "ID": null
-            }
-        }
+        ]
     }
 }
