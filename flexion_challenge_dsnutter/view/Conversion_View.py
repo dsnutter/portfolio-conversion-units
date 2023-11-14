@@ -16,5 +16,6 @@ class Conversion_View:
                 obj = vm.conversion(c, c2)
                 print('\tCan be converted to Type: {}'.format(c2))
                 print('\tEquation: {}'.format(obj.equation))
+                print('\tID: {}'.format(obj.id))
                 
 

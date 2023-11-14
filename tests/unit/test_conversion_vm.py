@@ -21,7 +21,7 @@ class Test_Conversion_VM:
     {
             "ThinkDifferent":
             {
-                "Kelvin": { "eq": fn }
+                "Kelvin": { "eq": fn, "ID": None }
             }
     }
 }, Conversion)
@@ -42,7 +42,7 @@ class Test_Conversion_VM:
         {
                 "ThinkDifferent":
                 {
-                    "Kelvin": { "eq": fn }
+                    "Kelvin": { "eq": fn, "ID": None }
                 }
         }
     }, Conversion)
@@ -63,7 +63,7 @@ class Test_Conversion_VM:
         {
                 "ThinkDifferent":
                 {
-                    "Kelvin": { "eq": fn }
+                    "Kelvin": { "eq": fn, "ID": None }
                 }
         }
     }, Conversion)
@@ -83,7 +83,7 @@ class Test_Conversion_VM:
         {
                 "ThinkDifferent":
                 {
-                    "Kelvin": { "eq": fn }
+                    "Kelvin": { "eq": fn, "ID": None }
                 }
         }
     }, Conversion)
@@ -92,4 +92,4 @@ class Test_Conversion_VM:
             result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
 
         # DSN Notes: does this work?
-        assert resultError.match("unmatched '\)'")
+        assert resultError.match("unmatched '\\)'")

@@ -19,6 +19,7 @@ class Response_View:
     #
     @inject
     def Display_Of_All_Responses(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
+        vm.generate_preexisting_responses()
         items = vm.all_from_types
         print('\n\nAll the responses so far:')
         for from_type in items:
@@ -29,15 +30,17 @@ class Response_View:
                 for student_id in students:                        
                     objs = vm.get_responses(from_type, to_type, student_id)
                     for obj in objs:
-                        print('Student ID: {}'.format(obj.student_id))
-                        print("""
+                        print(f'Student ID: {obj.student_id}')
+                        print(f"""
 Details
-    From: {}
-    To: {}
-    Student Entered: {}
-    Answer was: {}
-    Grade was: {}
-""".format(obj.from_type, obj.to_type, obj.response, obj.answer, obj.grade))
+    From: {obj.from_type}
+    To: {obj.to_type}
+    Student Entered: {obj.response}
+    Answer was: {obj.answer}
+    Grade was: {obj.grade}
+    Timestamp: {obj.timestamp}
+    ID: {obj.id}
+""")
 
     @inject
     def Display_Of_Single_Reponse():

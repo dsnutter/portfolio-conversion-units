@@ -1,13 +1,15 @@
 from .Base_Model import Base_Model
 from ..helpers.functions import Functions
+import uuid
 
 class Conversion(Base_Model):
 
-    def __init__(self, from_type: str, to_type: str, equation: str) -> None:
+    def __init__(self, from_type: str, to_type: str, equation: str, ID: str) -> None:
         self._from_type = from_type
         self._to_type = to_type
         self._equation = equation
         self._equation_lambda = Conversion.get_lambda(equation)
+        self._id = ID
 
     @staticmethod
     def get_lambda(equation):
@@ -38,6 +40,10 @@ class Conversion(Base_Model):
     @property
     def equation_lambda(self):
          return self._equation_lambda
+
+    @property
+    def id(self) -> str:
+        return self._id
 
     def __str__(self) -> str:
         result = 'From Type: {}\n'.format(self._from_type)
