@@ -46,10 +46,7 @@ class Conversion(Base_Model):
         return self._id
 
     def __str__(self) -> str:
-        result = 'From Type: {}\n'.format(self._from_type)
-        result += 'To Type: {}\n'.format(self._to_type)
-        result += '\tEquation: {}\n'.format(str(self._fn))
-        return result
+        return str(self.__dict__())
     
     def __dict__(self) -> dict:
         hashmap = {

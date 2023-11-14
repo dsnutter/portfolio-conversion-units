@@ -20,52 +20,83 @@ class Response_View:
             'student_id': { 
                 'text': 'student\'s ID', 
                 'depends_on_previous': False,
-                'valid_args': 'text',
-                'valid': lambda x: Functions.is_valid_string(x)
+                'can_override_valid': False,
+                'valid_args': 'alphanumeric',
+                'valid': lambda x: Functions.is_valid_string(x),
+                'convert': lambda x: x.upper()
             },
             'answer': {
-                'text': 'input numerical value', 
+                'text': 'answer of numerical value', 
                 'depends_on_previous': False,
+                'can_override_valid': False,
                 'valid_args': 'float',
-                'valid': lambda x: Functions.is_valid_float(x)
+                'valid': lambda x: Functions.is_valid_float(x),
+                'convert': lambda x: x
             },
             'from_type': {
                 'text': 'input unit of measure',
                 'depends_on_previous': False,
-                'valid_args': f'an item that is one of {c_vm.all_from_types}',
-                'valid': lambda x: x in c_vm.all_from_types
+                'can_override_valid': True,
+                'valid_args': f'An item that is one of {str(c_vm.all_from_types)}',
+                'valid': lambda x: x in c_vm.all_from_types,
+                'convert': lambda x: x.lower().capitalize()
             },
             'to_type': {
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
-                'valid_args': lambda x: f'an item that is one of {c_vm.all_to_types(x)}',
-                'valid': lambda entered, previous: entered in c_vm.all_to_types(previous)
+                'can_override_valid': True,
+                'valid_args': lambda x: f"An item that is one of {str(c_vm.all_to_types(x))}.\nIf you chose an invalid input unit of measure, you may not have choices",
+                'valid': lambda entered, previous: entered in c_vm.all_to_types(previous),
+                'convert': lambda x: x.lower().capitalize()
             },
             'response': {
-                'text': 'student response',
+                'text': 'student response of numerical value',
                 'depends_on_previous': False,
+                'can_override_valid': False,
                 'valid_args': 'float',
-                'valid': lambda x: Functions.is_valid_float(x)
+                'valid': lambda x: Functions.is_valid_float(x),
+                'convert': lambda x: x
             }
         }
         r = {}
-        print(f'For the reponse to a {type} conversion:')
-        for item in template:
+        print(f'\n\nFor the reponse to a {type} conversion:')
+        items = list(template.keys())
+        i = 0
+        while i < len(items):
+            item = items[i]
             entered = None
             valid_entered = False
             valid_entered_with_previous = False
+            override = False
             while entered is None or (not valid_entered and not valid_entered_with_previous):
                 if entered is not None:
                     if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):
                         valid_args = template[item]['valid_args'](previous)
                     else:
                         valid_args = template[item]['valid_args']
-                    print(f"There was an error with your input it must be: {(valid_args)}")
-                entered = input(f"What was the {template[item]['text']}: ")
-                valid_entered = (not(template[item]['depends_on_previous']) and template[item]['valid'](entered))
-                valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
+                    print(f"There was an error with your input it must be a valid {template[item]['text']} such as:")
+                    print(f"{valid_args}")
+                    if template[item]['can_override_valid']:
+                        o_input = input(f'Press \'Y\' to override and use the input that was entered or press \'B\' to go back to the previous choice before this one...')
+                        if o_input.lower() == 'y':
+                            override = True
+                        elif o_input.lower() == 'b':
+                            i -= 1
+                            item = items[i]
+                if override:
+                    valid_entered = True
+                    valid_entered_with_previous = True
+                    override = False
+                else:
+                    entered = input(f"What was the {template[item]['text']}: ")
+                    entered = template[item]['convert'](entered)
+                    valid_entered = (not(template[item]['depends_on_previous']) and template[item]['valid'](entered))
+                    valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
             r[item] = entered
             previous = entered
+            print(r)
+            print()
+            i += 1
         r_vm.add_reponse(r)
 
     #

@@ -28,8 +28,10 @@ class Functions:
     @staticmethod
     def is_valid_string(input) -> bool:
         try:
-            str(input)
-            return True
+            temp = str(input)
+            if temp.isalnum():
+                return True
+            return False
         except ValueError:
             return False
 

@@ -31,6 +31,7 @@ class Container(containers.DeclarativeContainer):
             Response_VM.Response_VM,
             response_type=config_responses.item,
             config=config_responses.definitions, 
+            conversions_config=config_conversions.definitions, 
             factory=repsonses_factory.provider,
             load_preexisting=True
         )
