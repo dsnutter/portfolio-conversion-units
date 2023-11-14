@@ -4,9 +4,23 @@ from .Conversion import Conversion
 
 class Response(Base_Model):
 
+    date_format = '%Y-%m-%d %I:%M %p'
+
+    """
+    def __init__(self, hashmap: dict) -> None:
+        self._response = hashmap['response']
+        self._student_id = hashmap['student_id'].upper()
+        self._answer = hashmap['answer']
+        self._from_type = hashmap['from_type']
+        self._to_type = hashmap['to_type']
+        self._grade = hashmap['grade']
+        self._timestamp = hashmap['timestamp']
+        self._id = hashmap['ID']
+    """
+    
     def __init__(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, grade: GradeTypes, ID: str) -> None:
         self._response = response   
-        self._student_id = student_id
+        self._student_id = student_id.upper()
         self._answer = answer
         self._from_type = from_type
         self._to_type = to_type
@@ -68,7 +82,7 @@ class Response(Base_Model):
 
     @student_id.setter
     def student_id(self, value: str) -> None:
-        self._student_id = value
+        self._student_id = value.upper()
 
     @property
     def id(self) -> str:
@@ -87,4 +101,20 @@ class Response(Base_Model):
         result = 'Response: {}\n'.format(self._response)
         result += 'Grade: {}\n'.format(self._grade)
         return result
+
+    def __dict__(self) -> dict:
+        hashmap = {
+            self._student_id : [
+                {
+                    "response": self._response,
+                    "answer": self._answer,
+                    "from_type": self._from_type,
+                    "to_type": self._to_type,
+                    "grade": self._grade,
+                    "timestamp": self._timestamp,
+                    "ID": self._id
+                }
+            ]
+        }
+        return hashmap
 

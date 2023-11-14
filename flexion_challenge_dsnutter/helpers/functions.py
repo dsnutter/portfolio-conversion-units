@@ -16,3 +16,22 @@ class Functions:
         if input.count('(') != input.count(')'):
             sanitized = False
         return sanitized
+    
+    @staticmethod
+    def is_valid_float(input: str) -> bool:
+        try:
+            float(input)
+            return True
+        except ValueError:
+            return False
+        
+    @staticmethod
+    def is_valid_string(input) -> bool:
+        try:
+            str(input)
+            return True
+        except ValueError:
+            return False
+
+    def is_in_list(items: dict) -> bool:
+        return items['input'] in items['list']

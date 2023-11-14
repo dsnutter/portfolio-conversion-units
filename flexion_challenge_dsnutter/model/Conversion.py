@@ -50,4 +50,15 @@ class Conversion(Base_Model):
         result += 'To Type: {}\n'.format(self._to_type)
         result += '\tEquation: {}\n'.format(str(self._fn))
         return result
+    
+    def __dict__(self) -> dict:
+        hashmap = {
+            self._from_type: {
+                self._to_type: {
+                    "eq": self._equation,
+                    "ID": self._id
+                }
+            }
+        }
+        return hashmap
 

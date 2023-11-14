@@ -19,6 +19,8 @@ class Conversion_VM(Base_VM):
         return self._storage.keys()
 
     def all_to_types(self, from_type: str) -> list:
+        if from_type not in self._storage:
+            return []
         return self._storage[from_type].keys()
 
     def convert(self, input: float, from_type, to_type) -> float:
