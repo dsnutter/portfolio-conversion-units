@@ -7,38 +7,48 @@ from datetime import datetime
 
 class Test_Response_VM:
 
-    @pytest.mark.parametrize('response, answer, grade', 
+    @pytest.mark.parametrize('response, answer, grade, to_type, from_type', 
         [
-            ("1", 0, GradeTypes.INCORRECT),
-            ("1.2", 1.2, GradeTypes.CORRECT),
-            ("1.2", 1.1, GradeTypes.INCORRECT),
+            ("1", 0, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+            ("1.2", 1.2, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+            ("1.2", 1.1, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
             # rounded
-            ("1.256", 1.278, GradeTypes.CORRECT),
-            ("1.256", 1.1222, GradeTypes.INCORRECT),
+            ("1.256", 1.278, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+            ("1.256", 1.1222, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
             # negative
-            ("-1.2", -1.2, GradeTypes.CORRECT),
-            ("-1.2", -1.1, GradeTypes.INCORRECT),
+            ("-1.2", -1.2, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+            ("-1.2", -1.1, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
             # rounded negative
-            ("-1.256", -1.278, GradeTypes.CORRECT),
-            ("-1.256", -1.1222, GradeTypes.INCORRECT),
+            ("-1.256", -1.278, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+            ("-1.256", -1.1222, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+            # invalid
+            ("1.2", 1.2, GradeTypes.INVALID, 'dog', 'Farenheit'),
+            ("1.2", 1.2, GradeTypes.INVALID, 'Celsius', 'dog')
         ])
-    def test_grade(self, response, answer, grade):
+    def test_grade(self, response, answer, grade, to_type, from_type):
 
-        c = Response_VM('students', {
-    "students": {
+        c = Response_VM('temperature', {
+    "temperature": {
         "ABC123": [
             {
                 "response": response,
                 "answer": answer,
-                "from_type": "Celsius",
-                "to_type": "Farenheit",
+                "from_type": from_type,
+                "to_type": to_type,
                 "grade": grade,
                 "timestamp": "2023-10-01 04:00 PM",
                 "ID": ''
             }
-        ]}}, Response, True)
+        ]}}, { 
+    "temperature":
+    {
+            "Farenheit":
+            {
+                "Celsius": { "eq": "x + 1", "ID": None }
+            }
+    }}, Response, True)
 
-        c.grade_answer(response, answer)
-        result = c.get_response('Celsius', 'Farenheit', 'ABC123', '2023-10-01 04:00 PM')
+        c.add_response('ABC123', response, answer, from_type, to_type, '2023-10-01 04:00 PM', None, None)
+        result = c.get_response(from_type, to_type, 'ABC123', '2023-10-01 04:00 PM')
         assert result.grade == grade
 

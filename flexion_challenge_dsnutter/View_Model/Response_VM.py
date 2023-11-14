@@ -8,32 +8,36 @@ import uuid
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
 
-    def __init__(self, response_type: str, config: dict, factory: Callable[..., Response.Response], load_preexisting: bool = False) -> None:
+    def __init__(self, response_type: str, config: dict, conversions_config: dict, factory: Callable[..., Response.Response], load_preexisting: bool = False) -> None:
         self._response_type = response_type
         if response_type in config:
             self._config = config[response_type]
         else:
             self._config = {}
+        if response_type in conversions_config:
+            self._conversions_config = conversions_config[response_type]
+        else:
+            self._conversions_config = {}
         self._response_factory = factory
         self._storage = {}
         self._load_preexisting = load_preexisting
-        
-    @property
-    def all_from_types(self) -> List:
-        # self.generate_preexisting_responses()
-        return self._storage.keys()
 
-    def all_to_types(self, from_type: str) -> List:
+    @property
+    def all_from_types(self) -> list:
+        # self.generate_preexisting_responses()
+        return list(self._storage.keys())
+
+    def all_to_types(self, from_type: str) -> list:
         if from_type not in self._storage:
             return []
         # self.generate_preexisting_responses()
-        return self._storage[from_type].keys()
+        return list(self._storage[from_type].keys())
 
     def all_students(self, from_type: str, to_type: str) -> list:
         if from_type not in self._storage or to_type not in self._storage[from_type]:
             return []
         # self.generate_preexisting_responses()
-        return self._storage[from_type][to_type].keys()
+        return list(self._storage[from_type][to_type].keys())
 
     def get_responses(self, from_type: str, to_type: str, student_id: str) -> dict:
         # self.generate_preexisting_responses()
@@ -64,7 +68,7 @@ class Response_VM(Base_VM):
         if override_grade is not None:
             grade = override_grade
         else:
-            grade = Response_VM.grade_answer(response, answer)
+            grade = self.grade_answer(from_type, to_type, response, answer)
 
         if from_type not in self._storage:
             self._storage[from_type] = {}
@@ -87,7 +91,7 @@ class Response_VM(Base_VM):
     # DSN Notes: this needs better test coverage
     def add_reponse(self, hashmap: dict):
         if 'grade' not in hashmap:
-            grade = Response_VM.grade_answer(hashmap['response'], hashmap['answer'])
+            grade = self.grade_answer(hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['answer'])
         else:
             grade = hashmap['grade']
 
@@ -111,14 +115,16 @@ class Response_VM(Base_VM):
         if hashmap['ID'] is None or hashmap['ID'] == '':
             ID = uuid.uuid4()
 
-        self._storage[from_type][to_type][student_id].append(self._response_factory(student_id=student_id, 
-                                                                                    response=hashmap['response'], 
-                                                                                    answer=hashmap['answer'], 
-                                                                                    from_type=from_type, 
-                                                                                    to_type=to_type, 
-                                                                                    timestamp=timestamp, 
-                                                                                    grade=grade, 
-                                                                                    ID=ID))
+        obj = self._response_factory(student_id=student_id, 
+                                    response=hashmap['response'], 
+                                    answer=hashmap['answer'], 
+                                    from_type=from_type, 
+                                    to_type=to_type, 
+                                    timestamp=timestamp, 
+                                    grade=grade, 
+                                    ID=ID)
+        self._storage[from_type][to_type][student_id].append(obj)
+        print(obj)
 
 
     def generate_preexisting_responses(self):
@@ -129,8 +135,7 @@ class Response_VM(Base_VM):
                 for inner in items[student_id]:
                     self.add_response(student_id, inner['response'], inner['answer'], inner['from_type'], inner['to_type'], inner['timestamp'], inner['grade'], inner['ID'])
 
-    @staticmethod
-    def grade_answer(response: str, answer: str) -> None:
+    def grade_answer(self, from_type: str, to_type: str, response: str, answer: str) -> None:
         try:
             if round(float(response), 1) == round(float(answer), 1):
                 grade = GradeTypes.CORRECT
@@ -138,7 +143,14 @@ class Response_VM(Base_VM):
                 grade = GradeTypes.INCORRECT
         except ValueError:
             grade = GradeTypes.INCORRECT
+
+        if from_type not in self._conversions_config:
+            grade = GradeTypes.INVALID
+        elif to_type not in self._conversions_config[from_type]:
+            grade = GradeTypes.INVALID
+
         return grade
+
 
     def __str__(self) -> str:
         result = 'Response Controller: {}\n'.format(self._response_type)
