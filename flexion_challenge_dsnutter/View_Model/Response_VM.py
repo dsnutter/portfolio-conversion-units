@@ -3,6 +3,7 @@ from ..Model import Response
 from .Base_VM import Base_VM
 from typing import Callable, List
 from datetime import datetime
+import uuid
 
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
@@ -19,23 +20,23 @@ class Response_VM(Base_VM):
         
     @property
     def all_from_types(self) -> List:
-        self.generate_preexisting_responses()
+        # self.generate_preexisting_responses()
         return self._storage.keys()
 
     def all_to_types(self, from_type: str) -> List:
-        self.generate_preexisting_responses()
+        # self.generate_preexisting_responses()
         return self._storage[from_type].keys()
 
     def all_students(self, from_type: str, to_type: str) -> list:
-        self.generate_preexisting_responses()
+        # self.generate_preexisting_responses()
         return self._storage[from_type][to_type].keys()
 
     def get_responses(self, from_type: str, to_type: str, student_id: str) -> dict:
-        self.generate_preexisting_responses()
+        # self.generate_preexisting_responses()
         return self._storage[from_type][to_type][student_id]
 
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
-        self.generate_preexisting_responses()
+        # self.generate_preexisting_responses()
         format = '%Y-%m-%d %I:%M %p'
 
         # result = next(filter(lambda arr: any(datetime.strptime(item.timestamp, format) == datetime.strptime(timestamp, format))), self._storage[from_type][to_type][student_id]), None)
@@ -55,8 +56,8 @@ class Response_VM(Base_VM):
     #     return any(datetime.strptime(item.timestamp, format) == datetime.strptime(timestamp, format) for item in arr)
 
     # DSN Notes: this needs better test coverage
-    def add_response(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, override_grade: str = None):
-        self.generate_preexisting_responses()
+    def add_response(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, override_grade: str = None, ID: str = None):
+        # self.generate_preexisting_responses()
         if override_grade is not None:
             grade = override_grade
         else:
@@ -68,16 +69,25 @@ class Response_VM(Base_VM):
             self._storage[from_type][to_type] = {}
         if student_id not in self._storage[from_type][to_type]:
             self._storage[from_type][to_type][student_id] = []
+        if ID is None or ID == '':
+            ID = uuid.uuid4()
 
-        self._storage[from_type][to_type][student_id].append(self._response_factory(student_id, response, answer, from_type, to_type, timestamp, grade))
+        self._storage[from_type][to_type][student_id].append(self._response_factory(student_id=student_id, 
+                                                                                    response=response, 
+                                                                                    answer=answer, 
+                                                                                    from_type=from_type, 
+                                                                                    to_type=to_type, 
+                                                                                    timestamp=timestamp, 
+                                                                                    grade=grade, 
+                                                                                    ID=ID))
 
     def generate_preexisting_responses(self):
         if self._load_preexisting and self._storage == {}:
             self._load_preexisting = False
             items = self._config
-            for student_id in items:
+            for student_id in items.keys():
                 for inner in items[student_id]:
-                    self.add_response(student_id, inner['response'], inner['answer'], inner['from_type'], inner['to_type'], inner['timestamp'], inner['grade'])
+                    self.add_response(student_id, inner['response'], inner['answer'], inner['from_type'], inner['to_type'], inner['timestamp'], inner['grade'], inner['ID'])
 
     @staticmethod
     def grade_answer(response: str, answer: str) -> None:

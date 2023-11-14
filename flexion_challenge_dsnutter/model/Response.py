@@ -4,7 +4,7 @@ from .Conversion import Conversion
 
 class Response(Base_Model):
 
-    def __init__(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, grade: GradeTypes) -> None:
+    def __init__(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, grade: GradeTypes, ID: str) -> None:
         self._response = response   
         self._student_id = student_id
         self._answer = answer
@@ -12,6 +12,7 @@ class Response(Base_Model):
         self._to_type = to_type
         self._grade = grade
         self._timestamp = timestamp
+        self._id = ID
 
     @property
     def grade(self) -> GradeTypes:
@@ -65,9 +66,17 @@ class Response(Base_Model):
     def student_id(self) -> str:
         return self._student_id
 
-    @timestamp.setter
+    @student_id.setter
     def student_id(self, value: str) -> None:
         self._student_id = value
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @id.setter
+    def id(self, value: str) -> None:
+        self._id = value
 
     # if needed later
     # @property

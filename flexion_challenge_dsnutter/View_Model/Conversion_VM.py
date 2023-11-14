@@ -1,6 +1,7 @@
 from .Base_VM import Base_VM
 from typing import Callable
 from ..Model.Conversion import Conversion
+import uuid
 
 # controls operationss on the conversion Models, and persistance
 class Conversion_VM(Base_VM):
@@ -34,10 +35,14 @@ class Conversion_VM(Base_VM):
     # may need to revisit this code if this application becomes multi-threaded
     def conversion(self, from_type: str, to_type: str) -> Conversion:
         eq = self._storage[from_type][to_type]["eq"]
+        id = self._storage[from_type][to_type]["ID"]
+
+        if id is None or id == '':
+            id = uuid.uuid4()
 
         # if a certain conversion object does not already exist, then create it
         # if not ('obj' in self._storage[from_type][to_type] or not ('obj' in self._storage[from_type][to_type] and self._storage[from_type][to_type]["obj"] is None)):
-        self._storage[from_type][to_type]["obj"] = self._conversion_factory(from_type, to_type, eq)
+        self._storage[from_type][to_type]["obj"] = self._conversion_factory(from_type, to_type, eq, id)
 
         return self._storage[from_type][to_type]["obj"]
 
