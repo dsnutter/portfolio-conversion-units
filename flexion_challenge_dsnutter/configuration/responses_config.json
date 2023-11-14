@@ -1,4 +1,3 @@
-
 {
     "temperature": {
         "ABC123": [
@@ -9,7 +8,7 @@
                 "to_type": "Farenheit",
                 "grade": "correct",
                 "timestamp": "2023-10-01 04:00 PM",
-                "ID": "" 
+                "ID": ""
             },
             {
                 "response": "84.2",
@@ -18,7 +17,7 @@
                 "to_type": "Rankine",
                 "grade": "correct",
                 "timestamp": "2023-10-02 01:00 PM",
-                "ID": "" 
+                "ID": ""
             },
             {
                 "response": "111.554",
@@ -27,7 +26,7 @@
                 "to_type": "Farenheit",
                 "grade": "incorrect",
                 "timestamp": "2023-10-01 09:01 AM",
-                "ID": "" 
+                "ID": ""
             }
         ],
         "ABC1233": [
@@ -38,7 +37,7 @@
                 "to_type": "Celsius",
                 "grade": "correct",
                 "timestamp": "2023-10-02 10:00 AM",
-                "ID": "" 
+                "ID": ""
             },
             {
                 "response": "dog",
@@ -47,7 +46,31 @@
                 "to_type": "Rankine",
                 "grade": "incorrect",
                 "timestamp": "2023-10-03 03:00 PM",
-                "ID": "" 
+                "ID": ""
+            }
+        ]
+    },
+    "volume": {
+        "ABC123": [
+            {
+                "response": "6.1",
+                "answer": "25.6",
+                "from_type": "Cups",
+                "to_type": "Liters",
+                "grade": "correct",
+                "timestamp": "2023-10-06 08:19 PM",
+                "ID": ""
+            }
+        ],
+        "ABC1233": [
+            {
+                "response": "19.4",
+                "answer": "73.12",
+                "from_type": "Gallons",
+                "to_type": "Kelvin",
+                "grade": "invalid",
+                "timestamp": "2023-10-06 08:19 PM",
+                "ID": ""
             }
         ]
     }

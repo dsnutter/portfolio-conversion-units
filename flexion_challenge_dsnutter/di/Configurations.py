@@ -75,7 +75,7 @@ class Configurations():
                 result = {}
                 for items in lines:
                     # DSN Notes: not totally sure this is the correct way to do this
-                    if result == {}:
+                    if items["TypeResponses"] not in result:
                         result[items["TypeResponses"]] = {}
                     if items["student_id"] not in result[items["TypeResponses"]]:
                         result[items["TypeResponses"]][items["student_id"]] = []                    
@@ -129,7 +129,8 @@ class Configurations():
                                                 'from_type': obj['from_type'],
                                                 'to_type': obj['to_type'], 
                                                 'grade': obj['grade'], 
-                                                'timestamp': obj['timestamp'] })
+                                                'timestamp': obj['timestamp'],
+                                                'ID': obj['ID']  })
 
     def __str__(self) -> str:
         result = 'Import/Export Controller'
