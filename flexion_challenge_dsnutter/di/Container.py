@@ -13,25 +13,27 @@ class Container(containers.DeclarativeContainer):
     )
 
     config_conversions = providers.Configuration()
+    config_responses = providers.Configuration()
         
     conversion_factory = providers.Factory(Conversion.Conversion)
 
     conversions_vm = providers.Factory(
             Conversion_VM.Conversion_VM,
-            conversion_type=config_conversions.item,
-            config=config_conversions.definitions, 
+            type=config_conversions.item,
+            backend_type=config_conversions.file_type, 
+            responses_config=config_responses.definitions, 
+            conversions_config=config_conversions.definitions,
             factory=conversion_factory.provider
-        )
-
-    config_responses = providers.Configuration()
+    )
 
     repsonses_factory = providers.Factory(Response.Response)
 
     reponses_vm = providers.Factory(
             Response_VM.Response_VM,
-            response_type=config_responses.item,
-            config=config_responses.definitions, 
-            conversions_config=config_conversions.definitions, 
+            type=config_responses.item,
+            backend_type=config_responses.file_type, 
+            responses_config=config_responses.definitions, 
+            conversions_config=config_conversions.definitions,
             factory=repsonses_factory.provider,
             load_preexisting=True
         )

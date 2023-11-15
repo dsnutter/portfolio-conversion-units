@@ -3,6 +3,7 @@ from flexion_challenge_dsnutter.View_Model.Conversion_VM import Conversion_VM
 from flexion_challenge_dsnutter.Model.Conversion import Conversion
 from dependency_injector import containers, providers
 from typing import Callable
+from flexion_challenge_dsnutter.helpers.Enums import BackendTypes
 
 class Test_Conversion_VM:
 
@@ -16,7 +17,21 @@ class Test_Conversion_VM:
             ])
     def test_convert(self, fn: str, value: float, converted: float):
 
-        vm = Conversion_VM("temperature", {
+        vm = Conversion_VM("temperature", BackendTypes.JSON, 
+                        {
+    "temperature": {
+        "ABC123": [
+            {
+                "response": "",
+                "answer": "",
+                "from_type": '',
+                "to_type": '',
+                "grade": '',
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ''
+            }
+        ]}},
+{
     "temperature":
     {
             "ThinkDifferent":
@@ -24,11 +39,11 @@ class Test_Conversion_VM:
                 "Kelvin": { "eq": fn, "ID": None }
             }
     }
-}, Conversion)
+}, Conversion, False)
 
 
         conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-        result = vm.convert(value, 'ThinkDifferent', 'Kelvin')
+        result = vm.convert_input(value, 'ThinkDifferent', 'Kelvin')
 
         assert result == converted
 
@@ -37,18 +52,29 @@ class Test_Conversion_VM:
         
             fn = "x * y + 1"
 
-            vm = Conversion_VM("temperature", {
-        "temperature":
-        {
-                "ThinkDifferent":
-                {
-                    "Kelvin": { "eq": fn, "ID": None }
-                }
-        }
-    }, Conversion)
+            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
+    "temperature": {
+        "ABC123": [
+            {
+                "response": "",
+                "answer": "",
+                "from_type": '',
+                "to_type": '',
+                "grade": '',
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ''
+            }
+        ]}}, { 
+    "temperature":
+    {
+            "ThinkDifferent":
+            {
+                "Kelvin": { "eq": fn, "ID": None }
+            }
+    }}, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
+            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
         assert resultError.match("Conversion function is not valid")
 
@@ -58,18 +84,29 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            vm = Conversion_VM("temperature", {
-        "temperature":
-        {
-                "ThinkDifferent":
-                {
-                    "Kelvin": { "eq": fn, "ID": None }
-                }
-        }
-    }, Conversion)
+            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
+    "temperature": {
+        "ABC123": [
+            {
+                "response": "",
+                "answer": "",
+                "from_type": '',
+                "to_type": '',
+                "grade": '',
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ''
+            }
+        ]}}, { 
+    "temperature":
+    {
+            "ThinkDifferent":
+            {
+                "Kelvin": { "eq": fn, "ID": None }
+            }
+    }}, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
+            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
         assert resultError.match("Conversion function is not valid")
 
@@ -78,18 +115,29 @@ class Test_Conversion_VM:
         
             fn = "x )( 1"
 
-            vm = Conversion_VM("temperature", {
-        "temperature":
-        {
-                "ThinkDifferent":
-                {
-                    "Kelvin": { "eq": fn, "ID": None }
-                }
-        }
-    }, Conversion)
+            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
+    "temperature": {
+        "ABC123": [
+            {
+                "response": "",
+                "answer": "",
+                "from_type": '',
+                "to_type": '',
+                "grade": '',
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ''
+            }
+        ]}}, { 
+    "temperature":
+    {
+            "ThinkDifferent":
+            {
+                "Kelvin": { "eq": fn, "ID": None }
+            }
+    }}, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert(32, 'ThinkDifferent', 'Kelvin')
+            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
         # DSN Notes: does this work?
         assert resultError.match("unmatched '\\)'")

@@ -1,4 +1,4 @@
-TypeResponses,student_id,response,answer,from_type,to_type,grade,timestamp,ID
+Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
 temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 temperature,ABC1233,0,32,Farenheit,Celsius,correct,2023-10-02 10:00 AM,
 temperature,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,

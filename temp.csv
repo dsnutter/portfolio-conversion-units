@@ -1,4 +1,4 @@
-TypeConversion,From,To,equation,ID
+Type,From,To,equation,ID
 temperature,Farenheit,Celsius,(x-32) * (5/9),
 temperature,Farenheit,Kelvin,((x-32) * (5/9)) + 273.15,
 temperature,Farenheit,Rankine,x + 459.67,

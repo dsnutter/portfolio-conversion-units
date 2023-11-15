@@ -1,14 +1,15 @@
 from flexion_challenge_dsnutter.di.Container import Container
 from flexion_challenge_dsnutter.di.Configurations import Configurations
 from flexion_challenge_dsnutter.View import Conversion_View, Response_View
-from flexion_challenge_dsnutter.helpers.Enums import FileTypes
+from flexion_challenge_dsnutter.helpers.Enums import BackendTypes
 
 
-conversions_filename = 'flexion_challenge_dsnutter/configuration/conversions_config.json'
-responses_filename = 'flexion_challenge_dsnutter/configuration/responses_config.json'
+conversions_filename = 'flexion_challenge_dsnutter/configuration/conversions_config.csv'
+responses_filename = 'flexion_challenge_dsnutter/configuration/responses_config.csv'
 types = ['temperature', 'volume']
+file_type = BackendTypes.CSV
 
-c_json = Configurations(FileTypes.JSON, 
+c_json = Configurations(file_type, 
                         conversions_filename, 
                         responses_filename)
 
@@ -18,7 +19,7 @@ c_json.wire_up(types[0])
 Conversion_View.Conversion_View.All_Possible_Types()
 
 # enter responses
-Response_View.Response_View.Entry_Of_Single_Reponse(types[0])
+#Response_View.Response_View.Entry_Of_Single_Reponse(types[0])
 
 # execute the view for responses
 Response_View.Response_View.Display_Of_All_Responses()

@@ -37,16 +37,16 @@ class Response_View:
                 'text': 'input unit of measure',
                 'depends_on_previous': False,
                 'can_override_valid': True,
-                'valid_args': f'An item that is one of {str(c_vm.all_from_types)}',
-                'valid': lambda x: x in c_vm.all_from_types,
+                'valid_args': f'An item that is one of {str(c_vm.all_keys())}',
+                'valid': lambda x: x in c_vm.all_keys(),
                 'convert': lambda x: x.lower().capitalize()
             },
             'to_type': {
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
                 'can_override_valid': True,
-                'valid_args': lambda x: f"An item that is one of {str(c_vm.all_to_types(x))}.\nIf you chose an invalid input unit of measure, you may not have choices",
-                'valid': lambda entered, previous: entered in c_vm.all_to_types(previous),
+                'valid_args': lambda x: f"An item that is one of {str(c_vm.all_keys_level2(x))}.\nIf you chose an invalid input unit of measure, you may not have choices",
+                'valid': lambda entered, previous: entered in c_vm.all_keys_level2(previous),
                 'convert': lambda x: x.lower().capitalize()
             },
             'response': {
@@ -77,7 +77,12 @@ class Response_View:
                     print(f"There was an error with your input it must be a valid {template[item]['text']} such as:")
                     print(f"{valid_args}")
                     if template[item]['can_override_valid']:
-                        o_input = input(f'Press \'Y\' to override and use the input that was entered or press \'B\' to go back to the previous choice before this one...')
+                        o_input = input(f"""
+Press 'Y' to override and use the input that was entered
+-or-
+Press 'B' to go back to the previous choice before this one
+-or-
+Press enter to go back and reenter""")
                         if o_input.lower() == 'y':
                             override = True
                         elif o_input.lower() == 'b':
@@ -92,12 +97,15 @@ class Response_View:
                     entered = template[item]['convert'](entered)
                     valid_entered = (not(template[item]['depends_on_previous']) and template[item]['valid'](entered))
                     valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
-            r[item] = entered
+            if item == 'student_id':
+                student_id = entered
+            else:
+                r[item] = entered
             previous = entered
             print(r)
             print()
             i += 1
-        r_vm.add_reponse(r)
+        r_vm.add(student_id, r)
 
     #
     # Output view functions
@@ -105,19 +113,14 @@ class Response_View:
     # this view is mainly for dev test purposes to see all responses that have been persisted already
     @inject
     def Display_Of_All_Responses(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
-        vm.generate_preexisting_responses()
-        items = vm.all_from_types
+        vm.execute_load_preexisting()
+        items = vm.all_keys()
         print('\n\nAll the responses so far:')
-        for from_type in items:
-            print('\nFrom Type: {}'.format(from_type))
-            to_types = vm.all_to_types(from_type)
-            for to_type in to_types:
-                students = vm.all_students(from_type, to_type)
-                for student_id in students:                        
-                    objs = vm.get_responses(from_type, to_type, student_id)
-                    for obj in objs:
-                        print(f'Student ID: {obj.student_id}')
-                        print(f"""
+        for student_id in items:                        
+            objs = vm.get_responses(student_id)
+            for obj in objs:
+                print(f'Student ID: {obj.student_id}')
+                print(f"""
 Details
     From: {obj.from_type}
     To: {obj.to_type}
