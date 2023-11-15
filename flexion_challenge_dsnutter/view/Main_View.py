@@ -1,40 +1,29 @@
 
 from dependency_injector.wiring import Provide, inject
-from ..di import Container, Configurations
-from ..View_Model import Response_VM, Conversion_VM
+from ..di import Container, Configurations as config_di
 from ..helpers.View_Functions import View_Functions
-from ..helpers.Enums import BackendTypes
 from ..View import Conversion_View, Response_Input_View, Response_Output_View
 
 class Main_View:
 
-    main_menu = """
-    
-    
-    """
-
-    @inject
-    def Main_Menu_DI(r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
-                    c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
-        Main_View.Main_Menu(r_vm, c_vm)
-
-    def Main_Menu(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM):
+    def Main_Menu(config: config_di.Configurations):
         title = '** Student Units Conversion Application **'
+        types = config.types
         menu_hashmap = {
                 # display responses
                 'd': {
                     'text': 'Display all response entries [including previous ones] to screen',
-                    'execute': lambda t, c, r: Response_Output_View.Response_Output_View.Display_Of_All_Responses(r, c)
+                    'execute': lambda t, c, r: Main_View.wire_display_responses(types, config)
                 },
                 # display conversions
                 'c': {
                     'text': 'List all possible conversion types',
-                    'execute': lambda t, c, r_vm: Conversion_View.Conversion_View.All_Possible_Types(r, c)
+                    'execute': lambda t, c, r: Main_View.wire_display_conversions(types, config)
                 },
                 # enter responses
                 'r': {
                     'text': 'Enter repsonses',
-                    'execute': lambda t, c, r: Response_Input_View.Response_Input_View.Entry_Response_Type(r, c)
+                    'execute': lambda t, c, r: Response_Input_View.Response_Input_View.Entry_Response_Type(config)
                 },
                 # quit application
                 'q': {
@@ -43,6 +32,16 @@ class Main_View:
                 }
             }
         # print(r_vm)
-        View_Functions.execute_menu(title, menu_hashmap, 'q', c_vm, r_vm)
+        View_Functions.execute_menu(title, menu_hashmap, 'q', None, None)
 
+    def wire_display_responses(types: list, config: config_di.Configurations):
+        modules = [Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI]
+        for type in types:
+            config.wire_up(type, modules)
+            Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI()
 
+    def wire_display_conversions(types: list, config: config_di.Configurations):
+        modules = [Conversion_View.Conversion_View.All_Possible_Types_DI]
+        for type in types:
+            config.wire_up(type, modules)
+            Conversion_View.Conversion_View.All_Possible_Types_DI()

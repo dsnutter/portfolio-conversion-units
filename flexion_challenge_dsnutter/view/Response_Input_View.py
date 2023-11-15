@@ -1,10 +1,10 @@
 
 from dependency_injector.wiring import Provide, inject
-from ..di import Container
+from ..di import Container, Configurations
 from ..View_Model import Response_VM, Conversion_VM
 from ..helpers.View_Functions import View_Functions
 from ..helpers.functions import Functions
-from . import Response_Input_View, Response_Output_View, Conversion_View
+from . import Response_Output_View, Conversion_View
 
 #
 # Input view functions
@@ -12,25 +12,29 @@ from . import Response_Input_View, Response_Output_View, Conversion_View
 class Response_Input_View:
 
     @inject
-    def Entry_Response_Type_DI(r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
-                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
-        Response_Input_View.Entry_Response_Type(r_vm, c_vm)
+    def Entry_Response_Type_DI():
+        Response_Input_View.Entry_Response_Type()
 
-    def Entry_Response_Type(r_vm: Response_VM.Response_VM,
-                                c_vm: Conversion_VM.Conversion_VM):
+    def Entry_Response_Type(config: Configurations.Configurations):
         title = '** Please choose a response type **'
         menu_hashmap = {}
-        for type in c_vm.all_types:
+        for type in config.types:
             menu_hashmap[type[0].lower()] = {
                 'text': type,
-                'execute': lambda t, c, r: Response_Input_View.Entry_Of_Multi_Reponse(t, r, c),
+                'execute': lambda t, c, r: Response_Input_View.wire_input_responses(t, config),
                 'context': type
             }
         menu_hashmap['b'] = {
             'text': 'Back',
             'execute': ''
         }
-        View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm)
+        View_Functions.execute_menu(title, menu_hashmap, 'b', None, None)
+
+    def wire_input_responses(type: list, config: Configurations.Configurations):
+        modules = [Response_Input_View.Entry_Of_Multi_Reponse_DI]
+
+        config.wire_up(type, modules)
+        Response_Input_View.Entry_Of_Multi_Reponse_DI(type)
 
     @inject
     def Entry_Of_Multi_Reponse_DI(type: str, 
@@ -47,7 +51,7 @@ class Response_Input_View:
                 # display conversions
                 'l': {
                     'text': 'List all possible conversion types',
-                    'execute': lambda t, c, r: Conversion_View.Conversion_View.List_By_Conversion_Type(t, r, c),
+                    'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
                     'context': type
                 },
                 # enter responses

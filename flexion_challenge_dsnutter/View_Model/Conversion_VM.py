@@ -7,8 +7,8 @@ import uuid
 # controls operationss on the conversion Models, and persistance
 class Conversion_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Conversion], load_preexisting: bool = False) -> None:
-        super(Conversion_VM, self).__init__(type, backend_type, responses_config, conversions_config, load_preexisting)
+    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Conversion]) -> None:
+        super(Conversion_VM, self).__init__(type, backend_type, responses_config, conversions_config)
 
         self._factory = factory
         self._storage = self._conversions_config

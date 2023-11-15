@@ -3,10 +3,9 @@ from .Base_Abstract import Base_Abstract
 
 class Base_VM(Base_Abstract):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = {}, conversions_config: dict = {}, load_preexisting: bool = False) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = {}, conversions_config: dict = {}) -> None:
         self._type = type
         self._backend_type = backend_type
-        self._load_preexisting = load_preexisting
         self._all_types = (conversions_config.keys())
 
         if type in responses_config:
@@ -21,6 +20,10 @@ class Base_VM(Base_Abstract):
     @property
     def all_types(self) -> list:
         return self._all_types
+
+    @property
+    def current_type(self) -> list:
+        return self._type
 
     """
     # persist exising items in memory to storage
@@ -37,6 +40,4 @@ class Base_VM(Base_Abstract):
     def add(self, hashmap: dict):
         raise NotImplementedError()
     
-    def load_preexisting(self):
-        raise NotImplementedError()
     """

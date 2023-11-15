@@ -13,11 +13,11 @@ class Response_Output_View:
     def Display_Of_All_Responses_DI(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
         Response_Output_View.Display_Of_All_Responses(vm, None)
 
-    # this view is mainly for dev test purposes to see all responses that have been persisted already
+    # this view loads all previous responses and displays them
     def Display_Of_All_Responses(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
-        # r_vm.execute_load_preexisting()
+        r_vm.execute_load_preexisting()
         items = r_vm.all_keys()
-        print('\n\nAll the responses so far:\n')
+        print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
         for student_id in items:                        
             objs = r_vm.get_responses(student_id)
             for obj in objs:

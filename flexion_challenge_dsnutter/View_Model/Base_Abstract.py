@@ -4,7 +4,7 @@ from ..helpers.Enums import BackendTypes
 class Base_Abstract(ABC):
 
     @abstractmethod
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = None, conversions_config: dict = None, load_preexisting: bool = False) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = None, conversions_config: dict = None) -> None:
         pass
 
     # persist exising items in memory to storage

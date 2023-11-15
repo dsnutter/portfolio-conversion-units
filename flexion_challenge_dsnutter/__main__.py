@@ -6,16 +6,16 @@ from dsnutter_conversion_units.helpers.Enums import BackendTypes
 
 conversions_filename = 'dsnutter_conversion_units/configuration/conversions_config.csv'
 responses_filename = 'dsnutter_conversion_units/configuration/responses_config.csv'
-types = ['temperature', 'volume']
 file_type = BackendTypes.CSV
 
-c_json = Configurations(file_type, 
+c = Configurations(file_type, 
                         conversions_filename, 
                         responses_filename)
 
-c_json.wire_up(types[0])
+# c_json.wire_up(types[0])
+# c_json.wire_up(types[1])
 
-Main_View.Main_View.Main_Menu_DI()
+Main_View.Main_View.Main_Menu(c)
 
 # execute the view for temperatures
 # Conversion_View.Conversion_View.All_Possible_Types()

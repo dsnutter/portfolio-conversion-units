@@ -8,8 +8,8 @@ import uuid
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Response.Response], load_preexisting: bool = False) -> None:
-        super(Response_VM, self).__init__(type, backend_type, responses_config, conversions_config, load_preexisting)
+    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Response.Response]) -> None:
+        super(Response_VM, self).__init__(type, backend_type, responses_config, conversions_config)
         self._config = self._responses_config
         self._factory = factory
         self._storage = {}
@@ -119,8 +119,7 @@ class Response_VM(Base_VM):
 
 
     def execute_load_preexisting(self):
-        if self._load_preexisting and self._storage == {}:
-            self._load_preexisting = False
+        if self._storage == {}:
             items = self._config
             for student_id in items.keys():
                 for inner in items[student_id]:
