@@ -2,17 +2,81 @@
 from dependency_injector.wiring import Provide, inject
 from ..di import Container
 from ..View_Model import Response_VM, Conversion_VM
+from ..helpers.View_Functions import View_Functions
 from ..helpers.functions import Functions
+from . import Response_Input_View, Response_Output_View, Conversion_View
 
-class Response_View:
+#
+# Input view functions
+#
+class Response_Input_View:
 
-    #
-    # Input view functions
-    #
     @inject
-    def Entry_Of_Single_Reponse(type: str, 
+    def Entry_Response_Type_DI(r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
+                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        Response_Input_View.Entry_Response_Type(r_vm, c_vm)
+
+    def Entry_Response_Type(r_vm: Response_VM.Response_VM,
+                                c_vm: Conversion_VM.Conversion_VM):
+        title = '** Please choose a response type **'
+        menu_hashmap = {}
+        for type in c_vm.all_types:
+            menu_hashmap[type[0].lower()] = {
+                'text': type,
+                'execute': lambda t, c, r: Response_Input_View.Entry_Of_Multi_Reponse(t, r, c),
+                'context': type
+            }
+        menu_hashmap['b'] = {
+            'text': 'Back',
+            'execute': ''
+        }
+        View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm)
+
+    @inject
+    def Entry_Of_Multi_Reponse_DI(type: str, 
                                 r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                 c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        Response_Input_View.Entry_Of_Multi_Reponse(type, r_vm, c_vm)
+
+    def Entry_Of_Multi_Reponse(type: str, 
+                                r_vm: Response_VM.Response_VM,
+                                c_vm: Conversion_VM.Conversion_VM):
+
+        title = f'** Student {type.capitalize()} Units Conversion Application **'
+        menu_hashmap = {
+                # display conversions
+                'l': {
+                    'text': 'List all possible conversion types',
+                    'execute': lambda t, c, r: Conversion_View.Conversion_View.List_By_Conversion_Type(t, r, c),
+                    'context': type
+                },
+                # enter responses
+                'r': {
+                    'text': 'Enter repsonses',
+                    'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
+                    'context': type
+                },
+                # quit application
+                'b': {
+                    'text': 'Back',
+                    'execute': ''
+                }
+            }
+        View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm)
+
+    # filename = Main_View.Enter_Filename("saving to disk")
+    # Configurations.Configurations.save_responses_dict_to_file({ type:  r_vm.get_responses() }, filename, BackendTypes.CSV)
+
+    @inject
+    def Entry_Of_Single_Reponse_DI(type: str, 
+                                r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
+                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        Response_Input_View.Entry_Of_Single_Reponse_NonDI(type, r_vm, c_vm)
+
+
+    def Entry_Of_Single_Reponse(type: str, 
+                                r_vm: Response_VM.Response_VM,
+                                c_vm: Conversion_VM.Conversion_VM):
         #
         # this template defines what to print when gathering reponse inputs and how to validate that input
         #
@@ -106,59 +170,4 @@ Press enter to go back and reenter""")
             print()
             i += 1
         r_vm.add(student_id, r)
-
-    #
-    # Output view functions
-    #
-    # this view is mainly for dev test purposes to see all responses that have been persisted already
-    @inject
-    def Display_Of_All_Responses(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
-        vm.execute_load_preexisting()
-        items = vm.all_keys()
-        print('\n\nAll the responses so far:')
-        for student_id in items:                        
-            objs = vm.get_responses(student_id)
-            for obj in objs:
-                print(f'Student ID: {obj.student_id}')
-                print(f"""
-Details
-    From: {obj.from_type}
-    To: {obj.to_type}
-    Student Entered: {obj.response}
-    Answer was: {obj.answer}
-    Grade was: {obj.grade}
-    Timestamp: {obj.timestamp}
-    ID: {obj.id}
-""")
-
-    @inject
-    def Display_Of_Single_Reponse():
-        pass
-
-    # simple print commands
-    @inject
-    def Console_Summary():
-        pass
-
-    # jinja2 templating
-    @inject
-    def Text_Summary():
-        pass
-
-    # opens in chrome or firefox
-    # jinja2 templating
-    @inject
-    def HTML_Summary():
-        pass
-
-    # possible future: am guessing there is a library for this for python somewheres
-    #  could use a python latex library with jinja2 templating for this?
-    @inject
-    def PDF_Summary():
-        pass
-
-    # possible future if integrated with SQLAlchemy library with SQLite or some other SQL: graph of statistics of reponses such as a bar graph of incorrect, invalid, correct
-    @inject
-    def Display_Graph():
-        pass
 

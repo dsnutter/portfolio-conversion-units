@@ -30,6 +30,9 @@ class Response_VM(Base_VM):
     def all_students(self) -> list:
         return self.all_keys()
 
+    def get_responses(self) -> dict:
+        return self._storage
+
     def get_responses(self, student_id: str) -> dict:
         # self.generate_preexisting_responses()
         return self._storage[student_id]
@@ -144,7 +147,7 @@ class Response_VM(Base_VM):
         raise NotImplementedError()
 
     def __str__(self) -> str:
-        result = 'Response Controller: {}\n'.format(self._response_type)
-        result = 'Response Controller: {}\n'.format(self._storage)
+        result = 'Response View Model: {}\n'.format(self._type)
+        result = 'Response View Model: {}\n'.format(self._storage)
         return result
 

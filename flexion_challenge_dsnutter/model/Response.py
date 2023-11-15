@@ -1,6 +1,5 @@
 from ..helpers.Enums import GradeTypes
 from .Base_Model import Base_Model
-from .Conversion import Conversion
 
 class Response(Base_Model):
 

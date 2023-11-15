@@ -1,7 +1,7 @@
 import json, csv
 from ..helpers.Enums import BackendTypes
 from ..di.Container import Container
-from ..View import Conversion_View, Response_View
+from ..View import Conversion_View, Response_Input_View, Response_Output_View, Main_View
 from ..helpers.Enums import BackendTypes
 
 #
@@ -159,10 +159,15 @@ class Configurations():
                                 config_responses={'item': type, 'definitions': self._responses_config, 'file_type': self._file_type})
 
         # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
-        container.wire(modules=[Conversion_View.Conversion_View.All_Possible_Types])
+        container.wire(modules=[Conversion_View.Conversion_View.All_Possible_Types_DI,
+                                Main_View.Main_View.Main_Menu_DI])
 
         # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
-        container.wire(modules=[Response_View.Response_View.Display_Of_All_Responses])
+        container.wire(modules=[Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI, 
+                                Response_Output_View.Response_Output_View,
+                                Response_Input_View.Response_Input_View.Entry_Response_Type_DI,
+                                Response_Input_View.Response_Input_View.Entry_Of_Multi_Reponse_DI,
+                                Main_View.Main_View.Main_Menu_DI])
 
         return container
 

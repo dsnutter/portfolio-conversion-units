@@ -7,6 +7,7 @@ class Base_VM(Base_Abstract):
         self._type = type
         self._backend_type = backend_type
         self._load_preexisting = load_preexisting
+        self._all_types = (conversions_config.keys())
 
         if type in responses_config:
             self._responses_config = responses_config[type]
@@ -17,6 +18,9 @@ class Base_VM(Base_Abstract):
         else:
             self._conversions_config = {}
 
+    @property
+    def all_types(self) -> list:
+        return self._all_types
 
     """
     # persist exising items in memory to storage
