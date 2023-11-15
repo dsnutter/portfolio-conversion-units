@@ -12,6 +12,11 @@ class Base_Abstract(ABC):
     def save(self):
         raise NotImplementedError()
 
+    @property
+    @abstractmethod
+    def all_types(self) -> list:
+        raise NotImplementedError()
+
     @abstractmethod    
     def all_keys(self) -> list:
         raise NotImplementedError()

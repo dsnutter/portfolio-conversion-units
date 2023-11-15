@@ -9,7 +9,11 @@ from ..Model import Conversion, Response
 class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
-        modules=['dsnutter_conversion_units.View.Conversion_View', 'dsnutter_conversion_units.View.Response_View']
+        modules=['dsnutter_conversion_units.View.Conversion_View', 
+                 'dsnutter_conversion_units.View.Response_Input_View',
+                 'dsnutter_conversion_units.View.Response_Output_View',
+                 'dsnutter_conversion_units.View.Main_View'
+                 ]
     )
 
     config_conversions = providers.Configuration()
