@@ -1,6 +1,6 @@
 import pytest
 
-from dsnutter_conversion_units.helpers.Enums import GradeTypes
+from dsnutter_conversion_units.helpers.Enums import GradeTypes, BackendTypes
 from dsnutter_conversion_units.View_Model.Response_VM import Response_VM
 from dsnutter_conversion_units.Model.Response import Response
 from datetime import datetime
@@ -27,7 +27,8 @@ class Test_Response_VM:
         ])
     def test_grade(self, response, answer, grade, to_type, from_type):
 
-        c = Response_VM('temperature', {
+        c = Response_VM('temperature', BackendTypes.JSON, 
+                        {
     "temperature": {
         "ABC123": [
             {
@@ -48,7 +49,15 @@ class Test_Response_VM:
             }
     }}, Response, True)
 
-        c.add_response('ABC123', response, answer, from_type, to_type, '2023-10-01 04:00 PM', None, None)
-        result = c.get_response(from_type, to_type, 'ABC123', '2023-10-01 04:00 PM')
+        c.add('ABC123', {
+                "response": response,
+                "answer": answer,
+                "from_type": from_type,
+                "to_type": to_type,
+                "grade": grade,
+                "timestamp": "2023-10-01 04:00 PM",
+                "ID": ''
+        })
+        result = c.get_response(from_type, to_type, 'ABC123', '2023-10-01 04:00 PM')[0]
         assert result.grade == grade
 
