@@ -1,8 +1,8 @@
 import json, csv
 from ..helpers.Enums import BackendTypes
 from ..di.Container import Container
-from ..View import Conversion_View, Response_Input_View, Response_Output_View, Main_View
 from ..helpers.Enums import BackendTypes
+# from ..View import Conversion_View, Response_Input_View, Response_Output_View
 
 #
 # for importing configurations from datastores for di
@@ -12,6 +12,7 @@ class Configurations():
         self._conversions_config_file = filename_conversions
         self._responses_config_file = filename_responses
         self._file_type = file_type
+        self._containers = {}
 
         if filename_conversions is not None:
             self._conversions_config = Configurations.conversions_file_to_dict(filename_conversions, file_type)
@@ -152,25 +153,24 @@ class Configurations():
                                                 'timestamp': obj['timestamp'],
                                                 'ID': obj['ID']  })
 
-    def wire_up(self, type: str):
+    def wire_up(self, type: str, modules: list):
+
+        if type not in self._containers:
+            self._containers[type] = {}
 
         # setups up injection of temperature/responses conversion Models derived from JSON files
-        container = Container(config_conversions={'item': type, 'definitions': self._conversions_config, 'file_type': self._file_type},
+        self._containers[type] = Container(config_conversions={'item': type, 'definitions': self._conversions_config, 'file_type': self._file_type},
                                 config_responses={'item': type, 'definitions': self._responses_config, 'file_type': self._file_type})
 
         # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
-        container.wire(modules=[Conversion_View.Conversion_View.All_Possible_Types_DI,
-                                Main_View.Main_View.Main_Menu_DI])
+        self._containers[type].wire(modules=modules)
 
-        # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
-        container.wire(modules=[Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI, 
-                                Response_Output_View.Response_Output_View,
-                                Response_Input_View.Response_Input_View.Entry_Response_Type_DI,
-                                Response_Input_View.Response_Input_View.Entry_Of_Multi_Reponse_DI,
-                                Main_View.Main_View.Main_Menu_DI])
+    @property
+    def types(self):
+        # types = ['temperature', 'volume']
+        types = list(self._conversions_config.keys())
 
-        return container
-
+        return types
 
     def __str__(self) -> str:
         result = 'Import/Export Controller'

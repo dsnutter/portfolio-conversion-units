@@ -38,8 +38,7 @@ class Container(containers.DeclarativeContainer):
             backend_type=config_responses.file_type, 
             responses_config=config_responses.definitions, 
             conversions_config=config_conversions.definitions,
-            factory=repsonses_factory.provider,
-            load_preexisting=True
+            factory=repsonses_factory.provider
         )
 
 
