@@ -7,7 +7,7 @@ from ..View import Conversion_View, Response_Input_View, Response_Output_View
 class Main_View:
 
     def Main_Menu(wire: DI_Wireup.DI_Wireup):
-        title = '** Student Units Conversion Application **'
+        title = '\n** Student Units Conversion Application **'
         types = wire.types
         menu_hashmap = {
                 # display responses
@@ -36,10 +36,10 @@ class Main_View:
             pass
 
     def wire_display_responses(types: list, config: DI_Wireup.DI_Wireup):
-        modules = [Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI]
+        modules = [Response_Output_View.Response_Output_View.Console_Summary_DI]
         for type in types:
             config.wire_up(type, modules)
-            Response_Output_View.Response_Output_View.Display_Of_All_Responses_DI()
+            Response_Output_View.Response_Output_View.Console_Summary_DI()
 
     def wire_display_conversions(types: list, config: DI_Wireup.DI_Wireup):
         modules = [Conversion_View.Conversion_View.All_Possible_Types_DI]

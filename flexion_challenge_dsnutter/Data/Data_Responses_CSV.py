@@ -8,7 +8,6 @@ class Data_Responses_CSV(Data_Responses):
 
     def __init__(self, type: BasicTypes, filename: str) -> None:
         super().__init__()
-        self._storage = {}
         self._type = type
         self._backend_type = BackendTypes.CSV
         self._filename = filename
