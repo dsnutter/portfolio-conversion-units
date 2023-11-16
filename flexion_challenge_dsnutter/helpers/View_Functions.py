@@ -1,29 +1,33 @@
 from ..View_Model import Conversion_VM, Response_VM
 from .functions import Functions
+from ..di.DI_Wireup import DI_Wireup
 
 class View_Functions:
 
     @staticmethod    
-    def execute_menu(title: str, menu_hashmap: dict, quit_cmd: str, c_vm: Conversion_VM.Conversion_VM, r_vm: Response_VM.Response_VM):
+    def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict, quit_cmd: list, c_vm: Conversion_VM.Conversion_VM, r_vm: Response_VM.Response_VM):
         print(title)
         for item in menu_hashmap:
             print(f"({item.capitalize()}) {menu_hashmap[item]['text']}")
         choice = ''
-        while not choice.isalpha() and choice.lower() != quit_cmd:
+        while not choice.isalpha() and choice.lower() not in quit_cmd:
             choice = input("Choose: ")
             choice = choice.lower()
             if choice not in menu_hashmap:
                 print("You did not enter a correct choice")
-            elif choice != quit_cmd:
+            elif choice not in quit_cmd:
                 context = ''
                 if 'context' in menu_hashmap[choice]:
                     context = menu_hashmap[choice]['context']
                 # lambda options for this is for three vars, a context/type and then appropriate view model
                 menu_hashmap[choice]['execute'](context, c_vm, r_vm)
-        if choice.lower() == quit_cmd:
-            return True
-        else:
+        if choice.lower() in quit_cmd:
+            if choice.lower() == 'q':
+                config.halt = True
+            # false since we dont want to execute the menu any longer
             return False
+        else:
+            return True
 
     @staticmethod
     def Enter_Filename(desc: str):

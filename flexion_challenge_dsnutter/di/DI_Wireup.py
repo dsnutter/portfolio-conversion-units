@@ -1,12 +1,14 @@
 from .Container import Container
 from .Configurations import Configurations
 
+# this was put in a separate file due to circular dependencies
 class DI_Wireup:
     
     def __init__(self, file_type: str, config: Configurations) -> None:
         self._containers = {}
         self._file_type = file_type
         self._config = config
+        self._stop = False
 
     def wire_up(self, type: str, modules: list):
 
@@ -23,3 +25,11 @@ class DI_Wireup:
     @property
     def types(self):
         return self._config.types
+    
+    @property
+    def halt(self):
+        return self._stop
+    
+    @halt.setter
+    def halt(self, value):
+        self._stop = value

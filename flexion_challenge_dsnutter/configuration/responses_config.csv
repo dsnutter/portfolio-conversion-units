@@ -11,3 +11,10 @@ volume,ABC123,0,32,Liters,Cubic_inches,GradeTypes.INCORRECT,2023-11-15 08:45 PM,
 volume,ABC123,0,32,Liters,Cubic_inches,GradeTypes.INVALID,2023-11-15 09:58 PM,bffb9aae-d4fa-4dab-bcb3-e4cb764fd88d
 volume,ABC123,99.3,34,Liters,Cups,GradeTypes.INVALID,2023-11-15 10:00 PM,86c741a0-85e9-4bba-8276-ae899b365950
 volume,ABC123,99.2,32,Cups,Liters,GradeTypes.INVALID,2023-11-15 10:01 PM,b6c18a72-c5a4-4de8-888e-80585ad0ac95
+volume,ABC123,34.5,32,Liters,Cups,GradeTypes.INVALID,2023-11-16 07:19 AM,db2f23ed-d994-4e2f-9661-8108453b26ec
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.INVALID,2023-11-16 07:20 AM,5187a8a4-2a59-4f14-86a9-1d30cbe027ba
+volume,ABC123,34,45.3,Liters,Cubic_feet,GradeTypes.INVALID,2023-11-16 07:31 AM,31f993ec-d105-47ec-8514-cf2b6d54f3e1
+temperature,123DD,3333.333,23.555555,Kelvin,Rankine,GradeTypes.INVALID,2023-11-16 07:41 AM,ca98f278-4487-4b00-ae73-3592572cd1cf
+volume,CASD123123,23.2,23.44444,Cups,Cubic_inches,GradeTypes.INVALID,2023-11-16 07:43 AM,9c7e3426-9546-4167-8e92-6b7886f4ea09
+volume,CBAS123,44.3,23.333,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:45 AM,f4fc6c19-ad7e-4777-bb37-bc7f0b6d554d
+volume,ASDANS2123,23.2,32.2,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:47 AM,c62f63d9-fcc9-4eda-88a7-1d941c0ffcac
