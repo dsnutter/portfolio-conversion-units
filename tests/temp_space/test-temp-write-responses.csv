@@ -1,2 +1,2 @@
-Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
-students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
+Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
+students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,

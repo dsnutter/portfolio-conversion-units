@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from ..helpers.Enums import BackendTypes
+from ..di.Configurations import Configurations
 
 class Base_Abstract(ABC):
 
     @abstractmethod
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = None, conversions_config: dict = None) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations ) -> None:
         pass
 
     # persist exising items in memory to storage

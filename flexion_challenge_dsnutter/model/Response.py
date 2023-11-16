@@ -97,9 +97,9 @@ class Response(Base_Model):
     #     return self._timestamp
 
     def __str__(self) -> str:
-        return str(self.__dict__())
+        return str(self.to_dict())
 
-    def __dict__(self) -> dict:
+    def to_dict(self) -> dict:
         hashmap = {
             self._student_id : [
                 {

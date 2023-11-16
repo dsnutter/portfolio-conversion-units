@@ -1,7 +1,8 @@
 import pytest
 from dsnutter_conversion_units.di import Configurations
-from dsnutter_conversion_units.Model.Conversion import Conversion
 from dsnutter_conversion_units.helpers.Enums import BackendTypes
+from dsnutter_conversion_units.helpers.Data_Functions import Data_Functions
+
 
 class Test_Configuration:
 
@@ -31,7 +32,7 @@ class Test_Configuration:
             file.writelines(header + "\n")
             file.writelines(content + "\n")
 
-        result = Configurations.Configurations.conversions_file_to_dict(filename, file_type)
+        result = Data_Functions.conversions_file_to_dict(filename, file_type)
 
         assert 'temperature' in result
         assert len(result['temperature'].keys()) == 1
@@ -54,9 +55,9 @@ class Test_Configuration:
         obj = Configurations.Configurations(file_type, filename_read, None)
         original = obj.conversions_config
 
-        Configurations.Configurations.save_conversion_dict_to_file(original, filename_save, file_type)
+        Data_Functions.save_conversion_dict_to_file(original, filename_save, file_type)
 
-        same_after_saving = Configurations.Configurations.conversions_file_to_dict(filename_save, file_type)
+        same_after_saving = Data_Functions.conversions_file_to_dict(filename_save, file_type)
 
         assert same_after_saving == original
 
@@ -130,7 +131,7 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
             file.writelines(header + "\n")
             file.writelines(content + "\n")
 
-        result = Configurations.Configurations.responses_file_to_dict(filename, file_type)
+        result = Data_Functions.responses_file_to_dict(filename, file_type)
 
         assert 'students' in result
         assert len(result['students'].keys()) == 2
@@ -152,8 +153,8 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
         obj = Configurations.Configurations(file_type, None, filename_read)
         original = obj.responses_config
 
-        Configurations.Configurations.save_responses_dict_to_file(original, filename_save, file_type)
+        Data_Functions.save_responses_dict_to_file(original, filename_save, file_type)
 
-        same_after_saving = Configurations.Configurations.responses_file_to_dict(filename_save, file_type)
+        same_after_saving = Data_Functions.responses_file_to_dict(filename_save, file_type)
 
         assert same_after_saving == original

@@ -1,9 +1,8 @@
 import pytest
 from dsnutter_conversion_units.View_Model.Conversion_VM import Conversion_VM
 from dsnutter_conversion_units.Model.Conversion import Conversion
-from dependency_injector import containers, providers
-from typing import Callable
 from dsnutter_conversion_units.helpers.Enums import BackendTypes
+from dsnutter_conversion_units.di.Configurations import Configurations
 
 class Test_Conversion_VM:
 
@@ -17,8 +16,18 @@ class Test_Conversion_VM:
             ])
     def test_convert(self, fn: str, value: float, converted: float):
 
-        vm = Conversion_VM("temperature", BackendTypes.JSON, 
-                        {
+        config = Configurations(BackendTypes.JSON, '', '')
+
+        config.conversions_config = {
+    "temperature":
+    {
+            "ThinkDifferent":
+            {
+                "Kelvin": { "eq": fn, "ID": None }
+            }
+    }
+}
+        config.responses_config = {
     "temperature": {
         "ABC123": [
             {
@@ -30,17 +39,9 @@ class Test_Conversion_VM:
                 "timestamp": "2023-10-01 04:00 PM",
                 "ID": ''
             }
-        ]}},
-{
-    "temperature":
-    {
-            "ThinkDifferent":
-            {
-                "Kelvin": { "eq": fn, "ID": None }
-            }
-    }
-}, Conversion, False)
+        ]}}
 
+        vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
         conversion = vm.conversion('ThinkDifferent', 'Kelvin')
         result = vm.convert_input(value, 'ThinkDifferent', 'Kelvin')
@@ -52,26 +53,32 @@ class Test_Conversion_VM:
         
             fn = "x * y + 1"
 
-            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
-    "temperature": {
-        "ABC123": [
-            {
-                "response": "",
-                "answer": "",
-                "from_type": '',
-                "to_type": '',
-                "grade": '',
-                "timestamp": "2023-10-01 04:00 PM",
-                "ID": ''
-            }
-        ]}}, { 
-    "temperature":
-    {
-            "ThinkDifferent":
-            {
-                "Kelvin": { "eq": fn, "ID": None }
-            }
-    }}, Conversion)
+            config = Configurations(BackendTypes.JSON, '', '')
+
+            config.conversions_config = {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn, "ID": None }
+                }
+        }
+    }
+            config.responses_config = {
+        "temperature": {
+            "ABC123": [
+                {
+                    "response": "",
+                    "answer": "",
+                    "from_type": '',
+                    "to_type": '',
+                    "grade": '',
+                    "timestamp": "2023-10-01 04:00 PM",
+                    "ID": ''
+                }
+    ]}}
+
+            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
             result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
@@ -84,26 +91,33 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
-    "temperature": {
-        "ABC123": [
-            {
-                "response": "",
-                "answer": "",
-                "from_type": '',
-                "to_type": '',
-                "grade": '',
-                "timestamp": "2023-10-01 04:00 PM",
-                "ID": ''
-            }
-        ]}}, { 
-    "temperature":
-    {
-            "ThinkDifferent":
-            {
-                "Kelvin": { "eq": fn, "ID": None }
-            }
-    }}, Conversion)
+            config = Configurations(BackendTypes.JSON, '', '')
+
+            config.conversions_config = {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn, "ID": None }
+                }
+        }
+    }
+            config.responses_config = {
+        "temperature": {
+            "ABC123": [
+                {
+                    "response": "",
+                    "answer": "",
+                    "from_type": '',
+                    "to_type": '',
+                    "grade": '',
+                    "timestamp": "2023-10-01 04:00 PM",
+                    "ID": ''
+                }
+    ]}}
+
+
+            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
             result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
@@ -115,26 +129,33 @@ class Test_Conversion_VM:
         
             fn = "x )( 1"
 
-            vm = Conversion_VM("temperature", BackendTypes.JSON,                         {
-    "temperature": {
-        "ABC123": [
-            {
-                "response": "",
-                "answer": "",
-                "from_type": '',
-                "to_type": '',
-                "grade": '',
-                "timestamp": "2023-10-01 04:00 PM",
-                "ID": ''
-            }
-        ]}}, { 
-    "temperature":
-    {
-            "ThinkDifferent":
-            {
-                "Kelvin": { "eq": fn, "ID": None }
-            }
-    }}, Conversion)
+            config = Configurations(BackendTypes.JSON, '', '')
+
+            config.conversions_config = {
+        "temperature":
+        {
+                "ThinkDifferent":
+                {
+                    "Kelvin": { "eq": fn, "ID": None }
+                }
+        }
+    }
+            config.responses_config = {
+        "temperature": {
+            "ABC123": [
+                {
+                    "response": "",
+                    "answer": "",
+                    "from_type": '',
+                    "to_type": '',
+                    "grade": '',
+                    "timestamp": "2023-10-01 04:00 PM",
+                    "ID": ''
+                }
+    ]}}
+
+
+            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
             conversion = vm.conversion('ThinkDifferent', 'Kelvin')
             result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')

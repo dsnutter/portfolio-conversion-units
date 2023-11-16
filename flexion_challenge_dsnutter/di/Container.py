@@ -1,6 +1,9 @@
 from dependency_injector import containers, providers
 from ..View_Model import Conversion_VM, Response_VM
 from ..Model import Conversion, Response
+from ..Data.Data_Responses_CSV import Data_Responses_CSV
+from ..helpers.Enums import BasicTypes
+from ..helpers import settings
 
 #
 # Notes on di library usage: The declarative container can not have any methods or any other attributes then providers.
@@ -25,20 +28,22 @@ class Container(containers.DeclarativeContainer):
             Conversion_VM.Conversion_VM,
             type=config_conversions.item,
             backend_type=config_conversions.file_type, 
-            responses_config=config_responses.definitions, 
-            conversions_config=config_conversions.definitions,
+            config=settings.main_configurations,
             factory=conversion_factory.provider
     )
 
     repsonses_factory = providers.Factory(Response.Response)
+    repsonses_data_csv = providers.Singleton(Data_Responses_CSV, 
+                                             type=BasicTypes.Response,
+                                             filename=settings.responses_filename)
 
     reponses_vm = providers.Factory(
             Response_VM.Response_VM,
             type=config_responses.item,
             backend_type=config_responses.file_type, 
-            responses_config=config_responses.definitions, 
-            conversions_config=config_conversions.definitions,
-            factory=repsonses_factory.provider
+            config=settings.main_configurations,
+            factory=repsonses_factory.provider,
+            data=repsonses_data_csv
         )
 
 
