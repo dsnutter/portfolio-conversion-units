@@ -1,9 +1,9 @@
 import pytest
-
-from flexion_challenge_dsnutter.helpers.Enums import GradeTypes, BackendTypes
+from flexion_challenge_dsnutter.helpers.Enums import GradeTypes, BackendTypes, BasicTypes
 from flexion_challenge_dsnutter.View_Model.Response_VM import Response_VM
 from flexion_challenge_dsnutter.Model.Response import Response
-from datetime import datetime
+from flexion_challenge_dsnutter.Data.Data_Responses_CSV import Data_Responses_CSV
+from flexion_challenge_dsnutter.di.Configurations import Configurations
 
 class Test_Response_VM:
 
@@ -27,8 +27,17 @@ class Test_Response_VM:
         ])
     def test_grade(self, response, answer, grade, to_type, from_type):
 
-        c = Response_VM('temperature', BackendTypes.JSON, 
-                        {
+        config = Configurations(BackendTypes.JSON, '', '')
+
+        config.conversions_confi = { 
+    "temperature":
+    {
+            "Farenheit":
+            {
+                "Celsius": { "eq": "x + 1", "ID": None }
+            }
+    }}
+        config.responses_config =                         {
     "temperature": {
         "ABC123": [
             {
@@ -40,14 +49,10 @@ class Test_Response_VM:
                 "timestamp": "2023-10-01 04:00 PM",
                 "ID": ''
             }
-        ]}}, { 
-    "temperature":
-    {
-            "Farenheit":
-            {
-                "Celsius": { "eq": "x + 1", "ID": None }
-            }
-    }}, Response, True)
+        ]}}
+
+
+        c = Response_VM('temperature', BackendTypes.JSON, config, Response, Data_Responses_CSV(BasicTypes.Response, "temp.csv" ))
 
         c.add('ABC123', {
                 "response": response,

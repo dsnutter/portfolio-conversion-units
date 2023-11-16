@@ -1,21 +1,14 @@
 from ..helpers.Enums import BackendTypes
 from .Base_Abstract import Base_Abstract
+from ..di.Configurations import Configurations
 
 class Base_VM(Base_Abstract):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict = {}, conversions_config: dict = {}) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations) -> None:
         self._type = type
         self._backend_type = backend_type
-        self._all_types = (conversions_config.keys())
-
-        if type in responses_config:
-            self._responses_config = responses_config[type]
-        else:
-            self._responses_config = {}
-        if type in conversions_config:
-            self._conversions_config = conversions_config[type]
-        else:
-            self._conversions_config = {}
+        self._all_types = (config.conversions_config.keys())
+        self._config = config
 
     @property
     def all_types(self) -> list:

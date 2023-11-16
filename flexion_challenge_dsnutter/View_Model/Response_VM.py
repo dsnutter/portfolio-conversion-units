@@ -1,22 +1,23 @@
 from ..helpers.Enums import GradeTypes, BackendTypes
+from ..helpers.Data_Functions import Data_Functions
 from ..Model import Response
 from .Base_VM import Base_VM
 from typing import Callable, List
 from datetime import datetime
 import uuid
+from ..di.Configurations import Configurations
+from ..Data import Data_Responses
 
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Response.Response]) -> None:
-        super(Response_VM, self).__init__(type, backend_type, responses_config, conversions_config)
-        self._config = self._responses_config
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, factory: Callable[..., Response.Response], data: Data_Responses.Data_Responses) -> None:
+        super(Response_VM, self).__init__(type, backend_type, config)
         self._factory = factory
-        self._storage = {}
+        self._data = data # singleton
 
     def all_keys(self) -> list:
-        # self.generate_preexisting_responses()
-        return list(self._storage.keys())
+        return self._data.all_keys()
 
     def all_keys_level2(self, key: str) -> list:
         raise NotImplementedError()
@@ -31,62 +32,19 @@ class Response_VM(Base_VM):
         return self.all_keys()
 
     def get_responses(self) -> dict:
-        return self._storage
+        return self._data.get_responses()
 
     def get_responses(self, student_id: str) -> dict:
-        # self.generate_preexisting_responses()
-        return self._storage[student_id]
+        return self._data.get_by_student_id(student_id)
 
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
-        # self.generate_preexisting_responses()
+        return self._data.get_response(from_type, to_type, student_id, timestamp)
 
-        # result = next(filter(lambda arr: any(datetime.strptime(item.timestamp, format) == datetime.strptime(timestamp, format))), self._storage[from_type][to_type][student_id]), None)
-        result = []
-        for item in self._storage[student_id]:
-            if datetime.strptime(item.timestamp, Response.Response.date_format) == datetime.strptime(timestamp, Response.Response.date_format) and from_type == item.from_type and to_type == item.to_type:
-                result.append(item)
-        return result
-
-    # def filter_response_by_exact_student_id(self, arr: list, timestamp: str):
-    #     date_format = '%Y-%m-%d %I:%M %p'
-    #     return any(datetime.strptime(item.timestamp, format) == datetime.strptime(timestamp, format) for item in arr)
-
-    # def filter_response_by_exact_primary_key(self, arr: list, timestamp: str):
-    #     date_format = '%Y-%m-%d %I:%M %p'
-    #     return any(datetime.strptime(item.timestamp, format) == datetime.strptime(timestamp, format) for item in arr)
-
-    """
-    # DSN Notes: this needs better test coverage
-    def add_single(self, student_id: str, response: str, answer: str, from_type: str, to_type: str, timestamp: str, override_grade: str = None, ID: str = None):
-        # self.generate_preexisting_responses()
-        if override_grade is not None:
-            grade = override_grade
-        else:
-            grade = self.grade_answer(from_type, to_type, response, answer)
-
-        if from_type not in self._storage:
-            self._storage[from_type] = {}
-        if to_type not in self._storage[from_type]:
-            self._storage[from_type][to_type] = {}
-        if student_id not in self._storage[from_type][to_type]:
-            self._storage[from_type][to_type][student_id] = []
-        if ID is None or ID == '':
-            ID = uuid.uuid4()
-
-        self._storage[from_type][to_type][student_id].append(self._factory(student_id=student_id, 
-                                                                                    response=response, 
-                                                                                    answer=answer, 
-                                                                                    from_type=from_type, 
-                                                                                    to_type=to_type, 
-                                                                                    timestamp=timestamp, 
-                                                                                    grade=grade, 
-                                                                                    ID=ID))
-    """                                                                         
     # DSN Notes: this needs better test coverage
     # DSN Notes: this is intended to add multiple items and needs changed
-    def add(self, hash_key: str, hashmap: dict):
+    def add(self, hash_key: str, hashmap: dict, persist: bool = True):
         if 'grade' not in hashmap:
-            grade = self.grade_answer(hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['answer'])
+            grade = hashmap['grade'] = self.grade_answer(hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['answer'])
         else:
             grade = hashmap['grade']
 
@@ -97,14 +55,14 @@ class Response_VM(Base_VM):
             ID = None
             hashmap['ID'] = None
         if 'timestamp' not in hashmap:
-            timestamp = datetime.now().strftime(Response.Response.date_format)
+            timestamp = hashmap['timestamp'] = datetime.now().strftime(Response.Response.date_format)
         else:
             timestamp = hashmap['timestamp']
 
-        if student_id not in self._storage:
-            self._storage[student_id] = []
         if hashmap['ID'] is None or hashmap['ID'] == '':
-            ID = uuid.uuid4()
+            ID = hashmap['ID'] = str(uuid.uuid4())
+        else:
+            ID = hashmap['ID']
 
         obj = self._factory(student_id=student_id, 
                                     response=hashmap['response'], 
@@ -114,17 +72,15 @@ class Response_VM(Base_VM):
                                     timestamp=timestamp, 
                                     grade=grade, 
                                     ID=ID)
-        self._storage[student_id].append(obj)
-        print(obj)
-
+        self._data.add(self._type, { 'obj': obj, 'student_id': student_id  }, persist)
 
     def execute_load_preexisting(self):
-        if self._storage == {}:
-            items = self._config
-            for student_id in items.keys():
-                for inner in items[student_id]:
-                    # self.add_single(student_id, inner['response'], inner['answer'], inner['from_type'], inner['to_type'], inner['timestamp'], inner['grade'], inner['ID'])
-                    self.add(student_id, inner)
+        items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
+        items = items[self._type]
+        for student_id in items.keys():
+            for inner in items[student_id]:
+                # do not persist to storage since its already there
+                self.add(student_id, inner, False)
 
     def grade_answer(self, from_type: str, to_type: str, response: str, answer: str) -> None:
         try:
@@ -135,9 +91,9 @@ class Response_VM(Base_VM):
         except ValueError:
             grade = GradeTypes.INCORRECT
 
-        if from_type not in self._conversions_config:
+        if from_type not in self._config.conversions_config:
             grade = GradeTypes.INVALID
-        elif to_type not in self._conversions_config[from_type]:
+        elif to_type not in self._config.conversions_config[from_type]:
             grade = GradeTypes.INVALID
 
         return grade

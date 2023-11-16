@@ -1,6 +1,6 @@
 
 from dependency_injector.wiring import Provide, inject
-from ..di import Container, Configurations
+from ..di import Container, DI_Wireup
 from ..View_Model import Response_VM, Conversion_VM
 from ..helpers.View_Functions import View_Functions
 from ..helpers.functions import Functions
@@ -15,7 +15,7 @@ class Response_Input_View:
     def Entry_Response_Type_DI():
         Response_Input_View.Entry_Response_Type()
 
-    def Entry_Response_Type(config: Configurations.Configurations):
+    def Entry_Response_Type(config: DI_Wireup.DI_Wireup):
         title = '** Please choose a response type **'
         menu_hashmap = {}
         for type in config.types:
@@ -28,9 +28,10 @@ class Response_Input_View:
             'text': 'Back',
             'execute': ''
         }
-        View_Functions.execute_menu(title, menu_hashmap, 'b', None, None)
+        while View_Functions.execute_menu(title, menu_hashmap, 'b', None, None) == False:
+            pass
 
-    def wire_input_responses(type: list, config: Configurations.Configurations):
+    def wire_input_responses(type: list, config: DI_Wireup.DI_Wireup):
         modules = [Response_Input_View.Entry_Of_Multi_Reponse_DI]
 
         config.wire_up(type, modules)
@@ -66,10 +67,8 @@ class Response_Input_View:
                     'execute': ''
                 }
             }
-        View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm)
-
-    # filename = Main_View.Enter_Filename("saving to disk")
-    # Configurations.Configurations.save_responses_dict_to_file({ type:  r_vm.get_responses() }, filename, BackendTypes.CSV)
+        while View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm) == False:
+            pass
 
     @inject
     def Entry_Of_Single_Reponse_DI(type: str, 

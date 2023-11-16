@@ -3,17 +3,17 @@ from .Base_VM import Base_VM
 from typing import Callable
 from ..Model.Conversion import Conversion
 import uuid
+from ..di.Configurations import Configurations
 
 # controls operationss on the conversion Models, and persistance
 class Conversion_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, responses_config: dict, conversions_config: dict, factory: Callable[..., Conversion]) -> None:
-        super(Conversion_VM, self).__init__(type, backend_type, responses_config, conversions_config)
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, factory: Callable[..., Conversion]) -> None:
+        super(Conversion_VM, self).__init__(type, backend_type, config)
 
         self._factory = factory
-        self._storage = self._conversions_config
+        self._storage = self._config.conversions_config[type]
         self._response_factory = factory
-
 
     # persist exising items in memory to storage
     def save(self):
@@ -55,7 +55,7 @@ class Conversion_VM(Base_VM):
         id = self._storage[from_type][to_type]["ID"]
 
         if id is None or id == '':
-            id = uuid.uuid4()
+            id = str(uuid.uuid4())
 
         # if a certain conversion object does not already exist, then create it
         # if not ('obj' in self._storage[from_type][to_type] or not ('obj' in self._storage[from_type][to_type] and self._storage[from_type][to_type]["obj"] is None)):

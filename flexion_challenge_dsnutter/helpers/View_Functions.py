@@ -20,6 +20,10 @@ class View_Functions:
                     context = menu_hashmap[choice]['context']
                 # lambda options for this is for three vars, a context/type and then appropriate view model
                 menu_hashmap[choice]['execute'](context, c_vm, r_vm)
+        if choice.lower() == quit_cmd:
+            return True
+        else:
+            return False
 
     @staticmethod
     def Enter_Filename(desc: str):
