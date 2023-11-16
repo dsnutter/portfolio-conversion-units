@@ -3,19 +3,19 @@
     {
             "Farenheit":
             {
-                "Celsius": { "eq": "(x-32) * (5/9)", "ID": null },
-                "Kelvin": { "eq": "((x-32) * (5/9)) + 273.15", "ID": null }, 
+                "Celsius": { "eq": "(x-32.0) * (5/9)", "ID": null },
+                "Kelvin": { "eq": "((x-32.0) * (5/9)) + 273.15", "ID": null }, 
                 "Rankine": { "eq": "x + 459.67", "ID": null }
             },
             "Celsius":
             {
-                "Farenheit": { "eq": "(x * (9/5)) + 32", "ID": null },
+                "Farenheit": { "eq": "(x * (9/5)) + 32.0", "ID": null },
                 "Kelvin": { "eq": "x + 273.15", "ID": null },
                 "Rankine": { "eq": "(x + 273.15) * 9/5", "ID": null }
             },
             "Kelvin":
             {
-                "Farenheit": { "eq": "((x-273.15) * (9/5)) + 32", "ID": null },
+                "Farenheit": { "eq": "((x-273.15) * (9/5)) + 32.0", "ID": null },
                 "Celsius": { "eq": "x - 273.15", "ID": null },
                 "Rankine": { "eq": "x * 9/5", "ID": null }
             },
@@ -33,7 +33,7 @@
     "volume": {
         "Liters": {
             "Tablespoons": {
-                "eq": "x * (67 + 2/3)",
+                "eq": "x * (67.0 + 2/3)",
                 "ID": null
             },
             "Cubic_inches": {
@@ -55,7 +55,7 @@
         },
         "Tablespoons": {
             "Liters": {
-                "eq": "x / (67 + 2/3)",
+                "eq": "x / (67.0 + 2/3)",
                 "ID": null
             },
             "Cubic_inches": {

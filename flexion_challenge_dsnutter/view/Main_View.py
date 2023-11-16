@@ -17,12 +17,12 @@ class Main_View:
                 },
                 # display conversions
                 'c': {
-                    'text': 'List all possible conversion types',
+                    'text': 'List all conversion types details',
                     'execute': lambda t, c, r: Main_View.wire_display_conversions(types, wire)
                 },
                 # enter responses
                 'r': {
-                    'text': 'Enter repsonses',
+                    'text': 'Repsonses actions',
                     'execute': lambda t, c, r: Response_Input_View.Response_Input_View.Entry_Response_Type(wire)
                 },
                 # quit application
@@ -32,7 +32,7 @@ class Main_View:
                 }
             }
         # print(r_vm)
-        while View_Functions.execute_menu(title, menu_hashmap, 'q', None, None) == False:
+        while View_Functions.execute_menu(wire, title, menu_hashmap, ['q'], None, None) and not wire.halt:
             pass
 
     def wire_display_responses(types: list, config: DI_Wireup.DI_Wireup):
