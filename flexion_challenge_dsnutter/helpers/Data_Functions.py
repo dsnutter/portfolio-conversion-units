@@ -20,7 +20,8 @@ class Data_Functions:
                             result[items["Type"]][items["From"]][items["To"]] = {}
                         result[items["Type"]][items["From"]][items["To"]]['eq'] = items["equation"]
                         result[items["Type"]][items["From"]][items["To"]]['ID'] = items["ID"]
-                    return result
+                file.close()
+                return result
             elif file_type == BackendTypes.JSON:
                 result = json.load(open(filename))
             else:
@@ -52,7 +53,8 @@ class Data_Functions:
                             "timestamp": items["timestamp"],
                             "ID": items["ID"]
                         })
-                    return result
+                file.close()
+                return result
             elif file_type == BackendTypes.JSON:
                 result = json.load(open(filename))
             else:
@@ -68,6 +70,7 @@ class Data_Functions:
             if file_type == BackendTypes.JSON:
                 with open(filename, 'w+') as file:
                     json.dump(obj=config, fp=file, indent=4)
+                file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
                     lines = csv.DictWriter(file, [ 'Type', 'From', 'To', 'equation', 'ID' ])
@@ -76,6 +79,7 @@ class Data_Functions:
                         for from_c in config[cname]:
                             for to_c in config[cname][from_c]:
                                 lines.writerow({ 'Type': cname, 'From': from_c, 'To': to_c, 'equation': config[cname][from_c][to_c]['eq'], 'ID': config[cname][from_c][to_c]['ID'] })
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
 
@@ -85,6 +89,7 @@ class Data_Functions:
             if file_type == BackendTypes.JSON:
                 with open(filename, 'w+') as file:
                     json.dump(obj=config, fp=file, indent=4)
+                file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
                     lines = csv.DictWriter(file, [ 'Type','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
@@ -101,6 +106,7 @@ class Data_Functions:
                                                     'grade': obj['grade'], 
                                                     'timestamp': obj['timestamp'],
                                                     'ID': obj['ID']  })
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
 
@@ -134,5 +140,6 @@ class Data_Functions:
                     # lines.writeheader()
                     for ID in IDs:
                         lines.writerow(new_lines[ID])
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
