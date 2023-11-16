@@ -18,3 +18,5 @@ temperature,123DD,3333.333,23.555555,Kelvin,Rankine,GradeTypes.INVALID,2023-11-1
 volume,CASD123123,23.2,23.44444,Cups,Cubic_inches,GradeTypes.INVALID,2023-11-16 07:43 AM,9c7e3426-9546-4167-8e92-6b7886f4ea09
 volume,CBAS123,44.3,23.333,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:45 AM,f4fc6c19-ad7e-4777-bb37-bc7f0b6d554d
 volume,ASDANS2123,23.2,32.2,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:47 AM,c62f63d9-fcc9-4eda-88a7-1d941c0ffcac
+temperature,ABC22,0,32,Farenheit,Celsius,GradeTypes.INVALID,2023-11-16 03:54 PM,3911457b-b251-4c35-8911-6d1ac5fad652
+temperature,ADS,0,32,Farenheit,Celsius,GradeTypes.INCORRECT,2023-11-16 03:56 PM,84dd226d-8021-4b60-9acd-08d0b8795d82

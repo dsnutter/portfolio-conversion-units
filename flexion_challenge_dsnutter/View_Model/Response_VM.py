@@ -7,6 +7,7 @@ from datetime import datetime
 import uuid
 from ..di.Configurations import Configurations
 from ..Data import Data_Responses
+from .Conversion_VM import Conversion_VM
 
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
@@ -15,6 +16,7 @@ class Response_VM(Base_VM):
         super(Response_VM, self).__init__(type, backend_type, config)
         self._factory = factory
         self._data = data # singleton
+        self._convert_input = None
 
     def all_keys(self) -> list:
         return self._data.all_keys()
@@ -84,18 +86,31 @@ class Response_VM(Base_VM):
                 # do not persist to storage since its already there
                 self.add(student_id, inner, False)
 
+    @property
+    def conversion(self):
+        return self._c_vm
+
+    @conversion.setter
+    def conversion(self, value: Conversion_VM):
+        self._c_vm = value
+
+    # must set conversion before executing this
     def grade_answer(self, from_type: str, to_type: str, response: str, answer: str) -> None:
         try:
-            if round(float(response), 1) == round(float(answer), 1):
+            if self._convert_input is None:
+                raise ModuleNotFoundError("Please set a conversion view model before calling Response_VM.grade_answer")
+            response_calculated = self._convert_input(response, from_type, to_type)
+
+            if response_calculated == round(float(answer), 1):
                 grade = GradeTypes.CORRECT
             else:
                 grade = GradeTypes.INCORRECT
         except ValueError:
             grade = GradeTypes.INCORRECT
 
-        if from_type not in self._config.conversions_config:
+        if from_type not in self._config.conversions_config[self._type]:
             grade = GradeTypes.INVALID
-        elif to_type not in self._config.conversions_config[from_type]:
+        elif to_type not in self._config.conversions_config[self._type][from_type]:
             grade = GradeTypes.INVALID
 
         return grade

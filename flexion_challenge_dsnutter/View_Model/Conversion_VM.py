@@ -41,11 +41,16 @@ class Conversion_VM(Base_VM):
     def convert_input(self, input: float, from_type, to_type) -> float:
         try:
             conversion_single = self.conversion(from_type, to_type)
-            result = conversion_single.equation_lambda(input)
+            result_from_calc = conversion_single.equation_lambda(input)
+            result = round(float(result_from_calc), 1)
         except:
-            raise ValueError("Cannot execute lambda function defined")
+            raise ValueError(f"Cannot execute lambda function defined for conversion from {from_type} to {to_type}: {conversion_single.equation}")
 
         return result
+    
+    def convert_input_as_static(self, input: float, from_type, to_type):
+        return lambda input, from_type, to_type: self.convert_input(input, from_type, to_type)
+
 
     # we are only creating the conversions with the factory when needed and not all of them initially
     #  allows for less boilerplate code anad decoupling

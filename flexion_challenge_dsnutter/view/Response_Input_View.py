@@ -45,6 +45,9 @@ class Response_Input_View:
     def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str, 
                                 r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                 c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        # to hook up calculations
+        r_vm._convert_input = c_vm.convert_input_as_static
+
         Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
 
     def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str, 
