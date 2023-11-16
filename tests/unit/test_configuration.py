@@ -9,7 +9,7 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename, file_type, header, content', 
             [
-                ('tests/temp_space/test-read-conversions.json', BackendTypes.JSON,'', """
+                ('tests/files/test-read-conversions.json', BackendTypes.JSON,'', """
 
 {
     "temperature":
@@ -23,7 +23,7 @@ class Test_Configuration:
 }
 
 """),
-                ('tests/temp_space/test-read-conversions.csv', BackendTypes.CSV,"Type,From,To,equation,ID","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2,")
+                ('tests/files/test-read-conversions.csv', BackendTypes.CSV,"Type,From,To,equation,ID","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2,")
             ])
     def test_conversions_file_to_dict(self, filename: str, file_type: BackendTypes, header: str, content: str):
 
@@ -47,8 +47,8 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type', 
             [
-                ('tests/temp_space/test-write-conversions.json', 'tests/temp_space/test-temp-write-conversions.json', BackendTypes.JSON),
-                ('tests/temp_space/test-write-conversions.csv', 'tests/temp_space/test-temp-write-conversions.csv', BackendTypes.CSV)
+                ('tests/files/test-write-conversions.json', 'tests/files/test-temp-write-conversions.json', BackendTypes.JSON),
+                ('tests/files/test-write-conversions.csv', 'tests/files/test-temp-write-conversions.csv', BackendTypes.CSV)
             ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
@@ -63,7 +63,7 @@ class Test_Configuration:
 
     @pytest.mark.parametrize('filename, file_type, header, content', 
             [
-                ('tests/temp_space/test-read-responses.json', BackendTypes.JSON,'',"""{
+                ('tests/files/test-read-responses.json', BackendTypes.JSON,'',"""{
     "students": {
         "ABC123": [
             {
@@ -116,7 +116,7 @@ class Test_Configuration:
         ]
     }
 }"""),
-                ('tests/temp_space/test-read-responses.csv', BackendTypes.CSV,"Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID","""
+                ('tests/files/test-read-responses.csv', BackendTypes.CSV,"Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID","""
 students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,
 students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,
@@ -145,8 +145,8 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type', 
             [
-                ('tests/temp_space/test-write-responses.json', 'tests/temp_space/test-temp-write-responses.json', BackendTypes.JSON),
-                ('tests/temp_space/test-write-responses.csv', 'tests/temp_space/test-temp-write-responses.csv', BackendTypes.CSV)
+                ('tests/files/test-write-responses.json', 'tests/files/test-temp-write-responses.json', BackendTypes.JSON),
+                ('tests/files/test-write-responses.csv', 'tests/files/test-temp-write-responses.csv', BackendTypes.CSV)
             ])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
