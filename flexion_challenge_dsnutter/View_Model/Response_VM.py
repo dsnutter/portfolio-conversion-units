@@ -74,6 +74,8 @@ class Response_VM(Base_VM):
                                     ID=ID)
         self._data.add(self._type, { 'obj': obj, 'student_id': student_id  }, persist)
 
+        return obj
+
     def execute_load_preexisting(self):
         items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
         items = items[self._type]

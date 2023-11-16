@@ -28,22 +28,26 @@ class Response_Input_View:
             'text': 'Back',
             'execute': ''
         }
-        while View_Functions.execute_menu(title, menu_hashmap, 'b', None, None) == False:
+        menu_hashmap['q'] = {
+            'text': 'Quit',
+            'execute': ''
+        }
+        while View_Functions.execute_menu(config, title, menu_hashmap, ['b', 'q'], None, None) and not config.halt:
             pass
 
     def wire_input_responses(type: list, config: DI_Wireup.DI_Wireup):
         modules = [Response_Input_View.Entry_Of_Multi_Reponse_DI]
 
         config.wire_up(type, modules)
-        Response_Input_View.Entry_Of_Multi_Reponse_DI(type)
+        Response_Input_View.Entry_Of_Multi_Reponse_DI(config, type)
 
     @inject
-    def Entry_Of_Multi_Reponse_DI(type: str, 
+    def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str, 
                                 r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                 c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
-        Response_Input_View.Entry_Of_Multi_Reponse(type, r_vm, c_vm)
+        Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
 
-    def Entry_Of_Multi_Reponse(type: str, 
+    def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str, 
                                 r_vm: Response_VM.Response_VM,
                                 c_vm: Conversion_VM.Conversion_VM):
 
@@ -51,12 +55,12 @@ class Response_Input_View:
         menu_hashmap = {
                 # display conversions
                 'l': {
-                    'text': 'List all possible conversion types',
+                    'text': f'List all possible conversion types for {type.capitalize()}',
                     'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
                     'context': type
                 },
                 # enter responses
-                'r': {
+                'e': {
                     'text': 'Enter repsonses',
                     'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
                     'context': type
@@ -65,9 +69,13 @@ class Response_Input_View:
                 'b': {
                     'text': 'Back',
                     'execute': ''
+                },
+                'q': {
+                    'text': 'quit',
+                    'execute': ''
                 }
             }
-        while View_Functions.execute_menu(title, menu_hashmap, 'b', c_vm, r_vm) == False:
+        while View_Functions.execute_menu(wire, title, menu_hashmap, ['b', 'q'], c_vm, r_vm) and not wire.halt:
             pass
 
     @inject
@@ -104,17 +112,17 @@ class Response_Input_View:
                 'text': 'input unit of measure',
                 'depends_on_previous': False,
                 'can_override_valid': True,
-                'valid_args': f'An item that is one of {str(c_vm.all_keys())}',
+                'valid_args': f'An item that is one of ({", ".join(c_vm.all_keys()).replace("_", " ")})',
                 'valid': lambda x: x in c_vm.all_keys(),
-                'convert': lambda x: x.lower().capitalize()
+                'convert': lambda x: x.lower().capitalize().replace(' ', '_')
             },
             'to_type': {
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
                 'can_override_valid': True,
-                'valid_args': lambda x: f"An item that is one of {str(c_vm.all_keys_level2(x))}.\nIf you chose an invalid input unit of measure, you may not have choices",
+                'valid_args': lambda x: f"An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).\nIf you chose an invalid input unit of measure, you may not have choices",
                 'valid': lambda entered, previous: entered in c_vm.all_keys_level2(previous),
-                'convert': lambda x: x.lower().capitalize()
+                'convert': lambda x: x.lower().capitalize().replace(' ', '_')
             },
             'response': {
                 'text': 'student response of numerical value',
@@ -145,11 +153,12 @@ class Response_Input_View:
                     print(f"{valid_args}")
                     if template[item]['can_override_valid']:
                         o_input = input(f"""
-Press 'Y' to override and use the input that was entered
+Press enter to go back and reenter
 -or-
-Press 'B' to go back to the previous choice before this one
+Press 'Y' to override and use what was entered
 -or-
-Press enter to go back and reenter""")
+Press 'B' to go back to the previous entry before this one, since this choice is invalid
+""")
                         if o_input.lower() == 'y':
                             override = True
                         elif o_input.lower() == 'b':
@@ -169,8 +178,9 @@ Press enter to go back and reenter""")
             else:
                 r[item] = entered
             previous = entered
-            print(r)
-            print()
             i += 1
-        r_vm.add(student_id, r)
+        result = r_vm.add(student_id, r)
+        if result.grade:
+            print(f"The graded result for student {result.student_id} is: {result.grade}\n")
+
 
