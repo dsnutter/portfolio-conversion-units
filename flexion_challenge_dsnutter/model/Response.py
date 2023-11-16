@@ -1,5 +1,6 @@
 from ..helpers.Enums import GradeTypes
 from .Base_Model import Base_Model
+import pandas as pd
 
 class Response(Base_Model):
 
@@ -98,11 +99,15 @@ class Response(Base_Model):
 
     def __str__(self) -> str:
         return str(self.to_dict())
+    
+    def keys():
+        return ["student_id", "response", "answer", "from_type", "to_type", "grade", "timestamp", "ID"]
 
     def to_dict(self) -> dict:
         hashmap = {
             self._student_id : [
                 {
+                    "student_id": self._student_id,
                     "response": self._response,
                     "answer": self._answer,
                     "from_type": self._from_type,
@@ -114,4 +119,18 @@ class Response(Base_Model):
             ]
         }
         return hashmap
+    
+    def to_dataframe(self) -> pd.DataFrame:
+        hashmap = self.to_dict()
+        index = 0
+        cols = Response.keys()
 
+        response = {}
+        for col in cols:
+             response[col] = [ hashmap[self._student_id][index][col] ]
+        # print(response)
+
+        df = pd.DataFrame.from_records(response)
+        # print(df)
+
+        return df
