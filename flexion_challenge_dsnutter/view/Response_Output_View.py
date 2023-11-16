@@ -3,6 +3,7 @@ from dependency_injector.wiring import Provide, inject
 from ..di import Container
 from ..View_Model import Response_VM, Conversion_VM
 from ..helpers.functions import Functions
+from ..Model import Response
 
 #
 # Output view functions
@@ -10,8 +11,8 @@ from ..helpers.functions import Functions
 class Response_Output_View:
 
     @inject
-    def Display_Of_All_Responses_DI(vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
-        Response_Output_View.Display_Of_All_Responses(vm, None)
+    def Display_Of_All_Responses_DI(r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)) -> None:
+        Response_Output_View.Display_Of_All_Responses(r_vm, None)
 
     # this view loads all previous responses and displays them
     def Display_Of_All_Responses(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
@@ -21,9 +22,9 @@ class Response_Output_View:
         for student_id in items:                        
             objs = r_vm.get_responses(student_id)
             for obj in objs:
-                Response_Output_View.Display_Of_Single_Reponse(obj)
+                Response_Output_View.Display_Of_Single_Response(obj)
 
-    def Display_Of_Single_Reponse(obj: Response_VM.Response_VM):
+    def Display_Of_Single_Response(obj: Response.Response):
                 print(f'\nStudent ID: {obj.student_id}')
                 print(f"""Details
     From: {obj.from_type}
@@ -36,11 +37,34 @@ class Response_Output_View:
 
 """)
 
-    # simple print commands
+    # print table to console
     @inject
-    def Console_Summary_DI():
-        pass
+    def Console_Summary_DI(r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm)):
+        Response_Output_View.Display_Summary_Console(r_vm, None)
 
+    # this view loads all previous responses and displays them
+    def Display_Summary_Console(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
+        r_vm.execute_load_preexisting()
+        print(f'\n\nAll the responses so far for {r_vm.current_type}:')
+        print(r_vm.to_dataframe_all().to_markdown())
+
+    """
+    # this view loads all previous responses and displays them
+    def Display_Summary_Console(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
+        r_vm.execute_load_preexisting()
+        items = r_vm.all_keys()
+        print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
+        separator = '\t\t'
+        print(f"StudentID{separator}Answer{separator}Input Measure{separator}Target Measure{separator}Student Response{separator}Output")
+        for student_id in items:                        
+            objs = r_vm.get_responses(student_id)
+            for obj in objs:
+                Response_Output_View.Display_Of_Single_Response_Console(obj, separator)
+
+    def Display_Of_Single_Response_Console(obj: Response.Response, separator: str):
+                print(f"{obj.student_id}{separator}{obj.answer}{separator}{obj.from_type}{separator}{obj.to_type}{separator}{obj.response}{separator}{obj.grade}")
+    """
+                
     # possible future: jinja2 templating
     @inject
     def Text_Summary_DI():
