@@ -1,11 +1,9 @@
 import pytest
-from dsnutter_conversion_units.helpers.Enums import GradeTypes, BackendTypes, BasicTypes
-from dsnutter_conversion_units.View_Model.Response_VM import Response_VM
-from dsnutter_conversion_units.View_Model.Conversion_VM import Conversion_VM
-from dsnutter_conversion_units.Model.Response import Response
-from dsnutter_conversion_units.Model.Conversion import Conversion
-from dsnutter_conversion_units.Data.Data_Responses_CSV import Data_Responses_CSV
-from dsnutter_conversion_units.di.Configurations import Configurations
+from ..helpers.Enums import GradeTypes, BackendTypes, BasicTypes
+from ..View_Model.Response_VM import Response_VM
+from ..Model.Response import Response
+from ..Data.Data_Responses_CSV import Data_Responses_CSV
+from ..di.Configurations import Configurations
 
 class Test_Response_VM:
 
