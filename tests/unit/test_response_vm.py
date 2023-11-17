@@ -1,7 +1,9 @@
 import pytest
 from dsnutter_conversion_units.helpers.Enums import GradeTypes, BackendTypes, BasicTypes
 from dsnutter_conversion_units.View_Model.Response_VM import Response_VM
+from dsnutter_conversion_units.View_Model.Conversion_VM import Conversion_VM
 from dsnutter_conversion_units.Model.Response import Response
+from dsnutter_conversion_units.Model.Conversion import Conversion
 from dsnutter_conversion_units.Data.Data_Responses_CSV import Data_Responses_CSV
 from dsnutter_conversion_units.di.Configurations import Configurations
 
@@ -29,7 +31,7 @@ class Test_Response_VM:
 
         config = Configurations(BackendTypes.JSON, '', '')
 
-        config.conversions_confi = { 
+        config.conversions_config = { 
     "temperature":
     {
             "Farenheit":
@@ -63,6 +65,8 @@ class Test_Response_VM:
                 "timestamp": "2023-10-01 04:00 PM",
                 "ID": ''
         })
+        conv = Conversion_VM('temperature', BackendTypes.JSON, config, Conversion)
+        c._convert_input = conv.convert_input_as_static
         result = c.get_response(from_type, to_type, 'ABC123', '2023-10-01 04:00 PM')[0]
         assert result.grade == grade
 
