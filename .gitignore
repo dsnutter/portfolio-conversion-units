@@ -163,4 +163,4 @@ cython_debug/
 notes-to-self.txt
 install.txt
 
-pytest.ini
+#pytest.ini
