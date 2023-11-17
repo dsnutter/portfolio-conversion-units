@@ -1,8 +1,8 @@
 import pytest
-from dsnutter_conversion_units.View_Model.Conversion_VM import Conversion_VM
-from dsnutter_conversion_units.Model.Conversion import Conversion
-from dsnutter_conversion_units.helpers.Enums import BackendTypes
-from dsnutter_conversion_units.di.Configurations import Configurations
+from ..View_Model.Conversion_VM import Conversion_VM
+from ..Model.Conversion import Conversion
+from ..helpers.Enums import BackendTypes
+from ..di.Configurations import Configurations
 
 class Test_Conversion_VM:
 
