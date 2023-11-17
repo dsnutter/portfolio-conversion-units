@@ -162,3 +162,5 @@ cython_debug/
 .vscode/
 notes-to-self.txt
 install.txt
+
+pytest.ini
