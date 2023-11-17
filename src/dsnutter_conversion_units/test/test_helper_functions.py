@@ -1,5 +1,5 @@
 import pytest
-from dsnutter_conversion_units.helpers.functions import Functions
+from ..helpers.functions import Functions
 
 class Test_Helper_Functions:
     @pytest.mark.parametrize('eq, result', 
