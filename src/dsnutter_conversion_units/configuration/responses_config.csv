@@ -1,4 +1,4 @@
-Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
+Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID
 temperature,ABC123,0,32,Celsius,Kelvin,GradeTypes.INCORRECT,2023-11-15 08:20 PM,80baf9e2-c0b0-44cc-aa0e-95b23a1d2fdb
 temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,96b297ca-7e57-4f81-a6b6-5e05f4384987
 temperature,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,3749450c-7008-4fde-9d91-3bdc07795186
@@ -18,3 +18,10 @@ temperature,123DD,3333.333,23.555555,Kelvin,Rankine,GradeTypes.INVALID,2023-11-1
 volume,CASD123123,23.2,23.44444,Cups,Cubic_inches,GradeTypes.INVALID,2023-11-16 07:43 AM,9c7e3426-9546-4167-8e92-6b7886f4ea09
 volume,CBAS123,44.3,23.333,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:45 AM,f4fc6c19-ad7e-4777-bb37-bc7f0b6d554d
 volume,ASDANS2123,23.2,32.2,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:47 AM,c62f63d9-fcc9-4eda-88a7-1d941c0ffcac
+temperature,ABC22,0,32,Farenheit,Celsius,GradeTypes.INVALID,2023-11-16 03:54 PM,3911457b-b251-4c35-8911-6d1ac5fad652
+temperature,ADS,0,32,Farenheit,Celsius,GradeTypes.INCORRECT,2023-11-16 03:56 PM,84dd226d-8021-4b60-9acd-08d0b8795d82
+temperature,ASDSAD,0,32,Farenheit,Celsius,GradeTypes.INCORRECT,2023-11-16 04:02 PM,28df40c0-b5d2-406f-bde3-1197097fcfb7
+temperature,ABC123,543.94,84.2,Farenheit,Rankine,GradeTypes.CORRECT,2023-11-18 09:05 AM,adce44b5-0011-4d75-9f84-070b09aca074
+temperature,ABC123,111.554,317.33,Kelvin,Farenheit,GradeTypes.INCORRECT,2023-11-18 09:06 AM,cd92ed3b-1a26-4561-bc24-f6e0ebbff4eb
+temperature,ABC123,19.4,73.12,Cups,Kelvin,GradeTypes.INVALID,2023-11-18 09:07 AM,14550af2-ca3e-4f58-912c-0e393741a136
+temperature,ABC123,0,6.5,Farenheit,Rankine,GradeTypes.INCORRECT,2023-11-18 09:09 AM,65383a74-dc93-4943-8812-08a402a4019d

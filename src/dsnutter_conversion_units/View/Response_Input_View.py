@@ -45,6 +45,9 @@ class Response_Input_View:
     def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str, 
                                 r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                 c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+        # to hook up calculations
+        r_vm._convert_input = c_vm.convert_input
+
         Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
 
     def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str, 
@@ -100,8 +103,8 @@ class Response_Input_View:
                 'valid': lambda x: Functions.is_valid_string(x),
                 'convert': lambda x: x.upper()
             },
-            'answer': {
-                'text': 'answer of numerical value', 
+            'input_value': {
+                'text': 'input_value of numerical value', 
                 'depends_on_previous': False,
                 'can_override_valid': False,
                 'valid_args': 'float',

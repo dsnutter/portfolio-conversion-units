@@ -1,6 +1,5 @@
 from ..helpers.Enums import BackendTypes
-import json, csv, mmap
-import shutil
+import json, csv
 
 class Data_Functions:
     @staticmethod
@@ -20,7 +19,8 @@ class Data_Functions:
                             result[items["Type"]][items["From"]][items["To"]] = {}
                         result[items["Type"]][items["From"]][items["To"]]['eq'] = items["equation"]
                         result[items["Type"]][items["From"]][items["To"]]['ID'] = items["ID"]
-                    return result
+                file.close()
+                return result
             elif file_type == BackendTypes.JSON:
                 result = json.load(open(filename))
             else:
@@ -45,14 +45,15 @@ class Data_Functions:
                             result[items["Type"]][items["student_id"]] = []                    
                         result[items["Type"]][items["student_id"]].append({
                             "response": items["response"],
-                            "answer": items["answer"],
+                            "input_value": items["input_value"],
                             "from_type": items["from_type"],
                             "to_type": items["to_type"],
                             "grade": items["grade"],
                             "timestamp": items["timestamp"],
                             "ID": items["ID"]
                         })
-                    return result
+                file.close()
+                return result
             elif file_type == BackendTypes.JSON:
                 result = json.load(open(filename))
             else:
@@ -68,6 +69,7 @@ class Data_Functions:
             if file_type == BackendTypes.JSON:
                 with open(filename, 'w+') as file:
                     json.dump(obj=config, fp=file, indent=4)
+                file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
                     lines = csv.DictWriter(file, [ 'Type', 'From', 'To', 'equation', 'ID' ])
@@ -76,6 +78,7 @@ class Data_Functions:
                         for from_c in config[cname]:
                             for to_c in config[cname][from_c]:
                                 lines.writerow({ 'Type': cname, 'From': from_c, 'To': to_c, 'equation': config[cname][from_c][to_c]['eq'], 'ID': config[cname][from_c][to_c]['ID'] })
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
 
@@ -85,9 +88,10 @@ class Data_Functions:
             if file_type == BackendTypes.JSON:
                 with open(filename, 'w+') as file:
                     json.dump(obj=config, fp=file, indent=4)
+                file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
                     lines.writeheader()
                     for cname in config:
                         for student_id in config[cname]:
@@ -95,12 +99,13 @@ class Data_Functions:
                                 lines.writerow({ 'Type': cname, 
                                                     'student_id': student_id, 
                                                     'response': obj['response'], 
-                                                    'answer': obj['answer'], 
+                                                    'input_value': obj['input_value'], 
                                                     'from_type': obj['from_type'],
                                                     'to_type': obj['to_type'], 
                                                     'grade': obj['grade'], 
                                                     'timestamp': obj['timestamp'],
                                                     'ID': obj['ID']  })
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
 
@@ -122,7 +127,7 @@ class Data_Functions:
                             new_lines[str(obj['ID'])] = { 'Type': cname, 
                                                 'student_id': student_id, 
                                                 'response': obj['response'], 
-                                                'answer': obj['answer'], 
+                                                'input_value': obj['input_value'], 
                                                 'from_type': obj['from_type'],
                                                 'to_type': obj['to_type'], 
                                                 'grade': obj['grade'], 
@@ -130,9 +135,10 @@ class Data_Functions:
                                                 'ID': obj['ID']  }
 
                 with open(filename, 'a+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
                     # lines.writeheader()
                     for ID in IDs:
                         lines.writerow(new_lines[ID])
+                file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
