@@ -47,7 +47,7 @@ class Response_Output_View:
     def Display_Summary_Console(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
         r_vm.execute_load_preexisting()
         print(f'\n\nAll the responses so far for {r_vm.current_type}:')
-        print(r_vm.to_dataframe_all().to_markdown())
+        print(r_vm.to_dataframe_all(for_display=True).to_markdown())
 
     # possible future: jinja2 templating
     @inject

@@ -32,7 +32,6 @@ class Conversion_VM(Base_VM):
             return []
         return list(self._storage[key].keys())
 
-    # does not really apply to conversions right now, so not implemented
     def all_keys_level3(self, key_outer: str, key_inner) -> list:
         raise NotImplementedError()
 
