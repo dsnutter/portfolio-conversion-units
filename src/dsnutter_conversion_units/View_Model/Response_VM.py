@@ -8,6 +8,7 @@ import uuid
 from ..di.Configurations import Configurations
 from ..Data import Data_Responses
 from .Conversion_VM import Conversion_VM
+from ..helpers.functions import Functions
 
 # controls operations on the reponse Models, and persistance
 class Response_VM(Base_VM):
@@ -46,9 +47,12 @@ class Response_VM(Base_VM):
     # DSN Notes: this is intended to add multiple items and needs changed
     def add(self, hash_key: str, hashmap: dict, persist: bool = True):
         if 'grade' not in hashmap:
-            grade = hashmap['grade'] = self.grade_answer(hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['answer'])
+            (input_value_rounded, input_value_calculated, grade) = self.grade_input_value(hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['input_value'])
+            hashmap['grade'] = grade
         else:
             grade = hashmap['grade']
+            input_value_calculated = None
+            input_value_rounded = None
 
         from_type = hashmap['from_type']
         to_type = hashmap['to_type']
@@ -68,12 +72,14 @@ class Response_VM(Base_VM):
 
         obj = self._factory(student_id=student_id, 
                                     response=hashmap['response'], 
-                                    answer=hashmap['answer'], 
+                                    input_value=hashmap['input_value'], 
                                     from_type=from_type, 
                                     to_type=to_type, 
                                     timestamp=timestamp, 
                                     grade=grade, 
-                                    ID=ID)
+                                    ID=ID,
+                                    input_value_rounded=input_value_rounded,
+                                    input_value_calculated=input_value_calculated)
         self._data.add(self._type, { 'obj': obj, 'student_id': student_id  }, persist)
 
         return obj
@@ -95,25 +101,26 @@ class Response_VM(Base_VM):
         self._c_vm = value
 
     # must set conversion before executing this
-    def grade_answer(self, from_type: str, to_type: str, response: str, answer: str) -> None:
+    def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> None:
         try:
             if self._convert_input is None:
-                raise ModuleNotFoundError("Please set a conversion view model before calling Response_VM.grade_answer")
-            response_calculated = self._convert_input(response, from_type, to_type)
+                raise ModuleNotFoundError("Please set a conversion view model before calling Response_VM.grade_input_value")
+            input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
 
-            if response_calculated == round(float(answer), 1):
+            if Functions.round_float_decimal_places(input_value_rounded, 1) == Functions.round_float_decimal_places(response, 1):
                 grade = GradeTypes.CORRECT
             else:
                 grade = GradeTypes.INCORRECT
         except ValueError:
             grade = GradeTypes.INCORRECT
+            input_value_rounded, input_value_calculated = None, None
 
         if from_type not in self._config.conversions_config[self._type]:
             grade = GradeTypes.INVALID
         elif to_type not in self._config.conversions_config[self._type][from_type]:
             grade = GradeTypes.INVALID
 
-        return grade
+        return (input_value_rounded, input_value_calculated, grade)
 
     def save(self):
         raise NotImplementedError()

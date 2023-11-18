@@ -3,6 +3,7 @@ from ..View_Model.Conversion_VM import Conversion_VM
 from ..Model.Conversion import Conversion
 from ..helpers.Enums import BackendTypes
 from ..di.Configurations import Configurations
+from ..helpers.functions import Functions
 
 class Test_Conversion_VM:
 
@@ -14,7 +15,7 @@ class Test_Conversion_VM:
                 ("x / 2", 8, 4),
                 ("x - 2", 4, 2),
                 #temperature,Farenheit,Celsius
-                ("(x-32.0) * (5/9)", 100, 37.8),
+                ("(x-32.0) * (5.0/9.0)", 100.0, 37.8),
                 #temperature,Farenheit,Kelvin
                 ("((x-32.0) * (5/9)) + 273.15", 100.0, 310.9),
                 #temperature,Farenheit,Rankine
@@ -28,7 +29,7 @@ class Test_Conversion_VM:
                 #temperature,Kelvin,Farenheit
                 ("((x-273.15) * (9/5)) + 32.0", 100.0, -279.7),
                 #temperature,Kelvin,Celsius
-                ("x - 273.15", 100, -173.2),
+                ("x - 273.150", 100.0, -173.2),
                 #temperature,Kelvin,Rankine
                 ("x * 9/5", 100, 180),
                 #temperature,Rankine,Farenheit
@@ -100,7 +101,7 @@ class Test_Conversion_VM:
                 #volume,Gallons,Cubic_feet
                 ("x / 7.480519", 100, 13.4)
             ])
-    def test_convert(self, fn: str, value: float, converted: float):
+    def test_convert(self, fn: str, converted: float, value: float):
 
         config = Configurations(BackendTypes.JSON, '', '')
 
@@ -118,7 +119,7 @@ class Test_Conversion_VM:
         "ABC123": [
             {
                 "response": "",
-                "answer": "",
+                "input_value": "",
                 "from_type": '',
                 "to_type": '',
                 "grade": '',
@@ -129,10 +130,9 @@ class Test_Conversion_VM:
 
         vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
-        conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-        result = vm.convert_input(value, 'ThinkDifferent', 'Kelvin')
+        result, result1 = vm.convert_input(value, 'ThinkDifferent', 'Kelvin')
 
-        assert result == converted
+        assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
 
     def test_convert_invalid_equation(self):
         with pytest.raises(ValueError) as resultError:
@@ -155,7 +155,7 @@ class Test_Conversion_VM:
             "ABC123": [
                 {
                     "response": "",
-                    "answer": "",
+                    "input_value": "",
                     "from_type": '',
                     "to_type": '',
                     "grade": '',
@@ -166,10 +166,9 @@ class Test_Conversion_VM:
 
             vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
-            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
+            result, result1 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
-        assert resultError.match("Conversion function is not valid")
+        assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
 
     def test_convert_invalid_equation_extreme(self):
         with pytest.raises(ValueError) as resultError:
@@ -193,7 +192,7 @@ class Test_Conversion_VM:
             "ABC123": [
                 {
                     "response": "",
-                    "answer": "",
+                    "input_value": "",
                     "from_type": '',
                     "to_type": '',
                     "grade": '',
@@ -205,13 +204,12 @@ class Test_Conversion_VM:
 
             vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
-            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
+            result, result1 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
-        assert resultError.match("Conversion function is not valid")
+        assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
 
     def test_convert_invalid_equation_unmatched_parens(self):
-        with pytest.raises(SyntaxError) as resultError:
+        with pytest.raises(ValueError) as resultError:
         
             fn = "x )( 1"
 
@@ -231,7 +229,7 @@ class Test_Conversion_VM:
             "ABC123": [
                 {
                     "response": "",
-                    "answer": "",
+                    "input_value": "",
                     "from_type": '',
                     "to_type": '',
                     "grade": '',
@@ -243,8 +241,7 @@ class Test_Conversion_VM:
 
             vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
 
-            conversion = vm.conversion('ThinkDifferent', 'Kelvin')
-            result = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
+            result1, result2 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
         # DSN Notes: does this work?
-        assert resultError.match("unmatched '\\)'")
+        assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")

@@ -4,7 +4,7 @@
         "ABC123": [
             {
                 "response": "32.0",
-                "answer": "0",
+                "input_value": "0",
                 "from_type": "Celsius",
                 "to_type": "Farenheit",
                 "grade": "correct",
@@ -13,7 +13,7 @@
             },
             {
                 "response": "84.2",
-                "answer": "543.94",
+                "input_value": "543.94",
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "correct",
@@ -22,7 +22,7 @@
             },
             {
                 "response": "111.554",
-                "answer": "317.33",
+                "input_value": "317.33",
                 "from_type": "Kelvin",
                 "to_type": "Farenheit",
                 "grade": "incorrect",
@@ -33,7 +33,7 @@
         "ABC1233": [
             {
                 "response": "0",
-                "answer": "32",
+                "input_value": "32",
                 "from_type": "Farenheit",
                 "to_type": "Celsius",
                 "grade": "correct",
@@ -42,7 +42,7 @@
             },
             {
                 "response": "dog",
-                "answer": "6.5",
+                "input_value": "6.5",
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "incorrect",

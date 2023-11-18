@@ -1,6 +1,7 @@
 from .Base_Model import Base_Model
 from ..helpers.functions import Functions
 import uuid
+from decimal import Decimal
 
 class Conversion(Base_Model):
 
@@ -14,7 +15,7 @@ class Conversion(Base_Model):
     @staticmethod
     def get_lambda(equation):
         if Functions.does_equation_pass_whitelist(equation):
-            temp = "lambda x: {}".format(equation)
+            temp = f"lambda x: {equation}"
             equation_lambda = eval(temp)
         else:
             raise ValueError("Conversion function is not valid")

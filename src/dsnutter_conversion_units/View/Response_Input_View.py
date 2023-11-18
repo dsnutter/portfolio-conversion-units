@@ -103,8 +103,8 @@ class Response_Input_View:
                 'valid': lambda x: Functions.is_valid_string(x),
                 'convert': lambda x: x.upper()
             },
-            'answer': {
-                'text': 'answer of numerical value', 
+            'input_value': {
+                'text': 'input_value of numerical value', 
                 'depends_on_previous': False,
                 'can_override_valid': False,
                 'valid_args': 'float',

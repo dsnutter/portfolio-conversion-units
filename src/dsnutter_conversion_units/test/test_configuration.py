@@ -68,7 +68,7 @@ class Test_Configuration:
         "ABC123": [
             {
                 "response": "32.0",
-                "answer": "0",
+                "input_value": "0",
                 "from_type": "Celsius",
                 "to_type": "Farenheit",
                 "grade": "correct",
@@ -77,7 +77,7 @@ class Test_Configuration:
             },
             {
                 "response": "84.2",
-                "answer": "543.94",
+                "input_value": "543.94",
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "correct",
@@ -86,7 +86,7 @@ class Test_Configuration:
             },
             {
                 "response": "111.554",
-                "answer": "317.33",
+                "input_value": "317.33",
                 "from_type": "Kelvin",
                 "to_type": "Farenheit",
                 "grade": "incorrect",
@@ -97,7 +97,7 @@ class Test_Configuration:
         "ABC1233": [
             {
                 "response": "0",
-                "answer": "32",
+                "input_value": "32",
                 "from_type": "Farenheit",
                 "to_type": "Celsius",
                 "grade": "correct",
@@ -106,7 +106,7 @@ class Test_Configuration:
             },
             {
                 "response": "dog",
-                "answer": "6.5",
+                "input_value": "6.5",
                 "from_type": "Farenheit",
                 "to_type": "Rankine",
                 "grade": "incorrect",
@@ -116,7 +116,7 @@ class Test_Configuration:
         ]
     }
 }"""),
-                ('test/files/test-read-responses.csv', BackendTypes.CSV,"Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID","""
+                ('test/files/test-read-responses.csv', BackendTypes.CSV,"Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID","""
 students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,
 students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,
@@ -140,7 +140,7 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
         assert 'response' in result['students']['ABC123'][0].keys()
         assert 'timestamp' in result['students']['ABC123'][0].keys()
         assert float(result['students']['ABC123'][0]['response']) == float('32')
-        assert float(result['students']['ABC123'][0]['answer']) == float('0')
+        assert float(result['students']['ABC123'][0]['input_value']) == float('0')
         assert result['students']['ABC123'][0]['grade'] == 'correct'
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type', 

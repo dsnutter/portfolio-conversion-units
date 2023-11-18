@@ -30,7 +30,7 @@ class Response_Output_View:
     From: {obj.from_type}
     To: {obj.to_type}
     Student Entered: {obj.response}
-    Answer was: {obj.answer}
+    input_value was: {obj.input_value}
     Grade was: {obj.grade}
     Timestamp: {obj.timestamp}
     ID: {obj.id}
@@ -55,14 +55,14 @@ class Response_Output_View:
         items = r_vm.all_keys()
         print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
         separator = '\t\t'
-        print(f"StudentID{separator}Answer{separator}Input Measure{separator}Target Measure{separator}Student Response{separator}Output")
+        print(f"StudentID{separator}input_value{separator}Input Measure{separator}Target Measure{separator}Student Response{separator}Output")
         for student_id in items:                        
             objs = r_vm.get_responses(student_id)
             for obj in objs:
                 Response_Output_View.Display_Of_Single_Response_Console(obj, separator)
 
     def Display_Of_Single_Response_Console(obj: Response.Response, separator: str):
-                print(f"{obj.student_id}{separator}{obj.answer}{separator}{obj.from_type}{separator}{obj.to_type}{separator}{obj.response}{separator}{obj.grade}")
+                print(f"{obj.student_id}{separator}{obj.input_value}{separator}{obj.from_type}{separator}{obj.to_type}{separator}{obj.response}{separator}{obj.grade}")
     """
                 
     # possible future: jinja2 templating

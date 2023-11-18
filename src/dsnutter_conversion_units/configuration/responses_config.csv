@@ -1,4 +1,4 @@
-Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
+Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID
 temperature,ABC123,0,32,Celsius,Kelvin,GradeTypes.INCORRECT,2023-11-15 08:20 PM,80baf9e2-c0b0-44cc-aa0e-95b23a1d2fdb
 temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,96b297ca-7e57-4f81-a6b6-5e05f4384987
 temperature,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,3749450c-7008-4fde-9d91-3bdc07795186

@@ -46,7 +46,7 @@ class Data_Functions:
                             result[items["Type"]][items["student_id"]] = []                    
                         result[items["Type"]][items["student_id"]].append({
                             "response": items["response"],
-                            "answer": items["answer"],
+                            "input_value": items["input_value"],
                             "from_type": items["from_type"],
                             "to_type": items["to_type"],
                             "grade": items["grade"],
@@ -92,7 +92,7 @@ class Data_Functions:
                 file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
                     lines.writeheader()
                     for cname in config:
                         for student_id in config[cname]:
@@ -100,7 +100,7 @@ class Data_Functions:
                                 lines.writerow({ 'Type': cname, 
                                                     'student_id': student_id, 
                                                     'response': obj['response'], 
-                                                    'answer': obj['answer'], 
+                                                    'input_value': obj['input_value'], 
                                                     'from_type': obj['from_type'],
                                                     'to_type': obj['to_type'], 
                                                     'grade': obj['grade'], 
@@ -128,7 +128,7 @@ class Data_Functions:
                             new_lines[str(obj['ID'])] = { 'Type': cname, 
                                                 'student_id': student_id, 
                                                 'response': obj['response'], 
-                                                'answer': obj['answer'], 
+                                                'input_value': obj['input_value'], 
                                                 'from_type': obj['from_type'],
                                                 'to_type': obj['to_type'], 
                                                 'grade': obj['grade'], 
@@ -136,7 +136,7 @@ class Data_Functions:
                                                 'ID': obj['ID']  }
 
                 with open(filename, 'a+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','answer','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
                     # lines.writeheader()
                     for ID in IDs:
                         lines.writerow(new_lines[ID])

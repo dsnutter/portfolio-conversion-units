@@ -1,4 +1,4 @@
-Type,student_id,response,answer,from_type,to_type,grade,timestamp,ID
+Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID
 
 students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,

@@ -4,6 +4,8 @@ from .Base_VM import Base_VM
 from typing import Callable
 from ..Model.Conversion import Conversion
 from ..di.Configurations import Configurations
+from ..helpers.functions import Functions
+from decimal import Decimal
 
 # controls operationss on the conversion Models, and persistance
 class Conversion_VM(Base_VM):
@@ -38,19 +40,20 @@ class Conversion_VM(Base_VM):
     def all_to_types(self, from_type: str) -> list:
         return self.all_keys_level2(from_type)
 
-    def convert_input(self, input: float, from_type, to_type) -> float:
+    # returns result to two decimal places
+    def convert_input(self, input: float, from_type, to_type) -> Decimal:
         try:
             conversion_single = self.conversion(from_type, to_type)
-            result_from_calc = conversion_single.equation_lambda(input)
-            result = round(float(result_from_calc), 1)
-        except:
-            raise ValueError(f"Cannot execute lambda function defined for conversion from {from_type} to {to_type}: {conversion_single.equation}")
+            result_from_calc = str(conversion_single.equation_lambda(float(input)))
+            # we want to round to two decimal places, then round to one due to the float/decimal 
+            #   precision 3.14159............... when converted to float
+            result = Functions.round_float_decimal_places(str(result_from_calc), 2)
+        except SyntaxError as se:
+            raise SyntaxError(f'Cannot execute lambda function defined for conversion from {from_type} to {to_type}: {se}')
+        except Exception as e:
+            raise ValueError(f"Cannot execute lambda function defined for conversion from {from_type} to {to_type}: {e}")
 
-        return result
-    
-    def convert_input_as_static(self, input: float, from_type, to_type):
-        return lambda input, from_type, to_type: self.convert_input(input, from_type, to_type)
-
+        return result, result_from_calc
 
     # we are only creating the conversions with the factory when needed and not all of them initially
     #  allows for less boilerplate code anad decoupling
