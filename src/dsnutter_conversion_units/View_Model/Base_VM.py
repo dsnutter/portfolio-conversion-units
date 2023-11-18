@@ -2,6 +2,7 @@ from ..helpers.Enums import BackendTypes
 from .Base_Abstract import Base_Abstract
 from ..di.Configurations import Configurations
 
+
 class Base_VM(Base_Abstract):
 
     def __init__(self, type: str, backend_type: BackendTypes, config: Configurations) -> None:

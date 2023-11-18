@@ -6,10 +6,9 @@ from ..helpers.Data_Functions import Data_Functions
 
 class Test_Configuration:
 
-
-    @pytest.mark.parametrize('filename, file_type, header, content', 
-            [
-                ('test/files/test-read-conversions.json', BackendTypes.JSON,'', """
+    @pytest.mark.parametrize('filename, file_type, header, content',
+                             [
+                                 ('test/files/test-read-conversions.json', BackendTypes.JSON, '', """
 
 {
     "temperature":
@@ -23,8 +22,9 @@ class Test_Configuration:
 }
 
 """),
-                ('test/files/test-read-conversions.csv', BackendTypes.CSV,"Type,From,To,equation,ID","temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2,")
-            ])
+                                 ('test/files/test-read-conversions.csv', BackendTypes.CSV, "Type,From,To,equation,ID",
+                                  "temperature,Farenheit,Celsius,x + 1\ntemperature,Farenheit,Kelvin,x + 2,")
+                             ])
     def test_conversions_file_to_dict(self, filename: str, file_type: BackendTypes, header: str, content: str):
 
         # recreate a sample file
@@ -40,16 +40,18 @@ class Test_Configuration:
         assert len(result['temperature']['Farenheit'].keys()) == 2
         assert 'Kelvin' in result['temperature']['Farenheit'].keys()
         assert 'Celsius' in result['temperature']['Farenheit'].keys()
-        assert result['temperature']['Farenheit']['Celsius']['eq'] == 'x + 1' 
+        assert result['temperature']['Farenheit']['Celsius']['eq'] == 'x + 1'
         assert result['temperature']['Farenheit']['Kelvin']['eq'] == 'x + 2'
         assert 'ID' in result['temperature']['Farenheit']['Celsius']
         assert 'ID' in result['temperature']['Farenheit']['Kelvin']
 
-    @pytest.mark.parametrize('filename_read, filename_save, file_type', 
-            [
-                ('test/files/test-write-conversions.json', 'test/files/test-temp-write-conversions.json', BackendTypes.JSON),
-                ('test/files/test-write-conversions.csv', 'test/files/test-temp-write-conversions.csv', BackendTypes.CSV)
-            ])
+    @pytest.mark.parametrize('filename_read, filename_save, file_type',
+                             [
+                                 ('test/files/test-write-conversions.json',
+                                  'test/files/test-temp-write-conversions.json', BackendTypes.JSON),
+                                 ('test/files/test-write-conversions.csv',
+                                  'test/files/test-temp-write-conversions.csv', BackendTypes.CSV)
+                             ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
         obj = Configurations.Configurations(file_type, filename_read, None)
@@ -61,9 +63,9 @@ class Test_Configuration:
 
         assert same_after_saving == original
 
-    @pytest.mark.parametrize('filename, file_type, header, content', 
-            [
-                ('test/files/test-read-responses.json', BackendTypes.JSON,'',"""{
+    @pytest.mark.parametrize('filename, file_type, header, content',
+                             [
+                                 ('test/files/test-read-responses.json', BackendTypes.JSON, '', """{
     "students": {
         "ABC123": [
             {
@@ -116,16 +118,18 @@ class Test_Configuration:
         ]
     }
 }"""),
-                ('test/files/test-read-responses.csv', BackendTypes.CSV,"Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID","""
+('test/files/test-read-responses.csv', BackendTypes.CSV, 
+ "Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID", 
+"""
 students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,
 students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,
 students,ABC123,111.554,317.33,Kelvin,Farenheit,incorrect,2023-10-01 09:01 AM,
 students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
 """)
-            ])
+                             ])
     def test_responses_file_to_dict(self, filename: str, file_type: BackendTypes, header: str, content: str):
-#"temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM"
+        # "temperature,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM"
         # recreate a sample file
         with open(file=filename, mode='w+') as file:
             file.writelines(header + "\n")
@@ -143,11 +147,12 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
         assert float(result['students']['ABC123'][0]['input_value']) == float('0')
         assert result['students']['ABC123'][0]['grade'] == 'correct'
 
-    @pytest.mark.parametrize('filename_read, filename_save, file_type', 
-            [
-                ('test/files/test-write-responses.json', 'test/files/test-temp-write-responses.json', BackendTypes.JSON),
-                ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
-            ])
+    @pytest.mark.parametrize('filename_read, filename_save, file_type',
+[
+    ('test/files/test-write-responses.json',
+    'test/files/test-temp-write-responses.json', BackendTypes.JSON),
+    ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
+])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
         obj = Configurations.Configurations(file_type, None, filename_read)

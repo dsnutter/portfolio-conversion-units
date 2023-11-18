@@ -4,11 +4,13 @@ from ..di import Container, DI_Wireup
 from ..View_Model import Response_VM, Conversion_VM
 from ..helpers.View_Functions import View_Functions
 from ..helpers.functions import Functions
-from . import Response_Output_View, Conversion_View
+from . import Conversion_View
 
 #
 # Input view functions
 #
+
+
 class Response_Input_View:
 
     @inject
@@ -42,61 +44,60 @@ class Response_Input_View:
         Response_Input_View.Entry_Of_Multi_Reponse_DI(config, type)
 
     @inject
-    def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str, 
-                                r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
-                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+    def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str,
+                                  r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
+                                  c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
         # to hook up calculations
         r_vm._convert_input = c_vm.convert_input
 
         Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
 
-    def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str, 
-                                r_vm: Response_VM.Response_VM,
-                                c_vm: Conversion_VM.Conversion_VM):
+    def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str,
+                               r_vm: Response_VM.Response_VM,
+                               c_vm: Conversion_VM.Conversion_VM):
 
         title = f'** Student {type.capitalize()} Units Conversion Application **'
         menu_hashmap = {
-                # display conversions
-                'l': {
-                    'text': f'List all possible conversion types for {type.capitalize()}',
-                    'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
-                    'context': type
-                },
-                # enter responses
-                'e': {
-                    'text': 'Enter repsonses',
-                    'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
-                    'context': type
-                },
-                # quit application
-                'b': {
-                    'text': 'Back',
-                    'execute': ''
-                },
-                'q': {
-                    'text': 'quit',
-                    'execute': ''
-                }
+            # display conversions
+            'l': {
+                'text': f'List all possible conversion types for {type.capitalize()}',
+                'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
+                'context': type
+            },
+            # enter responses
+            'e': {
+                'text': 'Enter repsonses',
+                'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
+                'context': type
+            },
+            # quit application
+            'b': {
+                'text': 'Back',
+                'execute': ''
+            },
+            'q': {
+                'text': 'quit',
+                'execute': ''
             }
+        }
         while View_Functions.execute_menu(wire, title, menu_hashmap, ['b', 'q'], c_vm, r_vm) and not wire.halt:
             pass
 
     @inject
-    def Entry_Of_Single_Reponse_DI(type: str, 
-                                r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
-                                c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
+    def Entry_Of_Single_Reponse_DI(type: str,
+                                   r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
+                                   c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
         Response_Input_View.Entry_Of_Single_Reponse_NonDI(type, r_vm, c_vm)
 
-
-    def Entry_Of_Single_Reponse(type: str, 
+    def Entry_Of_Single_Reponse(type: str,
                                 r_vm: Response_VM.Response_VM,
                                 c_vm: Conversion_VM.Conversion_VM):
         #
         # this template defines what to print when gathering reponse inputs and how to validate that input
         #
         template = {
-            'student_id': { 
-                'text': 'student\'s ID', 
+            'student_id': {
+                'text': 'student\'s ID',
                 'depends_on_previous': False,
                 'can_override_valid': False,
                 'valid_args': 'alphanumeric',
@@ -104,7 +105,7 @@ class Response_Input_View:
                 'convert': lambda x: x.upper()
             },
             'input_value': {
-                'text': 'input_value of numerical value', 
+                'text': 'input_value of numerical value',
                 'depends_on_previous': False,
                 'can_override_valid': False,
                 'valid_args': 'float',
@@ -123,7 +124,8 @@ class Response_Input_View:
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
                 'can_override_valid': True,
-                'valid_args': lambda x: f"An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).\nIf you chose an invalid input unit of measure, you may not have choices",
+                'valid_args': lambda x: f"""An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).
+If you chose an invalid input unit of measure, you may not have choices""",
                 'valid': lambda entered, previous: entered in c_vm.all_keys_level2(previous),
                 'convert': lambda x: x.lower().capitalize().replace(' ', '_')
             },
@@ -146,6 +148,7 @@ class Response_Input_View:
             valid_entered = False
             valid_entered_with_previous = False
             override = False
+            previous = ''
             while entered is None or (not valid_entered and not valid_entered_with_previous):
                 if entered is not None:
                     if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):
@@ -155,7 +158,7 @@ class Response_Input_View:
                     print(f"There was an error with your input it must be a valid {template[item]['text']} such as:")
                     print(f"{valid_args}")
                     if template[item]['can_override_valid']:
-                        o_input = input(f"""
+                        o_input = input("""
 Press enter to go back and reenter
 -or-
 Press 'Y' to override and use what was entered
@@ -174,8 +177,9 @@ Press 'B' to go back to the previous entry before this one, since this choice is
                 else:
                     entered = input(f"What was the {template[item]['text']}: ")
                     entered = template[item]['convert'](entered)
-                    valid_entered = (not(template[item]['depends_on_previous']) and template[item]['valid'](entered))
-                    valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
+                    valid_entered = (not (template[item]['depends_on_previous']) and template[item]['valid'](entered))
+                    valid_entered_with_previous = (template[item]['depends_on_previous']
+                                                   ) and template[item]['valid'](entered, previous)
             if item == 'student_id':
                 student_id = entered
             else:
@@ -185,5 +189,3 @@ Press 'B' to go back to the previous entry before this one, since this choice is
         result = r_vm.add(student_id, r)
         if result.grade:
             print(f"The graded result for student {result.student_id} is: {result.grade}\n")
-
-

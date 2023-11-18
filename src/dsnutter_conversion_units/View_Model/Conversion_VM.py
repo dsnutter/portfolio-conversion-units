@@ -8,9 +8,12 @@ from ..helpers.functions import Functions
 from decimal import Decimal
 
 # controls operationss on the conversion Models, and persistance
+
+
 class Conversion_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, factory: Callable[..., Conversion]) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, 
+                 factory: Callable[..., Conversion]) -> None:
         super(Conversion_VM, self).__init__(type, backend_type, config)
 
         self._factory = factory
@@ -45,7 +48,7 @@ class Conversion_VM(Base_VM):
         try:
             conversion_single = self.conversion(from_type, to_type)
             result_from_calc = str(conversion_single.equation_lambda(float(input)))
-            # we want to round to two decimal places, then round to one due to the float/decimal 
+            # we want to round to two decimal places, then round to one due to the float/decimal
             #   precision 3.14159............... when converted to float
             result = Functions.round_float_decimal_places(str(result_from_calc), 2)
         except SyntaxError as se:
@@ -65,8 +68,7 @@ class Conversion_VM(Base_VM):
         if id is None or id == '':
             id = str(uuid.uuid4())
 
-        # if a certain conversion object does not already exist, then create it
-        # if not ('obj' in self._storage[from_type][to_type] or not ('obj' in self._storage[from_type][to_type] and self._storage[from_type][to_type]["obj"] is None)):
+        # create conversion object
         self._storage[from_type][to_type]["obj"] = self._factory(from_type, to_type, eq, id)
 
         return self._storage[from_type][to_type]["obj"]
@@ -74,7 +76,7 @@ class Conversion_VM(Base_VM):
     # DSN Notes: this needs better test coverage
     def add(self, hash_key: str, hashmap: dict):
         raise NotImplementedError()
-    
+
     def execute_load_preexisting(self):
         raise NotImplementedError()
 

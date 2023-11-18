@@ -13,7 +13,7 @@ class Conversion_View:
         print(f'All the possible conversion types for {c_vm.current_type.capitalize()}:')
         for from_type in items:
             Conversion_View.List_Specific_From_Types(from_type, r_vm, c_vm)
-                
+
     def List_Specific_From_Types(type: str, r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
         print('From Type: {}'.format(type))
         convertTypes = c_vm.all_to_types(type)

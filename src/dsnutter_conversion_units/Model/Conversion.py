@@ -1,7 +1,6 @@
 from .Base_Model import Base_Model
 from ..helpers.functions import Functions
-import uuid
-from decimal import Decimal
+
 
 class Conversion(Base_Model):
 
@@ -31,7 +30,7 @@ class Conversion(Base_Model):
 
     @property
     def equation(self):
-         return self._equation
+        return self._equation
 
     # @equation.setter
     # def equation(self, value):
@@ -40,7 +39,7 @@ class Conversion(Base_Model):
 
     @property
     def equation_lambda(self):
-         return self._equation_lambda
+        return self._equation_lambda
 
     @property
     def id(self) -> str:
@@ -48,7 +47,7 @@ class Conversion(Base_Model):
 
     def __str__(self) -> str:
         return str(self.__dict__())
-    
+
     def __dict__(self) -> dict:
         hashmap = {
             self._from_type: {
@@ -59,4 +58,3 @@ class Conversion(Base_Model):
             }
         }
         return hashmap
-

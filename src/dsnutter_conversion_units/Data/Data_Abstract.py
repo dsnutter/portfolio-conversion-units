@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 class Data_Abstract(ABC):
 
     @abstractmethod
-    def add(self, type:str, hashmap: dict):
+    def add(self, type: str, hashmap: dict):
         raise NotImplementedError()
-    
+
     @abstractmethod
     def get(self, ID: str):
         raise NotImplementedError()

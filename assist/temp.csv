@@ -1,0 +1,74 @@
+Type,From,To,equation,ID
+temperature,Farenheit,Celsius,(x-32.0) * (5.0/9.0),
+temperature,Farenheit,Kelvin,((x-32.0) * (5/9)) + 273.15,
+temperature,Farenheit,Rankine,x + 459.67,
+temperature,Celsius,Farenheit,(x * (9/5)) + 32.0,
+temperature,Celsius,Kelvin,x + 273.15,
+temperature,Celsius,Rankine,(x + 273.15) * 9/5,
+temperature,Kelvin,Farenheit,((x-273.15) * (9/5)) + 32.0,
+temperature,Kelvin,Celsius,x - 273.150,
+temperature,Kelvin,Rankine,x * 9/5,
+temperature,Rankine,Farenheit,x - 459.67,
+temperature,Rankine,Celsius,(x * 5/9) - 273.15,
+temperature,Rankine,Kelvin,x * 5/9,
+temperature,ThinkDifferent,Kelvin,x + 1,
+volume,Liters,Tablespoons,x * (67.0 + 2/3),
+volume,Liters,Cubic_inches,x * 61.023744,
+volume,Liters,Cups,x * 4.2267528377,
+volume,Liters,Cubic_feet,x / 28.317,
+volume,Liters,Gallons,x / 3.785,
+volume,Tablespoons,Liters,x / (67.0 + 2/3),
+volume,Tablespoons,Cubic_inches,x * 0.902344,
+volume,Tablespoons,Cups,x * (1/16),
+volume,Tablespoons,Cubic_feet,x / 1915,
+volume,Tablespoons,Gallons,x / 256,
+volume,Cubic_inches,Liters,x / 61.023744,
+volume,Cubic_inches,Tablespoons,x /  0.902344,
+volume,Cubic_inches,Cups,x / 14.438,
+volume,Cubic_inches,Cubic_feet,x / 1728,
+volume,Cubic_inches,Gallons,x / 231,
+volume,Cups,Liters,x / 4.2267528377,
+volume,Cups,Tablespoons,x / (1/16),
+volume,Cups,Cubic_inches,x * 14.438,
+volume,Cups,Cubic_feet,x / 119.7,
+volume,Cups,Gallons,x * 0.0625,
+volume,Cubic_feet,Liters,x / 0.035315,
+volume,Cubic_feet,Tablespoons,x * 1915.01,
+volume,Cubic_feet,Cubic_inches,x * 1728,
+volume,Cubic_feet,Cups,x * 119.688,
+volume,Cubic_feet,Gallons,x * 7.480519,
+volume,Gallons,Liters,x / 0.264172,
+volume,Gallons,Tablespoons,x * 256,
+volume,Gallons,Cubic_inches,x / 0.004329,
+volume,Gallons,Cups,x / 0.0625,
+volume,Gallons,Cubic_feet,x / 7.480519,
+temperature,ABC123,0,1,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,52203d0b-92e6-4505-9c0a-5d58cb8e87ea
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,3a610c9e-40fd-41ea-8ea3-a3e20c4285b7
+temperature,ABC123,1.1,1.2,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,26728819-23ac-44af-a91e-154d2714a8b6
+temperature,ABC123,-17.08,1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,bf227697-2302-4956-a928-8e0dcc1d9986
+temperature,ABC123,-17.077,1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,a9d5e12e-61de-4e4f-b095-59d40d3399df
+temperature,ABC123,-17.075,1.256222,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,d957c851-7647-4ec4-89f5-dc054d5fac89
+temperature,ABC123,-17.076,1.2565,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,1126eb09-3df2-4dc3-aac5-8a45bc1e98ef
+temperature,ABC123,1.1222,1.256,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,eb6164fd-7fa5-4e76-ad73-70afd3aa8289
+temperature,ABC123,3.2,3.1499999999999999999,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,28a620ef-c308-4a8e-8861-a4af4f09e4d3
+temperature,ABC123,-18.44444,-1.2,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,9612392d-d1a0-4414-826f-c7db0af504a2
+temperature,ABC123,-1.1,-1.2,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,b15f7e2b-bcb3-42f0-9bf0-2022b1601aee
+temperature,ABC123,-18.4755,-1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,f83fc2c2-19ac-4aea-8140-47fb954e8059
+temperature,ABC123,-1.1222,-1.256,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,30d2a762-917c-4d37-826a-ad4d7ed30a46
+temperature,ABC123,1.2,1.2,Farenheit,dog,GradeTypes.INVALID,2023-10-01 04:00 PM,c69c1b9c-f1cc-4bb9-9c28-2543bbcfdec8
+temperature,ABC123,1.2,1.2,dog,Celsius,GradeTypes.INVALID,2023-10-01 04:00 PM,62bce75f-a791-47d8-9f26-7ababcb7184d
+temperature,ABC123,0,1,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,6f92642b-cdd0-4148-b1f1-7f6ba6ddfa58
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,a193842b-07d8-4771-a006-de51babacf32
+temperature,ABC123,1.1,1.2,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,d416fde7-f434-4c40-ba6c-ac3243ae8430
+temperature,ABC123,-17.08,1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,8ef1429a-de4b-4cb3-bf8d-3e85dbaa38a8
+temperature,ABC123,-17.077,1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,50719d09-6013-4b1c-9e7a-de101c8ebea8
+temperature,ABC123,-17.075,1.256222,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,3ec33d8d-b8de-4626-bd15-b7edfc84848e
+temperature,ABC123,-17.076,1.2565,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,e755352e-af55-4a14-8ef1-c142946f0c7a
+temperature,ABC123,1.1222,1.256,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,cd3fd4a6-ba6d-4e0d-b847-c4b4b7ffdf75
+temperature,ABC123,3.2,3.1499999999999999999,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,9c877faf-556c-4627-8b61-f920d13c41b7
+temperature,ABC123,-18.44444,-1.2,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,d3fcc86b-4503-4e60-acc5-201862d0d80d
+temperature,ABC123,-1.1,-1.2,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,5002251b-3757-479f-9608-d894e409e2a5
+temperature,ABC123,-18.4755,-1.256,Farenheit,Celsius,GradeTypes.CORRECT,2023-10-01 04:00 PM,be8674cf-3b8c-4ae0-ae60-d05fe14eb4e6
+temperature,ABC123,-1.1222,-1.256,Farenheit,Celsius,GradeTypes.INCORRECT,2023-10-01 04:00 PM,bc8975df-a783-4cd8-9179-8d7990f95cc0
+temperature,ABC123,1.2,1.2,Farenheit,dog,GradeTypes.INVALID,2023-10-01 04:00 PM,7b4f04ab-08e3-4c69-807d-5dccccb70070
+temperature,ABC123,1.2,1.2,dog,Celsius,GradeTypes.INVALID,2023-10-01 04:00 PM,7e0f7ac1-2777-461e-9039-58538cb8eee8

@@ -4,6 +4,7 @@ from ..helpers.Data_Functions import Data_Functions
 from datetime import datetime
 from ..Model import Response
 
+
 class Data_Responses_CSV(Data_Responses):
 
     def __init__(self, type: BasicTypes, filename: str) -> None:
@@ -17,24 +18,22 @@ class Data_Responses_CSV(Data_Responses):
             self._storage[hashmap['student_id']] = []
         self._storage[hashmap['student_id']].append(hashmap['obj'])
         if persist:
-            Data_Functions.append_responses_dict_to_file({ type: hashmap['obj'].to_dict()  }, self._filename, self._backend_type)
-
+            Data_Functions.append_responses_dict_to_file({type: hashmap['obj'].to_dict()}, self._filename, self._backend_type)
 
     def get_by_student_id(self, student_id: str):
         return self._storage[student_id]
-    
+
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
         result = []
         for item in self._storage[student_id]:
-            if datetime.strptime(item.timestamp, Response.Response.date_format) == datetime.strptime(timestamp, Response.Response.date_format) and from_type == item.from_type and to_type == item.to_type:
+            if datetime.strptime(item.timestamp, Response.Response.date_format) == \
+                    datetime.strptime(timestamp, Response.Response.date_format) \
+                    and from_type == item.from_type and to_type == item.to_type:
                 result.append(item)
         return result
 
     def all_keys(self):
         return list(self._storage.keys())
-    
+
     def get_responses(self) -> dict:
         return self._storage
-
-
-

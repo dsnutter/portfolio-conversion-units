@@ -2,10 +2,13 @@ from ..View_Model import Conversion_VM, Response_VM
 from .functions import Functions
 from ..di.DI_Wireup import DI_Wireup
 
+
 class View_Functions:
 
-    @staticmethod    
-    def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict, quit_cmd: list, c_vm: Conversion_VM.Conversion_VM, r_vm: Response_VM.Response_VM):
+    @staticmethod
+    def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict, 
+                     quit_cmd: list, c_vm: Conversion_VM.Conversion_VM, 
+                     r_vm: Response_VM.Response_VM):
         print(title)
         for item in menu_hashmap:
             print(f"({item.capitalize()}) {menu_hashmap[item]['text']}")

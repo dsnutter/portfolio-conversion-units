@@ -163,7 +163,7 @@ def convert_new_eq_from_test_parameters():
         file.close()
 
 def convert_csv_to_json_conversions():
-    conversions_filename = '../../src/dsnutter_conversion_units/configuration/conversions_config.csv'
+    conversions_filename = '../src/dsnutter_conversion_units/configuration/conversions_config.csv'
     conversions_filename_to = './temp.json'
 
     hashmap = conversions_file_to_dict(conversions_filename, BackendTypes.CSV)
