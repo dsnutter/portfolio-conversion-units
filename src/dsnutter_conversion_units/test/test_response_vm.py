@@ -30,7 +30,11 @@ class Test_Response_VM:
                                  ("-1.256", "-1.1222", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  # invalid
                                  ("1.2", "1.2", GradeTypes.INVALID, 'dog', 'Farenheit'),
-                                 ("1.2", "1.2", GradeTypes.INVALID, 'Celsius', 'dog')
+                                 ("1.2", "1.2", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'dog', 'Farenheit'),
+                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("dog", "1.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
                              ])
     def test_grade(self, input_value, response, grade, to_type, from_type):
 
