@@ -21,3 +21,7 @@ volume,ASDANS2123,23.2,32.2,Cubic_inches,Cups,GradeTypes.INVALID,2023-11-16 07:4
 temperature,ABC22,0,32,Farenheit,Celsius,GradeTypes.INVALID,2023-11-16 03:54 PM,3911457b-b251-4c35-8911-6d1ac5fad652
 temperature,ADS,0,32,Farenheit,Celsius,GradeTypes.INCORRECT,2023-11-16 03:56 PM,84dd226d-8021-4b60-9acd-08d0b8795d82
 temperature,ASDSAD,0,32,Farenheit,Celsius,GradeTypes.INCORRECT,2023-11-16 04:02 PM,28df40c0-b5d2-406f-bde3-1197097fcfb7
+temperature,ABC123,543.94,84.2,Farenheit,Rankine,GradeTypes.CORRECT,2023-11-18 09:05 AM,adce44b5-0011-4d75-9f84-070b09aca074
+temperature,ABC123,111.554,317.33,Kelvin,Farenheit,GradeTypes.INCORRECT,2023-11-18 09:06 AM,cd92ed3b-1a26-4561-bc24-f6e0ebbff4eb
+temperature,ABC123,19.4,73.12,Cups,Kelvin,GradeTypes.INVALID,2023-11-18 09:07 AM,14550af2-ca3e-4f58-912c-0e393741a136
+temperature,ABC123,0,6.5,Farenheit,Rankine,GradeTypes.INCORRECT,2023-11-18 09:09 AM,65383a74-dc93-4943-8812-08a402a4019d

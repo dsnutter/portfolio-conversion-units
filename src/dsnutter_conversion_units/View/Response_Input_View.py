@@ -46,7 +46,7 @@ class Response_Input_View:
                                 r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                 c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
         # to hook up calculations
-        r_vm._convert_input = c_vm.convert_input_as_static
+        r_vm._convert_input = c_vm.convert_input
 
         Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
 
