@@ -61,7 +61,7 @@ class Configurations():
         return types
 
     def __str__(self) -> str:
-        result = 'Import/Export Controller'
+        result = 'Configurations:'
         result += 'Conversions Config File: {}\n'.format(self._conversions_config_file)
         result += 'Repsonses Config File: {}\n'.format(self._responses_config_file)
         return result
