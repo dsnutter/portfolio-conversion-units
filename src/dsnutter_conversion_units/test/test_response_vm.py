@@ -12,25 +12,25 @@ class Test_Response_VM:
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
-                                 ("1", 0, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-                                 ("32", 0, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("1.2", 1.1, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("1", "0", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("32", "0", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.2", "1.1", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  # rounded
-                                 ("1.256", -17.08, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("1.256", -17.077, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("1.256222", -17.075, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("1.2565", -17.076, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("1.256", 1.1222, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-                                 ("3.1499999999999999999", 3.2, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.256", "-17.08", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.256", "-17.077", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.256222", "-17.075", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.2565", "-17.076", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.256", "1.1222", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("3.1499999999999999999", "3.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  # negative
-                                 ("-1.2", -18.44444, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("-1.2", -1.1, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("-1.2", "-18.44444", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("-1.2", "-1.1", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  # rounded negative
-                                 ("-1.256", -18.4755, GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
-                                 ("-1.256", -1.1222, GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("-1.256", "-18.4755", GradeTypes.CORRECT, 'Celsius', 'Farenheit'),
+                                 ("-1.256", "-1.1222", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  # invalid
-                                 ("1.2", 1.2, GradeTypes.INVALID, 'dog', 'Farenheit'),
-                                 ("1.2", 1.2, GradeTypes.INVALID, 'Celsius', 'dog')
+                                 ("1.2", "1.2", GradeTypes.INVALID, 'dog', 'Farenheit'),
+                                 ("1.2", "1.2", GradeTypes.INVALID, 'Celsius', 'dog')
                              ])
     def test_grade(self, input_value, response, grade, to_type, from_type):
 
