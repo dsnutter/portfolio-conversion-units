@@ -4,7 +4,7 @@ from ..di import Container, DI_Wireup
 from ..View_Model import Response_VM, Conversion_VM
 from ..helpers.View_Functions import View_Functions
 from ..helpers.functions import Functions
-from . import Response_Output_View, Conversion_View
+from . import Conversion_View
 
 #
 # Input view functions
@@ -124,7 +124,8 @@ class Response_Input_View:
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
                 'can_override_valid': True,
-                'valid_args': lambda x: f"An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).\nIf you chose an invalid input unit of measure, you may not have choices",
+                'valid_args': lambda x: f"""An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).
+If you chose an invalid input unit of measure, you may not have choices""",
                 'valid': lambda entered, previous: entered in c_vm.all_keys_level2(previous),
                 'convert': lambda x: x.lower().capitalize().replace(' ', '_')
             },
@@ -157,7 +158,7 @@ class Response_Input_View:
                     print(f"There was an error with your input it must be a valid {template[item]['text']} such as:")
                     print(f"{valid_args}")
                     if template[item]['can_override_valid']:
-                        o_input = input(f"""
+                        o_input = input("""
 Press enter to go back and reenter
 -or-
 Press 'Y' to override and use what was entered

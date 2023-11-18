@@ -12,7 +12,8 @@ from decimal import Decimal
 
 class Conversion_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, factory: Callable[..., Conversion]) -> None:
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, 
+                 factory: Callable[..., Conversion]) -> None:
         super(Conversion_VM, self).__init__(type, backend_type, config)
 
         self._factory = factory
@@ -67,8 +68,7 @@ class Conversion_VM(Base_VM):
         if id is None or id == '':
             id = str(uuid.uuid4())
 
-        # if a certain conversion object does not already exist, then create it
-        # if not ('obj' in self._storage[from_type][to_type] or not ('obj' in self._storage[from_type][to_type] and self._storage[from_type][to_type]["obj"] is None)):
+        # create conversion object
         self._storage[from_type][to_type]["obj"] = self._factory(from_type, to_type, eq, id)
 
         return self._storage[from_type][to_type]["obj"]

@@ -2,7 +2,6 @@
 from dependency_injector.wiring import Provide, inject
 from ..di import Container
 from ..View_Model import Response_VM, Conversion_VM
-from ..helpers.functions import Functions
 from ..Model import Response
 
 #
@@ -50,23 +49,6 @@ class Response_Output_View:
         print(f'\n\nAll the responses so far for {r_vm.current_type}:')
         print(r_vm.to_dataframe_all().to_markdown())
 
-    """
-    # this view loads all previous responses and displays them
-    def Display_Summary_Console(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
-        r_vm.execute_load_preexisting()
-        items = r_vm.all_keys()
-        print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
-        separator = '\t\t'
-        print(f"StudentID{separator}input_value{separator}Input Measure{separator}Target Measure{separator}Student Response{separator}Output")
-        for student_id in items:                        
-            objs = r_vm.get_responses(student_id)
-            for obj in objs:
-                Response_Output_View.Display_Of_Single_Response_Console(obj, separator)
-
-    def Display_Of_Single_Response_Console(obj: Response.Response, separator: str):
-                print(f"{obj.student_id}{separator}{obj.input_value}{separator}{obj.from_type}{separator}{obj.to_type}{separator}{obj.response}{separator}{obj.grade}")
-    """
-
     # possible future: jinja2 templating
     @inject
     def Text_Summary_DI():
@@ -84,7 +66,8 @@ class Response_Output_View:
     def PDF_Summary_DI():
         pass
 
-    # possible future if integrated with SQLAlchemy library with SQLite or some other SQL: graph of statistics of reponses such as a bar graph of incorrect, invalid, correct
+    # possible future if integrated with SQLAlchemy library with SQLite or some other SQL: 
+    # graph of statistics of reponses such as a bar graph of incorrect, invalid, correct
     @inject
     def Display_Graph_DI():
         pass

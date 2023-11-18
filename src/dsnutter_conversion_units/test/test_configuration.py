@@ -118,7 +118,9 @@ class Test_Configuration:
         ]
     }
 }"""),
-                                 ('test/files/test-read-responses.csv', BackendTypes.CSV, "Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID", """
+('test/files/test-read-responses.csv', BackendTypes.CSV, 
+ "Type,student_id,response,input_value,from_type,to_type,grade,timestamp,ID", 
+"""
 students,ABC123,32.0,0,Celsius,Farenheit,correct,2023-10-01 04:00 PM,
 students,ABC1233,0,32,Farenheit,Celsius,correct2023-10-02 10:00 AM,
 students,ABC123,84.2,543.94,Farenheit,Rankine,correct,2023-10-02 01:00 PM,
@@ -146,11 +148,11 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
         assert result['students']['ABC123'][0]['grade'] == 'correct'
 
     @pytest.mark.parametrize('filename_read, filename_save, file_type',
-                             [
-                                 ('test/files/test-write-responses.json',
-                                  'test/files/test-temp-write-responses.json', BackendTypes.JSON),
-                                 ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
-                             ])
+[
+    ('test/files/test-write-responses.json',
+    'test/files/test-temp-write-responses.json', BackendTypes.JSON),
+    ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
+])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
         obj = Configurations.Configurations(file_type, None, filename_read)

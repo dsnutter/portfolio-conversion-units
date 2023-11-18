@@ -1,7 +1,5 @@
 from ..di.Configurations import Configurations
 from .Enums import BackendTypes
-import os
-import sys
 
 conversions_filename = 'dsnutter_conversion_units/configuration/conversions_config.csv'
 responses_filename = 'dsnutter_conversion_units/configuration/responses_config.csv'

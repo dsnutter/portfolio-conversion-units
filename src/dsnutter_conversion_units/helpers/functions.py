@@ -1,5 +1,3 @@
-from decimal import Decimal, ROUND_HALF_UP, localcontext
-import numpy as np
 import math
 
 
@@ -54,28 +52,8 @@ class Functions:
     def is_in_list(items: dict) -> bool:
         return items['input'] in items['list']
 
-    """
-    # yes this is complicated, round() seems to not work for 0.5 values
-    #  the reason for this seems to be the way floating point numbers are stored and used
     @staticmethod
-    def round_float_decimal_places_alt(value: str, places: int = 2) -> str:
-        places = places - 1
-        # we want a multiplier so we do not consider the decimal places we possibly want to round to
-        if places == 0:
-            multiplier = 1
-        else:
-            multiplier = Decimal(places * 10)
-        temp = Decimal(value) * multiplier
-
-        # take the first place after the decimal and round it
-        result = Decimal(temp.quantize(Decimal(str(10**(-1 * (places)))), rounding=ROUND_HALF_UP))
-
-        # reset the value back to the original value to # places, we did not round it off since we mult by power of 10
-        result = result / multiplier
-        return str(result)
-    """
-
-    @staticmethod
+    # reason for this method is the way python rounds 0.5's with round()
     def round_float_decimal_places(value: str, places: int) -> str:
         # we want a multiplier so we do not consider the decimal places we possibly want to round to
         exponent = places

@@ -26,7 +26,9 @@ class Data_Responses_CSV(Data_Responses):
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
         result = []
         for item in self._storage[student_id]:
-            if datetime.strptime(item.timestamp, Response.Response.date_format) == datetime.strptime(timestamp, Response.Response.date_format) and from_type == item.from_type and to_type == item.to_type:
+            if datetime.strptime(item.timestamp, Response.Response.date_format) == \
+                    datetime.strptime(timestamp, Response.Response.date_format) \
+                    and from_type == item.from_type and to_type == item.to_type:
                 result.append(item)
         return result
 
