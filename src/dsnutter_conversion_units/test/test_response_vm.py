@@ -74,6 +74,6 @@ class Test_Response_VM:
             "to_type": to_type,
             "timestamp": "2023-10-01 04:00 PM",
             "ID": ''
-        })
+        }, persist=False)
         result = c.get_response(from_type, to_type, 'ABC123', '2023-10-01 04:00 PM')[0]
         assert result.grade == grade
