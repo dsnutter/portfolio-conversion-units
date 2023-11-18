@@ -40,16 +40,19 @@ class Data_Responses(Data_Abstract):
 
     # future: wanted to make sure we can get responses into pandas so we can maybe analyze later
     #  for now, just used for markdown printing in the console
-    def to_dataframe_all(self):
+    def to_dataframe_all(self, for_display = False):
         thash = {}
-        keys = Response.Response.keys()
+        if for_display:
+            keys = Response.Response.keys_for_display()
+        else:
+            keys = Response.Response.keys()
         for key in keys:
             thash[key] = []
         dfs = pd.DataFrame.from_dict(thash)
         # print(dfs)
         for student_id in self._storage:
             for obj in self._storage[student_id]:
-                df = obj.to_dataframe()
+                df = obj.to_dataframe(for_display)
 
                 # reset pandas index numbers in both, so new ones are generated on concat
                 df.reset_index(drop=True, inplace=True)

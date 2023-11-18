@@ -8,6 +8,41 @@ from ..helpers.functions import Functions
 
 class Test_Conversion_VM:
 
+    from_type = 'ThinkDifferent'
+    to_type = 'Kelvin'
+    type = "temperature"
+
+    def setup_method(self, fn):
+
+        config = Configurations(BackendTypes.JSON, '', '')
+
+        config.conversions_config = {
+            Test_Conversion_VM.type:
+            {
+                Test_Conversion_VM.from_type:
+                {
+                    Test_Conversion_VM.to_type: {"eq": fn, "ID": None}
+                }
+            }
+        }
+        config.responses_config = {
+            Test_Conversion_VM.type: {
+                "ABC123": [
+                    {
+                        "response": "",
+                        "input_value": "",
+                        "from_type": Test_Conversion_VM.from_type,
+                        "to_type": Test_Conversion_VM.to_type,
+                        "grade": '',
+                        "timestamp": "2023-10-01 04:00 PM",
+                        "ID": ''
+                    }
+                ]}}
+
+        c_vm = Conversion_VM(Test_Conversion_VM.type, BackendTypes.JSON, config, Conversion)
+        
+        return c_vm
+
     @pytest.mark.parametrize('fn, value, converted',
                              [
                                  ("x + 1", 33, 34),
@@ -101,36 +136,10 @@ class Test_Conversion_VM:
                                  # volume,Gallons,Cubic_feet
                                  ("x / 7.480519", 100, 13.4)
                              ])
-    def test_convert(self, fn: str, converted: float, value: float):
+    def test_convert(self, fn: str, value: float, converted: float):
 
-        config = Configurations(BackendTypes.JSON, '', '')
-
-        config.conversions_config = {
-            "temperature":
-            {
-                "ThinkDifferent":
-                {
-                    "Kelvin": {"eq": fn, "ID": None}
-                }
-            }
-        }
-        config.responses_config = {
-            "temperature": {
-                "ABC123": [
-                    {
-                        "response": "",
-                        "input_value": "",
-                        "from_type": '',
-                        "to_type": '',
-                        "grade": '',
-                        "timestamp": "2023-10-01 04:00 PM",
-                        "ID": ''
-                    }
-                ]}}
-
-        vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
-
-        result, result1 = vm.convert_input(value, 'ThinkDifferent', 'Kelvin')
+        c_vm = self.setup_method(fn)
+        result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
 
@@ -139,34 +148,9 @@ class Test_Conversion_VM:
 
             fn = "x * y + 1"
 
-            config = Configurations(BackendTypes.JSON, '', '')
+            c_vm = self.setup_method(fn)
 
-            config.conversions_config = {
-                "temperature":
-                {
-                    "ThinkDifferent":
-                    {
-                        "Kelvin": {"eq": fn, "ID": None}
-                    }
-                }
-            }
-            config.responses_config = {
-                "temperature": {
-                    "ABC123": [
-                        {
-                            "response": "",
-                            "input_value": "",
-                            "from_type": '',
-                            "to_type": '',
-                            "grade": '',
-                            "timestamp": "2023-10-01 04:00 PM",
-                            "ID": ''
-                        }
-                    ]}}
-
-            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
-
-            result, result1 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
+            result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
 
@@ -176,34 +160,9 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            config = Configurations(BackendTypes.JSON, '', '')
+            c_vm =self.setup_method(fn)
 
-            config.conversions_config = {
-                "temperature":
-                {
-                    "ThinkDifferent":
-                    {
-                        "Kelvin": {"eq": fn, "ID": None}
-                    }
-                }
-            }
-            config.responses_config = {
-                "temperature": {
-                    "ABC123": [
-                        {
-                            "response": "",
-                            "input_value": "",
-                            "from_type": '',
-                            "to_type": '',
-                            "grade": '',
-                            "timestamp": "2023-10-01 04:00 PM",
-                            "ID": ''
-                        }
-                    ]}}
-
-            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
-
-            result, result1 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
+            result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
 
@@ -212,35 +171,38 @@ class Test_Conversion_VM:
 
             fn = "x )( 1"
 
-            config = Configurations(BackendTypes.JSON, '', '')
+            c_vm = self.setup_method(fn)
 
-            config.conversions_config = {
-                "temperature":
-                {
-                    "ThinkDifferent":
-                    {
-                        "Kelvin": {"eq": fn, "ID": None}
-                    }
-                }
-            }
-            config.responses_config = {
-                "temperature": {
-                    "ABC123": [
-                        {
-                            "response": "",
-                            "input_value": "",
-                            "from_type": '',
-                            "to_type": '',
-                            "grade": '',
-                            "timestamp": "2023-10-01 04:00 PM",
-                            "ID": ''
-                        }
-                    ]}}
+            result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
-            vm = Conversion_VM("temperature", BackendTypes.JSON, config, Conversion)
-
-            result1, result2 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
-
-        # DSN Notes: does this work?
         assert resultError.match(
             "Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin: unmatched '\\)")
+
+    @pytest.mark.parametrize('fn, value, converted', [
+                                 # incorrect
+                                 ("x + 1", 'dog', '6.5'),
+                                 ("x + 1", 'cat', 'dog')
+                             ])
+    def test_convert_incorrect(self, fn: str, value: float, converted: float):
+        with pytest.raises(ValueError) as resultError:
+
+            c_vm = self.setup_method(fn)
+
+            result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
+
+        assert resultError.match(
+f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM.from_type} to {Test_Conversion_VM.to_type}: could not convert string to float: '{value}'")
+
+
+    @pytest.mark.parametrize('fn, value, converted', [
+                                # this will pass a conversion test but not a response test
+                                 ("x + 1", '6.5', 'cat')
+                             ])
+    def test_convert_invalid_converted(self, fn: str, value: float, converted: float):
+        with pytest.raises(ValueError) as resultError:
+            c_vm = self.setup_method(fn)
+            result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
+
+            assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
+
+        assert resultError.match(f"could not convert string to float: '{converted}'")

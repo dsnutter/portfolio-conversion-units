@@ -5,6 +5,10 @@ from ..di.DI_Wireup import DI_Wireup
 
 class View_Functions:
 
+    # generic way of executing a menu chooser an returning true if a predefined choice has been made
+    #   it also calls a predefined lambda based on the choice that typically loads another view or performs
+    #   some other operation
+    #   Note that a 'q' is a hard halt and will exit out of all menus directly to the command prompt
     @staticmethod
     def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict, 
                      quit_cmd: list, c_vm: Conversion_VM.Conversion_VM, 
@@ -32,6 +36,7 @@ class View_Functions:
         else:
             return True
 
+    # possible future, not fully implemented, entering a filename for export to a file
     @staticmethod
     def Enter_Filename(desc: str):
         print(f"Entering a filename for {desc}: ")

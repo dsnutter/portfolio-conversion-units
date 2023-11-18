@@ -66,7 +66,7 @@ class Response_Input_View:
             },
             # enter responses
             'e': {
-                'text': 'Enter repsonses',
+                'text': 'Enter repsonse',
                 'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
                 'context': type
             },
@@ -105,9 +105,9 @@ class Response_Input_View:
                 'convert': lambda x: x.upper()
             },
             'input_value': {
-                'text': 'input_value of numerical value',
+                'text': 'input value for equation of numerical value',
                 'depends_on_previous': False,
-                'can_override_valid': False,
+                'can_override_valid': True,
                 'valid_args': 'float',
                 'valid': lambda x: Functions.is_valid_float(x),
                 'convert': lambda x: x
@@ -132,7 +132,7 @@ If you chose an invalid input unit of measure, you may not have choices""",
             'response': {
                 'text': 'student response of numerical value',
                 'depends_on_previous': False,
-                'can_override_valid': False,
+                'can_override_valid': True,
                 'valid_args': 'float',
                 'valid': lambda x: Functions.is_valid_float(x),
                 'convert': lambda x: x
@@ -142,13 +142,13 @@ If you chose an invalid input unit of measure, you may not have choices""",
         print(f'\n\nFor the reponse to a {type} conversion:')
         items = list(template.keys())
         i = 0
+        previous = ''
         while i < len(items):
             item = items[i]
             entered = None
             valid_entered = False
             valid_entered_with_previous = False
             override = False
-            previous = ''
             while entered is None or (not valid_entered and not valid_entered_with_previous):
                 if entered is not None:
                     if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):
@@ -188,4 +188,4 @@ Press 'B' to go back to the previous entry before this one, since this choice is
             i += 1
         result = r_vm.add(student_id, r)
         if result.grade:
-            print(f"The graded result for student {result.student_id} is: {result.grade}\n")
+            print(f"The graded result for student {result.student_id} is: {result.grade_for_display}\n")

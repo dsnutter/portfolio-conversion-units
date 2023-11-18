@@ -42,6 +42,10 @@ class Response(Base_Model):
         self._grade = value
 
     @property
+    def grade_for_display(self) -> str:
+        return str(self._grade).replace('GradeTypes.', '').lower().capitalize()
+
+    @property
     def response(self) -> str:
         return self._response
 
@@ -116,27 +120,48 @@ class Response(Base_Model):
     def keys():
         return ["student_id", "response", "input_value", "from_type", "to_type", "grade", "timestamp", "ID"]
 
-    def to_dict(self) -> dict:
-        hashmap = {
-            self._student_id: [
-                {
-                    "student_id": self._student_id,
-                    "response": self._response,
-                    "input_value": self._input_value,
-                    "from_type": self._from_type,
-                    "to_type": self._to_type,
-                    "grade": self._grade,
-                    "timestamp": self._timestamp,
-                    "ID": self._id
-                }
-            ]
-        }
+    def keys_for_display():
+        return ["student_id", "response", "input_value", "from_type", "to_type", "grade", "timestamp"]
+
+    def to_dict(self, for_display = False) -> dict:
+        if not for_display:
+            hashmap = {
+                self._student_id: [
+                    {
+                        "student_id": self._student_id,
+                        "response": self._response,
+                        "input_value": self._input_value,
+                        "from_type": self._from_type,
+                        "to_type": self._to_type,
+                        "grade": self._grade,
+                        "timestamp": self._timestamp,
+                        "ID": self._id
+                    }
+                ]
+            }
+        else:
+            hashmap = {
+                self._student_id: [
+                    {
+                        "student_id": self._student_id,
+                        "response": self._response,
+                        "input_value": self._input_value,
+                        "from_type": self._from_type.replace("_", ' ').lower().capitalize(),
+                        "to_type": self._to_type.replace("_", ' ').lower().capitalize(),
+                        "grade": self.grade_for_display,
+                        "timestamp": self._timestamp
+                    }
+                ]
+            }
         return hashmap
 
-    def to_dataframe(self) -> pd.DataFrame:
-        hashmap = self.to_dict()
+    def to_dataframe(self, for_display = False) -> pd.DataFrame:
+        hashmap = self.to_dict(for_display)
         index = 0
-        cols = Response.keys()
+        if for_display:
+            cols = Response.keys_for_display()
+        else:
+            cols = Response.keys()
 
         response = {}
         for col in cols:

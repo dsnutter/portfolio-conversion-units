@@ -37,6 +37,7 @@ class Functions:
         except ValueError:
             return False
 
+    # note this is not with the full path
     @staticmethod
     def is_valid_filename(input) -> bool:
         try:
@@ -47,10 +48,6 @@ class Functions:
             return False
         except ValueError:
             return False
-
-    @staticmethod
-    def is_in_list(items: dict) -> bool:
-        return items['input'] in items['list']
 
     @staticmethod
     # reason for this method is the way python rounds 0.5's with round()

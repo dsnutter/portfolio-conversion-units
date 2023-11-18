@@ -130,8 +130,8 @@ class Response_VM(Base_VM):
     def save(self):
         raise NotImplementedError()
 
-    def to_dataframe_all(self):
-        return self._data.to_dataframe_all()
+    def to_dataframe_all(self, for_display = False):
+        return self._data.to_dataframe_all(for_display)
 
     def __str__(self) -> str:
         result = 'Response View Model: {}\n'.format(self._type)
