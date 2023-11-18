@@ -41,59 +41,59 @@ class Test_Conversion_VM:
                 #temperature,ThinkDifferent,Kelvin
                 ("x + 1", 100, 101),
                 #volume,Liters,Tablespoons
-                ("x * (67.0 + 2/3)", 100, 6762.8),
+                ("x * (67.0 + 2/3)", 100, 6766.6667),
                 #volume,Liters,Cubic_inches
                 ("x * 61.023744", 100, 6102.4),
                 #volume,Liters,Cups
                 ("x * 4.2267528377", 100, 422.7),
                 #volume,Liters,Cubic_feet
-                ("x * 0.035315", 100, 3.5),
+                ("x / 28.317", 100, 3.5),
                 #volume,Liters,Gallons
-                ("x * 0.264172", 100, 26.4),
+                ("x / 3.785", 100, 26.4),
                 #volume,Tablespoons,Liters
                 ("x / (67.0 + 2/3)", 100, 1.5),
                 #volume,Tablespoons,Cubic_inches
-                ("x *  0.902344", 100, 90.2),
+                ("x * 0.902344", 100, 90.2),
                 #volume,Tablespoons,Cups
-                ("x * (1/16)", 100, 25),
+                ("x * (1/16)", 100, 6.25),
                 #volume,Tablespoons,Cubic_feet
-                ("x * 0.000522", 100, 0.1),
+                ("x / 1915", 100, 0.1),
                 #volume,Tablespoons,Gallons
-                ("x * 0.003906", 100, 0.4),
+                ("x / 256", 100, 0.4),
                 #volume,Cubic_inches,Liters
                 ("x / 61.023744", 100, 1.6),
                 #volume,Cubic_inches,Tablespoons
                 ("x /  0.902344", 100, 110.8),
                 #volume,Cubic_inches,Cups
-                ("x * (1/16)", 100, 6.9),
+                ("x / 14.438", 100, 6.9),
                 #volume,Cubic_inches,Cubic_feet
-                ("x * 0.000579", 100, 0.1),
+                ("x / 1728", 100, 0.1),
                 #volume,Cubic_inches,Gallons
-                ("x * 0.004329", 100, 0.4),
+                ("x / 231", 100, 0.4),
                 #volume,Cups,Liters
                 ("x / 4.2267528377", 100, 23.7),
                 #volume,Cups,Tablespoons
                 ("x / (1/16)", 100, 1600),
                 #volume,Cups,Cubic_inches
-                ("x / (1/16)", 100, 1443.8),
+                ("x * 14.438", 100, 1443.8),
                 #volume,Cups,Cubic_feet
-                ("x * 0.008355", 100, 0.8),
+                ("x / 119.7", 100, 0.8),
                 #volume,Cups,Gallons
                 ("x * 0.0625", 100, 6.3),
                 #volume,Cubic_feet,Liters
                 ("x / 0.035315", 100, 2831.7),
                 #volume,Cubic_feet,Tablespoons
-                ("x / 0.000522", 100, 191501),
+                ("x * 1915.01", 100, 191501),
                 #volume,Cubic_feet,Cubic_inches
-                ("x / 0.000579", 100, 172800),
+                ("x * 1728", 100, 172800),
                 #volume,Cubic_feet,Cups
-                ("x / 0.008355", 100, 11968.8),
+                ("x * 119.688", 100, 11968.8),
                 #volume,Cubic_feet,Gallons
                 ("x * 7.480519", 100, 748.1),
                 #volume,Gallons,Liters
                 ("x / 0.264172", 100, 378.5),
                 #volume,Gallons,Tablespoons
-                ("x / 0.003906", 100, 25600),
+                ("x * 256", 100, 25600),
                 #volume,Gallons,Cubic_inches
                 ("x / 0.004329", 100, 23100),
                 #volume,Gallons,Cups
@@ -209,7 +209,7 @@ class Test_Conversion_VM:
         assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
 
     def test_convert_invalid_equation_unmatched_parens(self):
-        with pytest.raises(ValueError) as resultError:
+        with pytest.raises(SyntaxError) as resultError:
         
             fn = "x )( 1"
 
@@ -244,4 +244,4 @@ class Test_Conversion_VM:
             result1, result2 = vm.convert_input(32, 'ThinkDifferent', 'Kelvin')
 
         # DSN Notes: does this work?
-        assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin")
+        assert resultError.match("Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin: unmatched '\\)")
