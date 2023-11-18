@@ -146,6 +146,7 @@ class Response_Input_View:
             valid_entered = False
             valid_entered_with_previous = False
             override = False
+            previous = ''
             while entered is None or (not valid_entered and not valid_entered_with_previous):
                 if entered is not None:
                     if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):

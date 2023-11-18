@@ -1,5 +1,5 @@
 
-from abc import ABC, abstractmethod
+from abc import ABC
 
 class Base_Model(ABC):
     def __init__(self) -> None:

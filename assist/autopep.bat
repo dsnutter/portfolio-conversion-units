@@ -1,0 +1,1 @@
+autopep8 ./src/ --in-place --recursive --append-config ./assist/config.cfg

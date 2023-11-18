@@ -59,7 +59,7 @@ class Test_Response_VM:
 
 
         conv = Conversion_VM('temperature', BackendTypes.JSON, config, Conversion)
-        c = Response_VM('temperature', BackendTypes.JSON, config, Response, Data_Responses_CSV(BasicTypes.Response, "temp.csv" ))
+        c = Response_VM('temperature', BackendTypes.JSON, config, Response, Data_Responses_CSV(BasicTypes.Response, "../../../assist/temp.csv" ))
         c._convert_input = conv.convert_input
 
         c.add('ABC123', {
