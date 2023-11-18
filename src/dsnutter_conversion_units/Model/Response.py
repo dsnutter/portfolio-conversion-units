@@ -2,6 +2,7 @@ from ..helpers.Enums import GradeTypes
 from .Base_Model import Base_Model
 import pandas as pd
 
+
 class Response(Base_Model):
 
     date_format = '%Y-%m-%d %I:%M %p'
@@ -17,11 +18,11 @@ class Response(Base_Model):
         self._timestamp = hashmap['timestamp']
         self._id = hashmap['ID']
     """
-    
-    def __init__(self, student_id: str, response: str, input_value: str, from_type: str, 
+
+    def __init__(self, student_id: str, response: str, input_value: str, from_type: str,
                  to_type: str, timestamp: str, grade: GradeTypes, ID: str,
                  input_value_rounded: float = None, input_value_calculated: float = None) -> None:
-        self._response = response   
+        self._response = response
         self._student_id = student_id.upper()
         self._input_value = input_value
         self._from_type = from_type
@@ -111,13 +112,13 @@ class Response(Base_Model):
 
     def __str__(self) -> str:
         return str(self.to_dict())
-    
+
     def keys():
         return ["student_id", "response", "input_value", "from_type", "to_type", "grade", "timestamp", "ID"]
 
     def to_dict(self) -> dict:
         hashmap = {
-            self._student_id : [
+            self._student_id: [
                 {
                     "student_id": self._student_id,
                     "response": self._response,
@@ -131,7 +132,7 @@ class Response(Base_Model):
             ]
         }
         return hashmap
-    
+
     def to_dataframe(self) -> pd.DataFrame:
         hashmap = self.to_dict()
         index = 0
@@ -139,7 +140,7 @@ class Response(Base_Model):
 
         response = {}
         for col in cols:
-             response[col] = [ hashmap[self._student_id][index][col] ]
+            response[col] = [hashmap[self._student_id][index][col]]
         # print(response)
 
         df = pd.DataFrame.from_records(response)

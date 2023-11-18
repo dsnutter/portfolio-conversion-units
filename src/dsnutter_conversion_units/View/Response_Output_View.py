@@ -8,6 +8,8 @@ from ..Model import Response
 #
 # Output view functions
 #
+
+
 class Response_Output_View:
 
     @inject
@@ -19,14 +21,14 @@ class Response_Output_View:
         r_vm.execute_load_preexisting()
         items = r_vm.all_keys()
         print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
-        for student_id in items:                        
+        for student_id in items:
             objs = r_vm.get_responses(student_id)
             for obj in objs:
                 Response_Output_View.Display_Of_Single_Response(obj)
 
     def Display_Of_Single_Response(obj: Response.Response):
-                print(f'\nStudent ID: {obj.student_id}')
-                print(f"""Details
+        print(f'\nStudent ID: {obj.student_id}')
+        print(f"""Details
     From: {obj.from_type}
     To: {obj.to_type}
     Student Entered: {obj.response}
@@ -64,7 +66,7 @@ class Response_Output_View:
     def Display_Of_Single_Response_Console(obj: Response.Response, separator: str):
                 print(f"{obj.student_id}{separator}{obj.input_value}{separator}{obj.from_type}{separator}{obj.to_type}{separator}{obj.response}{separator}{obj.grade}")
     """
-                
+
     # possible future: jinja2 templating
     @inject
     def Text_Summary_DI():
@@ -86,4 +88,3 @@ class Response_Output_View:
     @inject
     def Display_Graph_DI():
         pass
-

@@ -1,5 +1,7 @@
 from ..helpers.Enums import BackendTypes
-import json, csv
+import json
+import csv
+
 
 class Data_Functions:
     @staticmethod
@@ -42,7 +44,7 @@ class Data_Functions:
                         if items["Type"] not in result:
                             result[items["Type"]] = {}
                         if items["student_id"] not in result[items["Type"]]:
-                            result[items["Type"]][items["student_id"]] = []                    
+                            result[items["Type"]][items["student_id"]] = []
                         result[items["Type"]][items["student_id"]].append({
                             "response": items["response"],
                             "input_value": items["input_value"],
@@ -72,12 +74,13 @@ class Data_Functions:
                 file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type', 'From', 'To', 'equation', 'ID' ])
+                    lines = csv.DictWriter(file, ['Type', 'From', 'To', 'equation', 'ID'])
                     lines.writeheader()
                     for cname in config:
                         for from_c in config[cname]:
                             for to_c in config[cname][from_c]:
-                                lines.writerow({ 'Type': cname, 'From': from_c, 'To': to_c, 'equation': config[cname][from_c][to_c]['eq'], 'ID': config[cname][from_c][to_c]['ID'] })
+                                lines.writerow({'Type': cname, 'From': from_c, 'To': to_c,
+                                               'equation': config[cname][from_c][to_c]['eq'], 'ID': config[cname][from_c][to_c]['ID']})
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
@@ -91,27 +94,28 @@ class Data_Functions:
                 file.close()
             elif file_type == BackendTypes.CSV:
                 with open(filename, 'w+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, ['Type', 'student_id', 'response', 'input_value',
+                                           'from_type', 'to_type', 'grade', 'timestamp', 'ID'])
                     lines.writeheader()
                     for cname in config:
                         for student_id in config[cname]:
                             for obj in config[cname][student_id]:
-                                lines.writerow({ 'Type': cname, 
-                                                    'student_id': student_id, 
-                                                    'response': obj['response'], 
-                                                    'input_value': obj['input_value'], 
-                                                    'from_type': obj['from_type'],
-                                                    'to_type': obj['to_type'], 
-                                                    'grade': obj['grade'], 
-                                                    'timestamp': obj['timestamp'],
-                                                    'ID': obj['ID']  })
+                                lines.writerow({'Type': cname,
+                                                'student_id': student_id,
+                                                'response': obj['response'],
+                                                'input_value': obj['input_value'],
+                                                'from_type': obj['from_type'],
+                                                'to_type': obj['to_type'],
+                                                'grade': obj['grade'],
+                                                'timestamp': obj['timestamp'],
+                                                'ID': obj['ID']})
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
 
     @staticmethod
     def append_responses_dict_to_file(config: dict, filename: str, file_type: BackendTypes):
-        try:                
+        try:
             if file_type == BackendTypes.JSON:
                 raise NotImplementedError()
                 # with open(filename, 'w+') as file:
@@ -124,18 +128,19 @@ class Data_Functions:
                     for student_id in config[cname]:
                         for obj in config[cname][student_id]:
                             IDs.append(str(obj['ID']))
-                            new_lines[str(obj['ID'])] = { 'Type': cname, 
-                                                'student_id': student_id, 
-                                                'response': obj['response'], 
-                                                'input_value': obj['input_value'], 
-                                                'from_type': obj['from_type'],
-                                                'to_type': obj['to_type'], 
-                                                'grade': obj['grade'], 
-                                                'timestamp': obj['timestamp'],
-                                                'ID': obj['ID']  }
+                            new_lines[str(obj['ID'])] = {'Type': cname,
+                                                         'student_id': student_id,
+                                                         'response': obj['response'],
+                                                         'input_value': obj['input_value'],
+                                                         'from_type': obj['from_type'],
+                                                         'to_type': obj['to_type'],
+                                                         'grade': obj['grade'],
+                                                         'timestamp': obj['timestamp'],
+                                                         'ID': obj['ID']}
 
                 with open(filename, 'a+', newline='') as file:
-                    lines = csv.DictWriter(file, [ 'Type','student_id','response','input_value','from_type','to_type','grade','timestamp', 'ID' ])
+                    lines = csv.DictWriter(file, ['Type', 'student_id', 'response', 'input_value',
+                                           'from_type', 'to_type', 'grade', 'timestamp', 'ID'])
                     # lines.writeheader()
                     for ID in IDs:
                         lines.writerow(new_lines[ID])

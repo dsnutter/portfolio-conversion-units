@@ -5,6 +5,8 @@ from ..helpers.Data_Functions import Data_Functions
 #
 # for importing configurations from datastores for di
 #
+
+
 class Configurations():
     def __init__(self, file_type: BackendTypes, filename_conversions: str, filename_responses: str) -> None:
         self._conversions_config_file = filename_conversions
@@ -39,7 +41,7 @@ class Configurations():
     @property
     def conversions_config(self):
         return self._conversions_config
-    
+
     @conversions_config.setter
     def conversions_config(self, value):
         self._conversions_config = value
@@ -64,4 +66,3 @@ class Configurations():
         result += 'Conversions Config File: {}\n'.format(self._conversions_config_file)
         result += 'Repsonses Config File: {}\n'.format(self._responses_config_file)
         return result
-

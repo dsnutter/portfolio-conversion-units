@@ -2,6 +2,7 @@ from decimal import Decimal, ROUND_HALF_UP, localcontext
 import numpy as np
 import math
 
+
 class Functions:
     WHITELIST_EQUATIONS = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '(', ')', '+', '-', '/', '*', ' ', 'x', '.')
 
@@ -19,7 +20,7 @@ class Functions:
         if input.count('(') != input.count(')'):
             sanitized = False
         return sanitized
-    
+
     @staticmethod
     def is_valid_float(input: str) -> bool:
         try:
@@ -27,7 +28,7 @@ class Functions:
             return True
         except ValueError:
             return False
-        
+
     @staticmethod
     def is_valid_string(input) -> bool:
         try:

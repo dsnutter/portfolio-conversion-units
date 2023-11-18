@@ -1,1 +1,1 @@
-autopep8 ./src/ --in-place --recursive --append-config ./assist/config.cfg
+autopep8 ./src/ --in-place --recursive --global-config ./assist/config.cfg
