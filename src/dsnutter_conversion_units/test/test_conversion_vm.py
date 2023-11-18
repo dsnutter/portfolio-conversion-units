@@ -12,7 +12,7 @@ class Test_Conversion_VM:
     to_type = 'Kelvin'
     type = "temperature"
 
-    def setup(self, fn):
+    def setup_method(self, fn):
 
         config = Configurations(BackendTypes.JSON, '', '')
 
@@ -138,7 +138,7 @@ class Test_Conversion_VM:
                              ])
     def test_convert(self, fn: str, value: float, converted: float):
 
-        c_vm = self.setup(fn)
+        c_vm = self.setup_method(fn)
         result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
@@ -148,7 +148,7 @@ class Test_Conversion_VM:
 
             fn = "x * y + 1"
 
-            c_vm = self.setup(fn)
+            c_vm = self.setup_method(fn)
 
             result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
@@ -160,7 +160,7 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            c_vm =self.setup(fn)
+            c_vm =self.setup_method(fn)
 
             result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
@@ -171,7 +171,7 @@ class Test_Conversion_VM:
 
             fn = "x )( 1"
 
-            c_vm = self.setup(fn)
+            c_vm = self.setup_method(fn)
 
             result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
@@ -186,7 +186,7 @@ class Test_Conversion_VM:
     def test_convert_incorrect(self, fn: str, value: float, converted: float):
         with pytest.raises(ValueError) as resultError:
 
-            c_vm = self.setup(fn)
+            c_vm = self.setup_method(fn)
 
             result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
@@ -200,7 +200,7 @@ f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM
                              ])
     def test_convert_invalid_converted(self, fn: str, value: float, converted: float):
         with pytest.raises(ValueError) as resultError:
-            c_vm = self.setup(fn)
+            c_vm = self.setup_method(fn)
             result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
             assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)

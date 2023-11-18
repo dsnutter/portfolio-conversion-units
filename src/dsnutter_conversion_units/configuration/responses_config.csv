@@ -33,3 +33,7 @@ temperature,ABC123,2323,317.33,Farenheit,Rankine,GradeTypes.INCORRECT,2023-11-18
 temperature,ABC123,111.554,317.33,Kelvin,Farenheit,GradeTypes.INCORRECT,2023-11-18 02:59 PM,d3b7d125-56ce-4b44-afb3-80be17376eb0
 temperature,ABC123,543.94,84.2,Farenheit,Rankine,GradeTypes.CORRECT,2023-11-18 03:02 PM,609b1212-3fdb-4d12-9048-6ffde1724ff7
 volume,ANCASD,6.1,25.6,Cups,Liters,GradeTypes.CORRECT,2023-11-18 03:04 PM,3dc6c9f6-31a5-4a59-ac5e-56db3888ab4c
+volume,ABC123,giraffe,cat,Dog,Cow,GradeTypes.INVALID,2023-11-18 03:09 PM,bf75ffda-8a70-42db-9617-4a4fbc67fdeb
+volume,ABC123,99,23,Cups,Liters,GradeTypes.INCORRECT,2023-11-18 03:11 PM,380ec2e7-36e3-4a63-9fe2-eccc1d545b15
+volume,ABCD123,45,32,Cups,Lit,GradeTypes.INVALID,2023-11-18 03:12 PM,758c8b11-7e3b-4d50-a307-8153674669c4
+volume,ABC123,0,32,Liters,Cups,GradeTypes.INCORRECT,2023-11-18 03:13 PM,08593a71-0a9d-493f-a789-14ab59eb7fd4
