@@ -2,6 +2,7 @@ from ..Data import Data_Responses_CSV
 from ..helpers.Enums import BackendTypes, BasicTypes, GradeTypes
 from ..Model import Response
 
+
 class Test_Data_Responses_CSV:
     filename = '../assist/temp.csv'
     type = BasicTypes.Response
@@ -13,11 +14,11 @@ class Test_Data_Responses_CSV:
     to_type = 'Celsius'
 
     def setup_method(self):
-        response = Response.Response(Test_Data_Responses_CSV.student_id, '12.3', '12.0', 
-                                     Test_Data_Responses_CSV.from_type, 
-                                     Test_Data_Responses_CSV.to_type, 
-                                     Test_Data_Responses_CSV.timestamp, 
-                                    GradeTypes.INCORRECT, Test_Data_Responses_CSV.ID, 12.2, 12.222222)
+        response = Response.Response(Test_Data_Responses_CSV.student_id, '12.3', '12.0',
+                                     Test_Data_Responses_CSV.from_type,
+                                     Test_Data_Responses_CSV.to_type,
+                                     Test_Data_Responses_CSV.timestamp,
+                                     GradeTypes.INCORRECT, Test_Data_Responses_CSV.ID, 12.2, 12.222222)
         return response
 
     def test_to_dataframe_all(self):
@@ -60,7 +61,8 @@ class Test_Data_Responses_CSV:
         obj.add_with_student_id('temperature', Test_Data_Responses_CSV.student_id, response, persist=False)
         obj.add_with_student_id('temperature', Test_Data_Responses_CSV.student_id, response, persist=False)
 
-        resp = obj.get_response('ThinkDifferent', 'Celsius', Test_Data_Responses_CSV.student_id, Test_Data_Responses_CSV.timestamp)
+        resp = obj.get_response('ThinkDifferent', 'Celsius', Test_Data_Responses_CSV.student_id,
+                                Test_Data_Responses_CSV.timestamp)
 
         assert resp[0].id == response.id
         assert resp[0].student_id == response.student_id

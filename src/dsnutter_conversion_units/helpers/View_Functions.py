@@ -10,8 +10,8 @@ class View_Functions:
     #   some other operation
     #   Note that a 'q' is a hard halt and will exit out of all menus directly to the command prompt
     @staticmethod
-    def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict, 
-                     quit_cmd: list, c_vm: Conversion_VM.Conversion_VM, 
+    def execute_menu(config: DI_Wireup, title: str, menu_hashmap: dict,
+                     quit_cmd: list, c_vm: Conversion_VM.Conversion_VM,
                      r_vm: Response_VM.Response_VM):
         print(title)
         for item in menu_hashmap:

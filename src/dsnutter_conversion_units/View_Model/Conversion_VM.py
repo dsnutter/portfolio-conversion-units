@@ -12,7 +12,7 @@ from decimal import Decimal
 
 class Conversion_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, 
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations,
                  factory: Callable[..., Conversion]) -> None:
         super(Conversion_VM, self).__init__(type, backend_type, config)
 

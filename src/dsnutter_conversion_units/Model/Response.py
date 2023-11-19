@@ -123,7 +123,7 @@ class Response(Base_Model):
     def keys_for_display():
         return ["student_id", "response", "input_value", "from_type", "to_type", "grade", "timestamp"]
 
-    def to_dict(self, for_display = False) -> dict:
+    def to_dict(self, for_display=False) -> dict:
         if not for_display:
             hashmap = {
                 self._student_id: [
@@ -155,7 +155,7 @@ class Response(Base_Model):
             }
         return hashmap
 
-    def to_dataframe(self, for_display = False) -> pd.DataFrame:
+    def to_dataframe(self, for_display=False) -> pd.DataFrame:
         hashmap = self.to_dict(for_display)
         index = 0
         if for_display:

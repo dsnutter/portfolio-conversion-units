@@ -80,8 +80,8 @@ class Data_Functions:
                         for from_c in config[cname]:
                             for to_c in config[cname][from_c]:
                                 lines.writerow({'Type': cname, 'From': from_c, 'To': to_c,
-                                               'equation': config[cname][from_c][to_c]['eq'], 
-                                               'ID': config[cname][from_c][to_c]['ID']})
+                                               'equation': config[cname][from_c][to_c]['eq'],
+                                                'ID': config[cname][from_c][to_c]['ID']})
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")

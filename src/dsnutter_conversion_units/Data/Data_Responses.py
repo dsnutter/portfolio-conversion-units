@@ -40,7 +40,7 @@ class Data_Responses(Data_Abstract):
 
     # future: wanted to make sure we can get responses into pandas so we can maybe analyze later
     #  for now, just used for markdown printing in the console
-    def to_dataframe_all(self, for_display = False):
+    def to_dataframe_all(self, for_display=False):
         thash = {}
         if for_display:
             keys = Response.Response.keys_for_display()

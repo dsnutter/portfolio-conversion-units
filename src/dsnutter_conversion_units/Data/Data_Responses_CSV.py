@@ -23,7 +23,6 @@ class Data_Responses_CSV(Data_Responses):
     def add_with_student_id(self, type: str, student_id: str, obj: Response.Response, persist: bool = True):
         self.add(type, {'obj': obj, 'student_id': student_id}, persist)
 
-
     def get_by_student_id(self, student_id: str):
         return self._storage[student_id]
 

@@ -14,7 +14,7 @@ from ..helpers.functions import Functions
 
 class Response_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, 
+    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations,
                  factory: Callable[..., Response.Response], data: Data_Responses.Data_Responses) -> None:
         super(Response_VM, self).__init__(type, backend_type, config)
         self._factory = factory
@@ -112,7 +112,7 @@ class Response_VM(Base_VM):
             input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
 
             if Functions.round_float_decimal_places(input_value_rounded, 1) == \
-                Functions.round_float_decimal_places(response, 1):
+                    Functions.round_float_decimal_places(response, 1):
                 grade = GradeTypes.CORRECT
             else:
                 grade = GradeTypes.INCORRECT
@@ -130,7 +130,7 @@ class Response_VM(Base_VM):
     def save(self):
         raise NotImplementedError()
 
-    def to_dataframe_all(self, for_display = False):
+    def to_dataframe_all(self, for_display=False):
         return self._data.to_dataframe_all(for_display)
 
     def __str__(self) -> str:
