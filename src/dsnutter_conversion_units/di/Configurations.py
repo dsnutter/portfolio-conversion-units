@@ -16,6 +16,8 @@ class Configurations():
         self._conversions_filter_config_file = filename_conversions_filter
         self._file_type = file_type
 
+        Data_Functions.check_config_files_exist(filename_conversions, filename_responses, filename_conversions_filter)
+
         if filename_conversions is not None:
             self._conversions_config = Data_Functions.conversions_file_to_dict(filename_conversions, file_type)
         else:

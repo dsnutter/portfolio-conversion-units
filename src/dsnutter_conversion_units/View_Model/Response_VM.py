@@ -102,11 +102,12 @@ class Response_VM(Base_VM):
 
     def execute_load_preexisting(self):
         items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
-        items = items[self._question_type]
-        for student_id in items.keys():
-            for inner in items[student_id]:
-                # do not persist to storage since its already there
-                self.add(student_id, inner, False)
+        if self._question_type in items:
+            items = items[self._question_type]
+            for student_id in items.keys():
+                for inner in items[student_id]:
+                    # do not persist to storage since its already there
+                    self.add(student_id, inner, False)            
 
     @property
     def conversion(self):

@@ -1,7 +1,7 @@
 from ..helpers.Enums import BackendTypes
 import json
 import csv
-
+import os.path
 
 class Data_Functions:
     @staticmethod
@@ -122,6 +122,13 @@ class Data_Functions:
                 # with open(filename, 'w+') as file:
                 #     json.dump(obj=config, fp=file, indent=4)
             elif file_type == BackendTypes.CSV:
+                # write head if does not exist already
+                if os.path.isfile(filename) and os.path.getsize(filename) <= 0:
+                    with open(filename, 'w+', newline='') as file:
+                        lines = csv.DictWriter(file, ['Type', 'student_id', 'response', 'input_value',
+                                            'from_type', 'to_type', 'grade', 'timestamp', 'ID'])
+                        lines.writeheader()
+                    file.close()
                 new_lines = {}
                 IDs = []
                 # generate the new items
@@ -196,3 +203,17 @@ class Data_Functions:
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
+        
+    @staticmethod
+    def check_config_files_exist(file_conversions, file_responses, file_conversion_filters):
+        if not os.path.isfile(file_conversions) or os.path.getsize(file_conversions) <= 0:
+            print("There is a configuration issue with a file not existing or empty, please fix it")
+            exit()
+        if not os.path.isfile(file_responses):
+            print("There is a configuration issue with a file not existing, please fix it")
+            exit()
+        if not os.path.isfile(file_conversion_filters) or os.path.getsize(file_conversion_filters) <= 0:
+            print("There is a configuration issue with a file not existing or empty, please fix it")
+            exit()
+
+
