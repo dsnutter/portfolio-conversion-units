@@ -7,8 +7,8 @@ from ..helpers.Data_Functions import Data_Functions
 
 
 class Configurations():
-    def __init__(self, file_type: BackendTypes, 
-                 filename_conversions: str, 
+    def __init__(self, file_type: BackendTypes,
+                 filename_conversions: str,
                  filename_responses: str,
                  filename_conversions_filter: str) -> None:
         self._conversions_config_file = filename_conversions
@@ -21,7 +21,8 @@ class Configurations():
         else:
             self._conversions_config = {}
         if filename_conversions_filter is not None:
-            self._conversions_filter_config = Data_Functions.conversions_filter_file_to_dict(filename_conversions_filter, file_type)
+            self._conversions_filter_config = \
+                Data_Functions.conversions_filter_file_to_dict(filename_conversions_filter, file_type)
         else:
             self._conversions_filter_config = {}
         if filename_responses is not None:

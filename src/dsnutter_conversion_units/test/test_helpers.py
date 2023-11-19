@@ -50,7 +50,7 @@ class Test_Helpers:
                                  ("blah123", False),
                                  ("+a+", False)
                              ])
-    def test_eq_whitelist(self, eq, result):
+    def test_does_boolean_equation_pass_whitelist(self, eq, result):
         temp = Functions.does_boolean_equation_pass_whitelist(eq)
 
         assert temp == result
@@ -257,7 +257,8 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
                              [
                                  ('test/files/test-write-responses.json',
                                   'test/files/test-temp-write-responses.json', BackendTypes.JSON),
-                                 ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
+                                 ('test/files/test-write-responses.csv',
+                                  'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
                              ])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 

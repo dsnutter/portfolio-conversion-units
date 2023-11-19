@@ -86,7 +86,7 @@ class Conversion_VM(Base_VM):
 
                 result = equation_lambda(float(value))
 
-                if result == False:
+                if result is False:
                     return obj['reason']
                 else:
                     return None

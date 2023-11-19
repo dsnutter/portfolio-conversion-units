@@ -19,14 +19,14 @@ class Response_VM(Base_VM):
         super(Response_VM, self).__init__(question_type, backend_type, config)
         self._factory = factory
         self._data = data  # singleton
-        self._conversion_functions = { 'input': None, 'filter': None  }
+        self._conversion_functions = {'input': None, 'filter': None}
 
     # sets up access to grading and filtering for conversions
     def setup_conversions(self, c_vm: Conversion_VM):
         self.set_conversion_functions(c_vm.convert_input, c_vm.check_filter_results)
 
     def set_conversion_functions(self, input_function, filter_function):
-        self._conversion_functions = { 'input': input_function, 'filter': filter_function  }
+        self._conversion_functions = {'input': input_function, 'filter': filter_function}
 
     def all_keys(self) -> list:
         return self._data.all_keys()

@@ -188,11 +188,11 @@ class Data_Functions:
                     lines.writeheader()
                     for question_type in config:
                         for to_type in config[question_type]:
-                                lines.writerow({'Type': question_type,
-                                                'To': to_type,
-                                                'equation': config[question_type][to_type]['eq'],
-                                                'Reason': config[question_type][to_type]['reason'],
-                                                'ID': config[question_type][to_type]['ID']})
+                            lines.writerow({'Type': question_type,
+                                            'To': to_type,
+                                            'equation': config[question_type][to_type]['eq'],
+                                            'Reason': config[question_type][to_type]['reason'],
+                                            'ID': config[question_type][to_type]['ID']})
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")

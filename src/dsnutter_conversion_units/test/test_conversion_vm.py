@@ -200,7 +200,9 @@ class Test_Conversion_VM:
             result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert resultError.match(
-            f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM.from_type} to {Test_Conversion_VM.to_type}: could not convert string to float: '{value}'")
+            f"Cannot execute lambda function defined for conversion from \
+                {Test_Conversion_VM.from_type} to {Test_Conversion_VM.to_type}: \
+                could not convert string to float: '{value}'")
 
     @pytest.mark.parametrize('fn, value, converted', [
         # this will pass a conversion test but not a response test
