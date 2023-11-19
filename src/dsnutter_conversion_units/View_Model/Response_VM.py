@@ -98,7 +98,8 @@ class Response_VM(Base_VM):
     def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> tuple:
         try:
             if self._convert_input is None:
-                raise ModuleNotFoundError("Please set a handler for converting input before calling Response_VM.grade_input_value")
+                raise ModuleNotFoundError(
+                    "Please set a handler for converting input before calling Response_VM.grade_input_value")
             input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
 
             if Functions.round_float_decimal_places(input_value_rounded, 1) == \

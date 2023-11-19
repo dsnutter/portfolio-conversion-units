@@ -19,7 +19,7 @@ class DI_Wireup:
 
         # setups up injection of temperature/responses conversion Models derived from JSON files
         self._containers[question_type] = Container(config_conversions={'item': question_type, 'file_type': self._file_type},
-                                           config_responses={'item': question_type, 'file_type': self._file_type})
+                                                    config_responses={'item': question_type, 'file_type': self._file_type})
 
         # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
         self._containers[question_type].wire(modules=modules)

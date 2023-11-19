@@ -18,7 +18,8 @@ class Data_Responses_CSV(Data_Responses):
             self._storage[hashmap['student_id']] = []
         self._storage[hashmap['student_id']].append(hashmap['obj'])
         if persist:
-            Data_Functions.append_responses_dict_to_file({question_type: hashmap['obj'].to_dict()}, self._filename, self._backend_type)
+            Data_Functions.append_responses_dict_to_file(
+                {question_type: hashmap['obj'].to_dict()}, self._filename, self._backend_type)
 
     def add_with_student_id(self, question_type: str, student_id: str, obj: Response.Response, persist: bool = True):
         self.add(question_type, {'obj': obj, 'student_id': student_id}, persist)

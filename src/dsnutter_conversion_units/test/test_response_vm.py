@@ -28,7 +28,7 @@ class Test_Response_VM:
 
         conv = Conversion_VM('temperature', BackendTypes.JSON, config, Conversion)
         resp = Response_VM('temperature', BackendTypes.JSON, config, Response,
-                        Data_Responses_CSV(BasicTypes.Response, "./assist/temp.csv"))
+                           Data_Responses_CSV(BasicTypes.Response, "./assist/temp.csv"))
         resp._convert_input = conv.convert_input
 
         return resp
@@ -74,7 +74,7 @@ class Test_Response_VM:
         result = resp.get_response(from_type, to_type, Test_Response_VM.student_id, Test_Response_VM.timestamp)[0]
 
         assert result.response == response
-        assert result.input_value == input_value        
+        assert result.input_value == input_value
         assert result.grade == grade
         assert result.from_type == from_type
         assert result.to_type == to_type
@@ -128,13 +128,12 @@ class Test_Response_VM:
         }, persist=False)
 
         assert result.response == response
-        assert result.input_value == input_value        
+        assert result.input_value == input_value
         assert result.grade == grade
         assert result.from_type == from_type
         assert result.to_type == to_type
         assert result.student_id == Test_Response_VM.student_id
         assert result.timestamp == Test_Response_VM.timestamp
-
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
@@ -173,10 +172,10 @@ class Test_Response_VM:
     def test_grade_input_value(self, input_value, response, grade, to_type, from_type):
         r = self.setup_method()
 
-        input_value_rounded, input_value_calculated, input_value_grade = r.grade_input_value(from_type, to_type, response, input_value)
+        input_value_rounded, input_value_calculated, input_value_grade = r.grade_input_value(
+            from_type, to_type, response, input_value)
 
         assert input_value_grade == grade
-
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
