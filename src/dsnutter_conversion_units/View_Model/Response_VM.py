@@ -37,8 +37,7 @@ class Response_VM(Base_VM):
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
         return self._data.get_response(from_type, to_type, student_id, timestamp)
 
-    # DSN Notes: this needs better test coverage
-    # DSN Notes: this is intended to add multiple items and needs changed
+    # future plans: this was intended to add multiple items and needs changed
     def add(self, hash_key: str, hashmap: dict, persist: bool = True):
         if 'grade' not in hashmap:
             (input_value_rounded, input_value_calculated, grade) = self.grade_input_value(
@@ -96,10 +95,10 @@ class Response_VM(Base_VM):
         self._c_vm = value
 
     # must set conversion before executing this
-    def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> None:
+    def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> tuple:
         try:
             if self._convert_input is None:
-                raise ModuleNotFoundError("Please set a conversion view model before calling Response_VM.grade_input_value")
+                raise ModuleNotFoundError("Please set a handler for converting input before calling Response_VM.grade_input_value")
             input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
 
             if Functions.round_float_decimal_places(input_value_rounded, 1) == \
