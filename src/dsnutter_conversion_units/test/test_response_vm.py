@@ -62,6 +62,8 @@ class Test_Response_VM:
                                  # invalid
                                  ("1.2", "1.2", GradeTypes.INVALID, 'dog', 'Farenheit'),
                                  ("1.2", "1.2", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
                                  ("1.2", "dog", GradeTypes.INVALID, 'dog', 'Farenheit')
                              ])
     def test_get_response(self, input_value, response, grade, to_type, from_type):
@@ -88,8 +90,6 @@ class Test_Response_VM:
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
-                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
-                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  ("dog", "1.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
                              ])
     def test_get_response_error(self, input_value, response, grade, to_type, from_type):
@@ -141,6 +141,9 @@ class Test_Response_VM:
                                  ("1.2", "1.1", GradeTypes.INVALID, 'Celsius', ''),
                                  ("32", "0", GradeTypes.INVALID, None, 'Farenheit'),
                                  ("1.2", "dog", GradeTypes.INVALID, 'dog', 'Farenheit'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ('23', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  ("1.2", "1.1", GradeTypes.INVALID, 'Celsius', None)
                              ])
     def test_add(self, input_value, response, grade, to_type, from_type):
@@ -164,12 +167,9 @@ class Test_Response_VM:
         assert result.timestamp == Test_Response_VM.timestamp
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type', [
-        ('', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
         ("dog", "1.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-        ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
-        ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
         ('', '32', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-        ('23', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
+        ('', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
     ])
     def test_add_error(self, input_value, response, grade, to_type, from_type):
         with pytest.raises(ValueError) as resultError:
