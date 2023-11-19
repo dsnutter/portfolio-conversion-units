@@ -19,7 +19,14 @@ class Response_VM(Base_VM):
         super(Response_VM, self).__init__(question_type, backend_type, config)
         self._factory = factory
         self._data = data  # singleton
-        self._convert_input = None
+        self._conversion_functions = {'input': None, 'filter': None}
+
+    # sets up access to grading and filtering for conversions
+    def setup_conversions(self, c_vm: Conversion_VM):
+        self.set_conversion_functions(c_vm.convert_input, c_vm.check_filter_results)
+
+    def set_conversion_functions(self, input_function, filter_function):
+        self._conversion_functions = {'input': input_function, 'filter': filter_function}
 
     def all_keys(self) -> list:
         return self._data.all_keys()
@@ -43,10 +50,23 @@ class Response_VM(Base_VM):
             (input_value_rounded, input_value_calculated, grade) = self.grade_input_value(
                 hashmap['from_type'], hashmap['to_type'], hashmap['response'], hashmap['input_value'])
             hashmap['grade'] = grade
+            if self._conversion_functions['filter'] is not None:
+                # judge if there are any additional requirments for the conversion that could make the
+                #   final conversion invalid
+                filter_result_msg = []
+                temp = self._conversion_functions['filter'](hashmap['from_type'], hashmap['input_value'])
+                if temp is not None:
+                    filter_result_msg.append(temp)
+                temp = self._conversion_functions['filter'](hashmap['to_type'], hashmap['response'])
+                if temp is not None:
+                    filter_result_msg.append(temp)
+            else:
+                filter_result_msg = None
         else:
             grade = hashmap['grade']
             input_value_calculated = None
             input_value_rounded = None
+            filter_result_msg = []
 
         from_type = hashmap['from_type']
         to_type = hashmap['to_type']
@@ -73,8 +93,12 @@ class Response_VM(Base_VM):
                             grade=grade,
                             ID=ID,
                             input_value_rounded=input_value_rounded,
-                            input_value_calculated=input_value_calculated)
-        self._data.add(self._question_type, {'obj': obj, 'student_id': student_id}, persist)
+                            input_value_calculated=input_value_calculated,
+                            filter_result_msg=filter_result_msg)
+
+        # only add if it passes the conversion filter
+        if len(obj.filter_result_msg) == 0:
+            self._data.add(self._question_type, {'obj': obj, 'student_id': student_id}, persist)
 
         return obj
 
@@ -97,10 +121,10 @@ class Response_VM(Base_VM):
     # must set conversion before executing this
     def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> tuple:
         try:
-            if self._convert_input is None:
+            if self._conversion_functions['input'] is None:
                 raise ModuleNotFoundError(
                     "Please set a handler for converting input before calling Response_VM.grade_input_value")
-            input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
+            input_value_rounded, input_value_calculated = self._conversion_functions['input'](input_value, from_type, to_type)
 
             if Functions.round_float_decimal_places(input_value_rounded, 1) == \
                     Functions.round_float_decimal_places(response, 1):

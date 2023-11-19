@@ -22,7 +22,7 @@ class Main_View:
             },
             # enter responses
             'r': {
-                'text': 'Repsonses actions',
+                'text': 'Responses actions',
                 'execute': lambda t, c, r: Response_Input_View.Response_Input_View.Entry_Response_Type(wire)
             },
             # quit application

@@ -40,3 +40,8 @@ volume,ABC123,0,32,Liters,Cups,GradeTypes.INCORRECT,2023-11-18 03:13 PM,08593a71
 temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-18 09:06 PM,f34263fd-d8b0-4798-a245-662d7b436e10
 temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-18 09:07 PM,cacb5262-62c3-46cf-ad52-c09df929dbca
 volume,ABC123,0,32,Cups,Liters,GradeTypes.INCORRECT,2023-11-18 09:07 PM,2194ed69-6804-496d-80bd-3eed7b32d49e
+volume,ABC123,100,-100,Cups,Liters,GradeTypes.INCORRECT,2023-11-19 08:55 AM,4ff5a3af-ebce-4a05-8961-812e9d3bf1de
+volume,ABC123,123.22,111.22,Cups,Liters,GradeTypes.INCORRECT,2023-11-19 09:19 AM,daa11d71-ca89-4e4e-8531-88cd3df89b5a
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-19 09:53 AM,97b868e0-bc82-42e3-9e50-7889fba9ef25
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-19 11:34 AM,5b073820-1b68-4edc-b009-89b57f49a86d
+temperature,ABC123,32,asd,Asdasd,Asddasd,GradeTypes.INVALID,2023-11-19 11:34 AM,06403060-f6d0-447d-b816-d231ce1f825f

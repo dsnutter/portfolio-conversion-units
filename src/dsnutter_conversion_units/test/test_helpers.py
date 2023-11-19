@@ -32,6 +32,29 @@ class Test_Helpers:
 
         assert temp == result
 
+    @pytest.mark.parametrize('eq, result',
+                             [
+                                 ("x > 0", True),
+                                 ("x >= 0", True),
+                                 ("x < 0", True),
+                                 ("x <= 0", True),
+                                 # because of our whitelisting method, would need to rewrite and use 'x >= 0'
+                                 ("not (x < 0)", False),
+                                 ("", True),
+                                 ("x == 1", True),
+                                 # these true/falses are not allow because the way we are whitelisting this
+                                 #  would need to use 'x == (1 == 1)'
+                                 ("x == True", False),
+                                 ("x == False", False),
+                                 ("input()", False),
+                                 ("blah123", False),
+                                 ("+a+", False)
+                             ])
+    def test_does_boolean_equation_pass_whitelist(self, eq, result):
+        temp = Functions.does_boolean_equation_pass_whitelist(eq)
+
+        assert temp == result
+
     @pytest.mark.parametrize('value, places, result',
                              [
                                  ('3.14159', 2, '3.14'),
@@ -137,7 +160,7 @@ class Test_Helpers:
                              ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
-        obj = Configurations.Configurations(file_type, filename_read, None)
+        obj = Configurations.Configurations(file_type, filename_read, None, None)
         original = obj.conversions_config
 
         Data_Functions.save_conversion_dict_to_file(original, filename_save, file_type)
@@ -234,11 +257,12 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
                              [
                                  ('test/files/test-write-responses.json',
                                   'test/files/test-temp-write-responses.json', BackendTypes.JSON),
-                                 ('test/files/test-write-responses.csv', 'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
+                                 ('test/files/test-write-responses.csv',
+                                  'test/files/test-temp-write-responses.csv', BackendTypes.CSV)
                              ])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
-        obj = Configurations.Configurations(file_type, None, filename_read)
+        obj = Configurations.Configurations(file_type, None, filename_read, None)
         original = obj.responses_config
 
         Data_Functions.save_responses_dict_to_file(original, filename_save, file_type)

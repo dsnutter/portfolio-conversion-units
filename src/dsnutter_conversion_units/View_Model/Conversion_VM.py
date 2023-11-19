@@ -18,6 +18,7 @@ class Conversion_VM(Base_VM):
 
         self._factory = factory
         self._storage = self._config.conversions_config[question_type]
+        self._filter_results = self._config.conversions_filter_config[question_type]
         self._response_factory = factory
 
     # future: persist exising items in memory to storage
@@ -70,6 +71,31 @@ class Conversion_VM(Base_VM):
             self._storage[from_type][to_type]["obj"] = self._factory(from_type, to_type, eq, id)
 
         return self._storage[from_type][to_type]["obj"]
+
+    # judge if there are any additional requirments for the conversion that could make the
+    #   final conversion invalid
+    # return None if passes special case or there is no special case or a string reason if not
+    def check_filter_results(self, to_type: str, value: str) -> str:
+        if to_type not in self._filter_results:
+            return None
+        try:
+            obj = self._filter_results[to_type]
+            if Functions.does_boolean_equation_pass_whitelist(obj['eq']):
+                temp = f"lambda x: {obj['eq']}"
+                equation_lambda = eval(temp)
+
+                result = equation_lambda(float(value))
+
+                if result is False:
+                    return obj['reason']
+                else:
+                    return None
+        except SyntaxError as se:
+            raise SyntaxError(f'Cannot execute lambda function filter defined for conversion {to_type}: {se}')
+        except Exception as e:
+            raise ValueError(f"Cannot execute lambda function filter defined for conversion {to_type}: {e}")
+        else:
+            raise ValueError("Conversion function for special cases is not valid")
 
     # possible future: this may need implemented
     def add(self, hash_key: str, hashmap: dict):

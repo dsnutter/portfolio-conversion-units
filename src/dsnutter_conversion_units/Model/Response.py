@@ -21,7 +21,8 @@ class Response(Base_Model):
 
     def __init__(self, student_id: str, response: str, input_value: str, from_type: str,
                  to_type: str, timestamp: str, grade: GradeTypes, ID: str,
-                 input_value_rounded: float = None, input_value_calculated: float = None) -> None:
+                 input_value_rounded: float = None, input_value_calculated: float = None,
+                 filter_result_msg: str = None) -> None:
         self._response = response
         self._student_id = student_id.upper()
         self._input_value = input_value
@@ -32,6 +33,7 @@ class Response(Base_Model):
         self._id = ID
         self._input_value_rounded = input_value_rounded
         self._input_value_calculated = input_value_calculated
+        self._filter_result_msg = filter_result_msg
 
     @property
     def grade(self) -> GradeTypes:
@@ -109,10 +111,18 @@ class Response(Base_Model):
     def input_value_calculated(self) -> float:
         return self._input_value_calculated
 
-    # if needed later
+    @property
+    def filter_result_msg(self) -> str:
+        return self._filter_result_msg
+
+    @filter_result_msg.setter
+    def filter_result_msg(self, value: str) -> None:
+        self._filter_result_msg = value
+
+    # future: if needed later for comparisons of dates
     # @property
     # def timestamp_as_ticks(self) ->:
-    #     return self._timestamp
+    #     return self._timestamp.???
 
     def __str__(self) -> str:
         return str(self.to_dict())

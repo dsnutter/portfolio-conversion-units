@@ -47,8 +47,8 @@ class Response_Input_View:
     def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, question_type: str,
                                   r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                   c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
-        # to hook up calculations
-        r_vm._convert_input = c_vm.convert_input
+        # to hook up calculations and other stuff
+        r_vm.setup_conversions(c_vm)
 
         Response_Input_View.Entry_Of_Multi_Reponse(wire, question_type, r_vm, c_vm)
 
@@ -66,7 +66,7 @@ class Response_Input_View:
             },
             # enter responses
             'e': {
-                'text': 'Enter repsonse',
+                'text': 'Enter response',
                 'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
                 'context': question_type
             },
@@ -187,5 +187,14 @@ Press 'B' to go back to the previous entry before this one, since this choice is
             previous = entered
             i += 1
         result = r_vm.add(student_id, r)
-        if result.grade:
-            print(f"The graded result for student {result.student_id} is: {result.grade_for_display}\n")
+        if len(result.filter_result_msg) > 0:
+            print(f"""
+The result for {result.student_id} is not possible given the input value {result.input_value} \
+and student response {result.response} since:
+
+{str.join(", ", result.filter_result_msg)}.
+
+The response you entered was not saved.
+""")
+        elif result.grade:
+            print(f"\nThe graded result for student {result.student_id} is: {result.grade_for_display}\n")
