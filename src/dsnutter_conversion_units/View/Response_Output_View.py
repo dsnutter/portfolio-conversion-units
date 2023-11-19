@@ -19,7 +19,7 @@ class Response_Output_View:
     def Display_Of_All_Responses(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
         r_vm.execute_load_preexisting()
         items = r_vm.all_keys()
-        print(f'\n\nAll the responses so far for {r_vm.current_type}:\n')
+        print(f'\n\nAll the responses so far for {r_vm.current_question_type}:\n')
         for student_id in items:
             objs = r_vm.get_responses(student_id)
             for obj in objs:
@@ -46,7 +46,7 @@ class Response_Output_View:
     # this view loads all previous responses and displays them
     def Display_Summary_Console(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
         r_vm.execute_load_preexisting()
-        print(f'\n\nAll the responses so far for {r_vm.current_type}:')
+        print(f'\n\nAll the responses so far for {r_vm.current_question_type}:')
         print(r_vm.to_dataframe_all(for_display=True).to_markdown())
 
     # possible future: jinja2 templating

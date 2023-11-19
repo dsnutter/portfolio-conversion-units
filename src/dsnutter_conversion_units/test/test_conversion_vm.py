@@ -1,10 +1,9 @@
-import pytest
+import pytest, uuid
 from ..View_Model.Conversion_VM import Conversion_VM
 from ..Model.Conversion import Conversion
 from ..helpers.Enums import BackendTypes
 from ..di.Configurations import Configurations
 from ..helpers.functions import Functions
-
 
 class Test_Conversion_VM:
 
@@ -205,3 +204,45 @@ class Test_Conversion_VM:
             assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
 
         assert resultError.match(f"could not convert string to float: '{converted}'")
+
+
+    def test_get_conversion_single(self):
+        eq = 'x + 1'
+        c_vm = self.setup_method(eq)
+
+        conversion = c_vm.get_conversion_single(Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
+
+        assert conversion.to_type == Test_Conversion_VM.to_type
+        assert conversion.from_type == Test_Conversion_VM.from_type
+        assert conversion.equation == eq
+        assert uuid.UUID(conversion.id).version == 4
+        assert callable(conversion.equation_lambda)
+
+    @pytest.mark.parametrize('from_type, to_type', [
+        ('', ''),
+        (None, None),
+        (None, 'Celsius'),
+        ('', 'Celsius')
+    ])
+    def test_get_conversion_single_error_from_type(self, from_type, to_type):
+        with pytest.raises(KeyError) as resultError:
+            eq = 'x + 1'
+            c_vm = self.setup_method(eq)
+
+            conversion = c_vm.get_conversion_single(from_type, to_type)
+
+        assert resultError.match(f"{from_type}")
+
+    @pytest.mark.parametrize('from_type, to_type', [
+        ('ThinkDifferent', None),
+        ('ThinkDifferent', ''),
+    ])
+    def test_get_conversion_single_error_to_type(self, from_type, to_type):
+        with pytest.raises(KeyError) as resultError:
+            eq = 'x + 1'
+            c_vm = self.setup_method(eq)
+
+            conversion = c_vm.get_conversion_single(from_type, to_type)
+
+        assert resultError.match(f"{to_type}")
+

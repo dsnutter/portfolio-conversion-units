@@ -14,24 +14,15 @@ from ..helpers.functions import Functions
 
 class Response_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations,
+    def __init__(self, question_type: str, backend_type: BackendTypes, config: Configurations,
                  factory: Callable[..., Response.Response], data: Data_Responses.Data_Responses) -> None:
-        super(Response_VM, self).__init__(type, backend_type, config)
+        super(Response_VM, self).__init__(question_type, backend_type, config)
         self._factory = factory
         self._data = data  # singleton
         self._convert_input = None
 
     def all_keys(self) -> list:
         return self._data.all_keys()
-
-    def all_keys_level2(self, key: str) -> list:
-        raise NotImplementedError()
-
-    def all_to_types(self, from_type: str) -> list:
-        raise NotImplementedError()
-
-    def all_keys_level3(self, key_outer: str, key_inner) -> list:
-        raise NotImplementedError()
 
     def all_students(self) -> list:
         return self.all_keys()
@@ -84,13 +75,13 @@ class Response_VM(Base_VM):
                             ID=ID,
                             input_value_rounded=input_value_rounded,
                             input_value_calculated=input_value_calculated)
-        self._data.add(self._type, {'obj': obj, 'student_id': student_id}, persist)
+        self._data.add(self._question_type, {'obj': obj, 'student_id': student_id}, persist)
 
         return obj
 
     def execute_load_preexisting(self):
         items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
-        items = items[self._type]
+        items = items[self._question_type]
         for student_id in items.keys():
             for inner in items[student_id]:
                 # do not persist to storage since its already there
@@ -120,9 +111,9 @@ class Response_VM(Base_VM):
             grade = GradeTypes.INCORRECT
             input_value_rounded, input_value_calculated = None, None
 
-        if from_type not in self._config.conversions_config[self._type]:
+        if from_type not in self._config.conversions_config[self._question_type]:
             grade = GradeTypes.INVALID
-        elif to_type not in self._config.conversions_config[self._type][from_type]:
+        elif to_type not in self._config.conversions_config[self._question_type][from_type]:
             grade = GradeTypes.INVALID
 
         return (input_value_rounded, input_value_calculated, grade)
@@ -134,6 +125,6 @@ class Response_VM(Base_VM):
         return self._data.to_dataframe_all(for_display)
 
     def __str__(self) -> str:
-        result = 'Response View Model: {}\n'.format(self._type)
+        result = 'Response View Model: {}\n'.format(self._question_type)
         result = 'Response View Model: {}\n'.format(self._storage)
         return result

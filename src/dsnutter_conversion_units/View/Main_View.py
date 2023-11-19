@@ -8,17 +8,17 @@ class Main_View:
 
     def Main_Menu(wire: DI_Wireup.DI_Wireup):
         title = '\n** Student Units Conversion Application **'
-        types = wire.types
+        question_types = wire.types
         menu_hashmap = {
             # display responses
             'd': {
                 'text': 'Display all response entries [including previous ones] to screen',
-                'execute': lambda t, c, r: Main_View.wire_display_responses(types, wire)
+                'execute': lambda t, c, r: Main_View.wire_display_responses(question_types, wire)
             },
             # display conversions
             'c': {
-                'text': 'List all conversion types details',
-                'execute': lambda t, c, r: Main_View.wire_display_conversions(types, wire)
+                'text': 'List all conversion question_types details',
+                'execute': lambda t, c, r: Main_View.wire_display_conversions(question_types, wire)
             },
             # enter responses
             'r': {
@@ -37,12 +37,12 @@ class Main_View:
 
     def wire_display_responses(types: list, config: DI_Wireup.DI_Wireup):
         modules = [Response_Output_View.Response_Output_View.Console_Summary_DI]
-        for type in types:
-            config.wire_up(type, modules)
+        for question_type in types:
+            config.wire_up(question_type, modules)
             Response_Output_View.Response_Output_View.Console_Summary_DI()
 
     def wire_display_conversions(types: list, config: DI_Wireup.DI_Wireup):
         modules = [Conversion_View.Conversion_View.All_Possible_Types_DI]
-        for type in types:
-            config.wire_up(type, modules)
+        for question_type in types:
+            config.wire_up(question_type, modules)
             Conversion_View.Conversion_View.All_Possible_Types_DI()

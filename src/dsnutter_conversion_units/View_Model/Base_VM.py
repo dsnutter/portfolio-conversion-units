@@ -5,8 +5,8 @@ from ..di.Configurations import Configurations
 
 class Base_VM(Base_Abstract):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations) -> None:
-        self._type = type
+    def __init__(self, question_type: str, backend_type: BackendTypes, config: Configurations) -> None:
+        self._question_type = question_type
         self._backend_type = backend_type
         self._all_types = (config.conversions_config.keys())
         self._config = config
@@ -17,10 +17,9 @@ class Base_VM(Base_Abstract):
 
     @property
     def current_type(self) -> list:
-        return self._type
+        return self._question_type
 
     """
-    # persist exising items in memory to storage
     def save(self):
         raise NotImplementedError()
 
