@@ -52,7 +52,7 @@ class Response_VM(Base_VM):
             hashmap['grade'] = grade
             if self._conversion_functions['filter'] is not None:
                 # judge if there are any additional requirments for the conversion that could make the
-                #   final conversion invalid, so am making this an array since maybe in the future we 
+                #   final conversion invalid, so am making this an array since maybe in the future we
                 #   could support more than one filter configuration for a give question/conversion type
                 filter_result_msg = []
                 temp_filter = self._conversion_functions['filter'](hashmap['from_type'], hashmap['input_value'])
