@@ -15,7 +15,7 @@ class Test_Conversion_VM:
 
     def setup_method(self, fn):
 
-        config = Configurations(BackendTypes.JSON, '', '')
+        config = Configurations(BackendTypes.JSON, '', '', '')
 
         config.conversions_config = {
             Test_Conversion_VM.type:
@@ -26,6 +26,14 @@ class Test_Conversion_VM:
                 }
             }
         }
+        config.conversions_filter_config = {
+            Test_Conversion_VM.type:
+            {
+                Test_Conversion_VM.from_type: {"eq": 'x == x', "ID": None, "reason": "test reason"},
+                Test_Conversion_VM.to_type: {"eq": 'x == x', "ID": None, "reason": "test reason"}
+            }
+        }
+
         config.responses_config = {
             Test_Conversion_VM.type: {
                 "ABC123": [

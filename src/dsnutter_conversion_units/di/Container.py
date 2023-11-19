@@ -34,8 +34,8 @@ class Container(containers.DeclarativeContainer):
         factory=conversion_factory.provider
     )
 
-    repsonses_factory = providers.Factory(Response.Response)
-    repsonses_data_csv = providers.Singleton(Data_Responses_CSV,
+    responses_factory = providers.Factory(Response.Response)
+    responses_data_csv = providers.Singleton(Data_Responses_CSV,
                                              question_type=BasicTypes.Response,
                                              filename=settings.responses_filename)
 
@@ -44,6 +44,6 @@ class Container(containers.DeclarativeContainer):
         question_type=config_responses.item,
         backend_type=config_responses.file_type,
         config=settings.main_configurations,
-        factory=repsonses_factory.provider,
-        data=repsonses_data_csv
+        factory=responses_factory.provider,
+        data=responses_data_csv
     )

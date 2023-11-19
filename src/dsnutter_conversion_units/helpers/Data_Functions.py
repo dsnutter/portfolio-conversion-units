@@ -148,3 +148,51 @@ class Data_Functions:
                 file.close()
         except FileNotFoundError:
             raise FileNotFoundError(f"Could not write to: {filename}")
+
+    @staticmethod
+    def conversions_filter_file_to_dict(filename: str, file_type: BackendTypes) -> dict:
+        try:
+            if file_type == BackendTypes.CSV:
+                with open(filename, newline='') as file:
+                    lines = csv.DictReader(f=file, delimiter=',')
+                    result = {}
+                    for items in lines:
+                        if items["Type"] not in result:
+                            result[items["Type"]] = {}
+                        if items["To"] not in result[items["Type"]]:
+                            result[items["Type"]][items["To"]] = {}
+                        result[items["Type"]][items["To"]]['eq'] = items["equation"]
+                        result[items["Type"]][items["To"]]['ID'] = items["ID"]
+                        result[items["Type"]][items["To"]]['reason'] = items["Reason"]
+                file.close()
+                return result
+            elif file_type == BackendTypes.JSON:
+                result = json.load(open(filename))
+            else:
+                result = None
+
+            return result
+        except FileNotFoundError:
+            return {}
+
+    @staticmethod
+    def save_responses_filter_results_dict_to_file(config: dict, filename: str, file_type: BackendTypes):
+        try:
+            if file_type == BackendTypes.JSON:
+                with open(filename, 'w+') as file:
+                    json.dump(obj=config, fp=file, indent=4)
+                file.close()
+            elif file_type == BackendTypes.CSV:
+                with open(filename, 'w+', newline='') as file:
+                    lines = csv.DictWriter(file, ['Type', 'To', 'equation', 'Reason', 'ID'])
+                    lines.writeheader()
+                    for question_type in config:
+                        for to_type in config[question_type]:
+                                lines.writerow({'Type': question_type,
+                                                'To': to_type,
+                                                'equation': config[question_type][to_type]['eq'],
+                                                'Reason': config[question_type][to_type]['reason'],
+                                                'ID': config[question_type][to_type]['ID']})
+                file.close()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Could not write to: {filename}")
