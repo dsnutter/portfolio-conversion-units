@@ -10,13 +10,15 @@ class Configurations():
     def __init__(self, file_type: BackendTypes,
                  filename_conversions: str,
                  filename_responses: str,
-                 filename_conversions_filter: str) -> None:
+                 filename_conversions_filter: str,
+                 file_checks: bool = True) -> None:
         self._conversions_config_file = filename_conversions
         self._responses_config_file = filename_responses
         self._conversions_filter_config_file = filename_conversions_filter
         self._file_type = file_type
 
-        Data_Functions.check_config_files_exist(filename_conversions, filename_responses, filename_conversions_filter)
+        if file_checks:
+            Data_Functions.check_config_files_exist(filename_conversions, filename_responses, filename_conversions_filter)
 
         if filename_conversions is not None:
             self._conversions_config = Data_Functions.conversions_file_to_dict(filename_conversions, file_type)

@@ -15,7 +15,7 @@ class Test_Response_VM:
     equation = 'x == x'
 
     def setup_method(self):
-        config = Configurations(BackendTypes.JSON, '', '', '')
+        config = Configurations(BackendTypes.JSON, '', '', '', False)
 
         config.conversions_config = {
             "temperature":

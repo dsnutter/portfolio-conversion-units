@@ -15,7 +15,7 @@ class Test_Conversion_VM:
 
     def setup_method(self, fn):
 
-        config = Configurations(BackendTypes.JSON, '', '', '')
+        config = Configurations(BackendTypes.JSON, '', '', '', False)
 
         config.conversions_config = {
             Test_Conversion_VM.type:
