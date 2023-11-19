@@ -78,24 +78,25 @@ class Conversion_VM(Base_VM):
     def check_filter_results(self, to_type: str, value: str) -> str:
         if to_type not in self._filter_results:
             return None
-        try:
-            obj = self._filter_results[to_type]
-            if Functions.does_boolean_equation_pass_whitelist(obj['eq']):
-                temp = f"lambda x: {obj['eq']}"
-                equation_lambda = eval(temp)
-
-                result = equation_lambda(float(value))
-
-                if result is False:
-                    return obj['reason']
-                else:
-                    return None
-        except SyntaxError as se:
-            raise SyntaxError(f'Cannot execute lambda function filter defined for conversion {to_type}: {se}')
-        except Exception as e:
-            raise ValueError(f"Cannot execute lambda function filter defined for conversion {to_type}: {e}")
         else:
-            raise ValueError("Conversion function for special cases is not valid")
+            obj = self._filter_results[to_type]
+            try:
+                if Functions.does_boolean_equation_pass_whitelist(obj['eq']):
+                    temp = f"lambda x: {obj['eq']}"
+                    equation_lambda = eval(temp)
+
+                    result = equation_lambda(float(value))
+
+                    if result is False:
+                        return obj['reason']
+                    else:
+                        return None
+            except SyntaxError:
+                return f'Cannot execute conversion filter defined for conversion {to_type}: value must be {obj["eq"]}'
+            except Exception:
+                return f"Cannot execute conversion filter defined for conversion {to_type}: value must be {obj['eq']}"
+            else:
+                return f"Conversion function for special cases is not valid for: {obj['eq']}"
 
     # possible future: this may need implemented
     def add(self, hash_key: str, hashmap: dict):

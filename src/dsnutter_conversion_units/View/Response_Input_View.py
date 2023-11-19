@@ -92,6 +92,88 @@ class Response_Input_View:
     def Entry_Of_Single_Reponse(question_type: str,
                                 r_vm: Response_VM.Response_VM,
                                 c_vm: Conversion_VM.Conversion_VM):
+        template = Response_Input_View.Entry_Single_Response_Template(question_type, r_vm, c_vm)
+        r = {}
+        print(f'\n\nFor the reponse to a {question_type} conversion:')
+        template_keys = list(template.keys())
+        i = 0
+        previous = ''
+        while i < len(template_keys):
+            key = template_keys[i]
+            entered = None
+            valid_entered = False
+            valid_entered_with_previous = False
+            override = False
+            while entered is None or (not valid_entered and not valid_entered_with_previous):
+                if entered is not None:
+                    override = Response_Input_View. \
+                        Entry_Single_Response_Handle_Errors(template,
+                                                            previous,
+                                                            key)
+                if override:
+                    valid_entered = True
+                    valid_entered_with_previous = True
+                    override = False
+                else:
+                    valid_entered, valid_entered_with_previous, entered = Response_Input_View. \
+                        Entry_Single_Response_Handle_General_Input(
+                            template,
+                            key,
+                            previous)
+            if key == 'student_id':
+                student_id = entered
+            else:
+                r[key] = entered
+            previous = entered
+            i += 1
+        try:
+            result = r_vm.add(student_id, r)
+        except Exception as ex:
+            print(ex)
+
+        if len(result.filter_result_msg) > 0:
+            print(f"""
+The result for {result.student_id} is not possible given the input value {result.input_value} \
+and student response {result.response} since:
+
+{str.join(", ", result.filter_result_msg)}.
+
+The response you entered was not saved.
+""")
+        elif result.grade:
+            print(f"\nThe graded result for student {result.student_id} is: {result.grade_for_display}\n")
+
+    def Entry_Single_Response_Handle_Errors(template, previous, template_key):
+        override = False
+
+        if template[template_key]['depends_on_previous'] and callable(template[template_key]['valid_args']):
+            valid_args = template[template_key]['valid_args'](previous)
+        else:
+            valid_args = template[template_key]['valid_args']
+        print(f"There was an error with your input it must be a valid {template[template_key]['text']} such as:")
+        print(f"{valid_args}")
+        if template[template_key]['can_override_valid']:
+            o_input = input("""
+Press enter to go back and reenter
+-or-
+Press 'Y' to override and use what was entered
+""")
+            if o_input.lower() == 'y':
+                override = True
+        return override
+
+    def Entry_Single_Response_Handle_General_Input(template, item, previous):
+        entered = input(f"What was the {template[item]['text']}: ")
+        entered = template[item]['convert'](entered)
+
+        valid_entered = (not (template[item]['depends_on_previous']) and template[item]['valid'](entered))
+        valid_entered_with_previous = (template[item]['depends_on_previous']) and template[item]['valid'](entered, previous)
+
+        return valid_entered, valid_entered_with_previous, entered
+
+    def Entry_Single_Response_Template(question_type: str,
+                                       r_vm: Response_VM.Response_VM,
+                                       c_vm: Conversion_VM.Conversion_VM):
         #
         # this template defines what to print when gathering reponse inputs and how to validate that input
         #
@@ -138,63 +220,4 @@ If you chose an invalid input unit of measure, you may not have choices""",
                 'convert': lambda x: x
             }
         }
-        r = {}
-        print(f'\n\nFor the reponse to a {question_type} conversion:')
-        items = list(template.keys())
-        i = 0
-        previous = ''
-        while i < len(items):
-            item = items[i]
-            entered = None
-            valid_entered = False
-            valid_entered_with_previous = False
-            override = False
-            while entered is None or (not valid_entered and not valid_entered_with_previous):
-                if entered is not None:
-                    if template[item]['depends_on_previous'] and callable(template[item]['valid_args']):
-                        valid_args = template[item]['valid_args'](previous)
-                    else:
-                        valid_args = template[item]['valid_args']
-                    print(f"There was an error with your input it must be a valid {template[item]['text']} such as:")
-                    print(f"{valid_args}")
-                    if template[item]['can_override_valid']:
-                        o_input = input("""
-Press enter to go back and reenter
--or-
-Press 'Y' to override and use what was entered
--or-
-Press 'B' to go back to the previous entry before this one, since this choice is invalid
-""")
-                        if o_input.lower() == 'y':
-                            override = True
-                        elif o_input.lower() == 'b':
-                            i -= 1
-                            item = items[i]
-                if override:
-                    valid_entered = True
-                    valid_entered_with_previous = True
-                    override = False
-                else:
-                    entered = input(f"What was the {template[item]['text']}: ")
-                    entered = template[item]['convert'](entered)
-                    valid_entered = (not (template[item]['depends_on_previous']) and template[item]['valid'](entered))
-                    valid_entered_with_previous = (template[item]['depends_on_previous']
-                                                   ) and template[item]['valid'](entered, previous)
-            if item == 'student_id':
-                student_id = entered
-            else:
-                r[item] = entered
-            previous = entered
-            i += 1
-        result = r_vm.add(student_id, r)
-        if len(result.filter_result_msg) > 0:
-            print(f"""
-The result for {result.student_id} is not possible given the input value {result.input_value} \
-and student response {result.response} since:
-
-{str.join(", ", result.filter_result_msg)}.
-
-The response you entered was not saved.
-""")
-        elif result.grade:
-            print(f"\nThe graded result for student {result.student_id} is: {result.grade_for_display}\n")
+        return template

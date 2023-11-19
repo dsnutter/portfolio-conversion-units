@@ -15,7 +15,7 @@ class Test_Conversion_VM:
 
     def setup_method(self, fn):
 
-        config = Configurations(BackendTypes.JSON, '', '', '')
+        config = Configurations(BackendTypes.JSON, '', '', '', False)
 
         config.conversions_config = {
             Test_Conversion_VM.type:
@@ -290,17 +290,16 @@ class Test_Conversion_VM:
         ('ThinkDifferent', '', False, ''),
     ])
     def test_check_filter_results_error(self, to_type: str, value: str, result: bool, eq: str):
-        with pytest.raises(SyntaxError) as resultError:
-            reason = 'test reason'
-            c_vm = self.setup_method(eq)
+        reason = 'test reason'
+        c_vm = self.setup_method(eq)
 
-            c_vm._filter_results = {
-                Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
-                Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
-            }
+        c_vm._filter_results = {
+            Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
+            Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
+        }
 
-            c_vm.check_filter_results(to_type, value)
-        assert resultError.match(r"Cannot execute lambda function filter defined for conversion(.*)")
+        filter_result_msg = c_vm.check_filter_results(to_type, value)
+        assert filter_result_msg == f"Cannot execute conversion filter defined for conversion {to_type}: value must be {eq}"
 
     @pytest.mark.parametrize('to_type, value, result, eq', [
         ('ThinkDifferent', '1.0', True, 'x == y'),
@@ -311,14 +310,13 @@ class Test_Conversion_VM:
         ('ThinkDifferent', '1.0', True, 'input()')
     ])
     def test_check_filter_results_error2(self, to_type: str, value: str, result: bool, eq: str):
-        with pytest.raises(ValueError) as resultError:
-            reason = 'test reason'
-            c_vm = self.setup_method(eq)
+        reason = 'test reason'
+        c_vm = self.setup_method(eq)
 
-            c_vm._filter_results = {
-                Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
-                Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
-            }
+        c_vm._filter_results = {
+            Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
+            Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
+        }
 
-            c_vm.check_filter_results(to_type, value)
-        assert resultError.match(r"Conversion function for special cases is not valid")
+        filter_result_msg = c_vm.check_filter_results(to_type, value)
+        assert filter_result_msg == f"Conversion function for special cases is not valid for: {eq}"

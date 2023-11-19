@@ -12,9 +12,10 @@ class Test_Response_VM:
 
     student_id = 'ABC123'
     timestamp = '2023-10-01 04:00 PM'
+    equation = 'x == x'
 
     def setup_method(self):
-        config = Configurations(BackendTypes.JSON, '', '', '')
+        config = Configurations(BackendTypes.JSON, '', '', '', False)
 
         config.conversions_config = {
             "temperature":
@@ -27,8 +28,8 @@ class Test_Response_VM:
         config.conversions_filter_config = {
             "temperature":
             {
-                "Farenheit": {"eq": 'x == x', "ID": None, "reason": "test reason"},
-                "Celsius": {"eq": 'x == x', "ID": None, "reason": "test reason"}
+                "Farenheit": {"eq": Test_Response_VM.equation, "ID": None, "reason": "test reason"},
+                "Celsius": {"eq": Test_Response_VM.equation, "ID": None, "reason": "test reason"}
             }
         }
 
@@ -62,6 +63,8 @@ class Test_Response_VM:
                                  # invalid
                                  ("1.2", "1.2", GradeTypes.INVALID, 'dog', 'Farenheit'),
                                  ("1.2", "1.2", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
                                  ("1.2", "dog", GradeTypes.INVALID, 'dog', 'Farenheit')
                              ])
     def test_get_response(self, input_value, response, grade, to_type, from_type):
@@ -88,33 +91,27 @@ class Test_Response_VM:
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
-                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
-                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  ("dog", "1.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
                              ])
     def test_get_response_error(self, input_value, response, grade, to_type, from_type):
-        with pytest.raises(ValueError) as resultError:
+        resp = self.setup_method()
 
-            resp = self.setup_method()
+        original = resp.add(Test_Response_VM.student_id, {
+            "response": response,
+            "input_value": input_value,
+            "from_type": from_type,
+            "to_type": to_type,
+            "timestamp": Test_Response_VM.timestamp,
+            "ID": ''
+        }, persist=False)
+        # its a keyerror since there was an error with filter and it was not added to storage
+        with pytest.raises(KeyError) as resultError:
 
-            resp.add(Test_Response_VM.student_id, {
-                "response": response,
-                "input_value": input_value,
-                "from_type": from_type,
-                "to_type": to_type,
-                "timestamp": Test_Response_VM.timestamp,
-                "ID": ''
-            }, persist=False)
-            resp.get_response(from_type, to_type, Test_Response_VM.student_id, Test_Response_VM.timestamp)[0]
-        if input_value.isalpha():
-            check = input_value
-            type_check = from_type
-        else:
-            check = response
-            type_check = to_type
+            obj = resp.get_response(from_type, to_type, Test_Response_VM.student_id, Test_Response_VM.timestamp)[0]
 
-        assert resultError.match(
-            f"Cannot execute lambda function filter defined for conversion {type_check}: could not convert string to float: '{check}'")
+        assert resultError.match(f'\'{Test_Response_VM.student_id}\'')
+
+        assert original.filter_result_msg[0] == f"Cannot execute conversion filter defined for conversion {from_type}: value must be {Test_Response_VM.equation}"
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [
@@ -141,6 +138,9 @@ class Test_Response_VM:
                                  ("1.2", "1.1", GradeTypes.INVALID, 'Celsius', ''),
                                  ("32", "0", GradeTypes.INVALID, None, 'Farenheit'),
                                  ("1.2", "dog", GradeTypes.INVALID, 'dog', 'Farenheit'),
+                                 ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
+                                 ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
+                                 ('23', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
                                  ("1.2", "1.1", GradeTypes.INVALID, 'Celsius', None)
                              ])
     def test_add(self, input_value, response, grade, to_type, from_type):
@@ -164,49 +164,25 @@ class Test_Response_VM:
         assert result.timestamp == Test_Response_VM.timestamp
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type', [
-        ('', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
         ("dog", "1.2", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-        ("1.2", "dog", GradeTypes.INVALID, 'Celsius', 'dog'),
-        ("1.2", "dog", GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
         ('', '32', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
-        ('23', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
-    ])
-    def test_add_error(self, input_value, response, grade, to_type, from_type):
-        with pytest.raises(ValueError) as resultError:
-
-            resp = self.setup_method()
-
-            resp.add(Test_Response_VM.student_id, {
-                "response": response,
-                "input_value": input_value,
-                "from_type": from_type,
-                "to_type": to_type,
-                "timestamp": Test_Response_VM.timestamp,
-                "ID": ''
-            }, persist=False)
-
-        assert resultError.match(
-            r'Cannot execute lambda function filter defined for conversion \b[a-zA-Z]+\b: could not convert string to float: ([a-zA-Z\'].*)')
-
-    @pytest.mark.parametrize('input_value, response, grade, to_type, from_type', [
+        ('', '', GradeTypes.INCORRECT, 'Celsius', 'Farenheit'),
         (None, '23', GradeTypes.INCORRECT, 'Celsius', 'Farenheit')
     ])
-    def test_add_error2(self, input_value, response, grade, to_type, from_type):
-        with pytest.raises(ValueError) as resultError:
+    def test_add_error(self, input_value, response, grade, to_type, from_type):
 
-            resp = self.setup_method()
+        resp = self.setup_method()
 
-            resp.add(Test_Response_VM.student_id, {
-                "response": response,
-                "input_value": input_value,
-                "from_type": from_type,
-                "to_type": to_type,
-                "timestamp": Test_Response_VM.timestamp,
-                "ID": ''
-            }, persist=False)
+        original = resp.add(Test_Response_VM.student_id, {
+            "response": response,
+            "input_value": input_value,
+            "from_type": from_type,
+            "to_type": to_type,
+            "timestamp": Test_Response_VM.timestamp,
+            "ID": ''
+        }, persist=False)
 
-        assert resultError.match(
-            r'Cannot execute lambda function filter defined for conversion \b[a-zA-Z]+\b: float\(\) argument must be a string or a real number, not ([a-zA-Z\'].*)')
+        assert original.filter_result_msg[0] == f"Cannot execute conversion filter defined for conversion {from_type}: value must be {Test_Response_VM.equation}"
 
     @pytest.mark.parametrize('input_value, response, grade, to_type, from_type',
                              [

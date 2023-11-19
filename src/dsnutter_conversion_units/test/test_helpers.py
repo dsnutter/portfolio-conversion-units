@@ -160,7 +160,7 @@ class Test_Helpers:
                              ])
     def test_save_conversion_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
-        obj = Configurations.Configurations(file_type, filename_read, None, None)
+        obj = Configurations.Configurations(file_type, filename_read, None, None, False)
         original = obj.conversions_config
 
         Data_Functions.save_conversion_dict_to_file(original, filename_save, file_type)
@@ -262,7 +262,7 @@ students,ABC1233,dog,6.5,Farenheit,Rankine,incorrect,2023-10-03 03:00 PM,
                              ])
     def test_save_responses_dict_to_file(self, filename_read: str, filename_save: str, file_type: BackendTypes):
 
-        obj = Configurations.Configurations(file_type, None, filename_read, None)
+        obj = Configurations.Configurations(file_type, None, filename_read, None, False)
         original = obj.responses_config
 
         Data_Functions.save_responses_dict_to_file(original, filename_save, file_type)

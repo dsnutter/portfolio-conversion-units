@@ -17,7 +17,7 @@ class Main_View:
             },
             # display conversions
             'c': {
-                'text': 'List all conversion question_types details',
+                'text': 'List all conversion question types details',
                 'execute': lambda t, c, r: Main_View.wire_display_conversions(question_types, wire)
             },
             # enter responses

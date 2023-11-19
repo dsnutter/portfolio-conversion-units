@@ -52,14 +52,12 @@ class Response_VM(Base_VM):
             hashmap['grade'] = grade
             if self._conversion_functions['filter'] is not None:
                 # judge if there are any additional requirments for the conversion that could make the
-                #   final conversion invalid
+                #   final conversion invalid, so am making this an array since maybe in the future we
+                #   could support more than one filter configuration for a give question/conversion type
                 filter_result_msg = []
-                temp = self._conversion_functions['filter'](hashmap['from_type'], hashmap['input_value'])
-                if temp is not None:
-                    filter_result_msg.append(temp)
-                temp = self._conversion_functions['filter'](hashmap['to_type'], hashmap['response'])
-                if temp is not None:
-                    filter_result_msg.append(temp)
+                temp_filter = self._conversion_functions['filter'](hashmap['from_type'], hashmap['input_value'])
+                if temp_filter is not None:
+                    filter_result_msg.append(temp_filter)
             else:
                 filter_result_msg = None
         else:
@@ -104,11 +102,12 @@ class Response_VM(Base_VM):
 
     def execute_load_preexisting(self):
         items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
-        items = items[self._question_type]
-        for student_id in items.keys():
-            for inner in items[student_id]:
-                # do not persist to storage since its already there
-                self.add(student_id, inner, False)
+        if self._question_type in items:
+            items = items[self._question_type]
+            for student_id in items.keys():
+                for inner in items[student_id]:
+                    # do not persist to storage since its already there
+                    self.add(student_id, inner, False)            
 
     @property
     def conversion(self):
