@@ -76,10 +76,10 @@ class Conversion_VM(Base_VM):
     #   final conversion invalid
     # return None if passes special case or there is no special case or a string reason if not
     def check_filter_results(self, to_type: str, value: str) -> str:
-        if to_type not in self._config.conversions_filter_config[self._question_type]:
+        if to_type not in self._filter_results:
             return None
         try:
-            obj = self._config.conversions_filter_config[self._question_type][to_type]
+            obj = self._filter_results[to_type]
             if Functions.does_boolean_equation_pass_whitelist(obj['eq']):
                 temp = f"lambda x: {obj['eq']}"
                 equation_lambda = eval(temp)
@@ -91,7 +91,7 @@ class Conversion_VM(Base_VM):
                 else:
                     return None
         except SyntaxError as se:
-            raise SyntaxError(f'Cannot execute lambda function filterdefined for conversion {to_type}: {se}')
+            raise SyntaxError(f'Cannot execute lambda function filter defined for conversion {to_type}: {se}')
         except Exception as e:
             raise ValueError(f"Cannot execute lambda function filter defined for conversion {to_type}: {e}")
         else:

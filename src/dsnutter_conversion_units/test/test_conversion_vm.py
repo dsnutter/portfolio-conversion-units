@@ -254,3 +254,71 @@ class Test_Conversion_VM:
             c_vm.get_conversion_single(from_type, to_type)
 
         assert resultError.match(f"{to_type}")
+
+    @pytest.mark.parametrize('to_type, value, result, eq', [
+        ('ThinkDifferent', '1.0', True, 'x > 0'),
+        ('ThinkDifferent', '-1.0', False, 'x > 0'),
+        ('ThinkDifferent', '-1.0', True, 'x < 0'),
+        ('ThinkDifferent', '1.0', False, 'x < 0'),
+        ('ThinkDifferent', '1.0', True, 'x >= 0'),
+        ('ThinkDifferent', '-1.0', False, 'x >= 0'),
+        ('ThinkDifferent', '-1.0', True, 'x <= 0'),
+        ('ThinkDifferent', '1.0', False, 'x <= 0'),
+        ('ThinkDifferent', '1.0', True, 'x == 1'),
+        ('ThinkDifferent', '1.0', True, 'x == x'),
+        ('ThinkDifferent', '1.0', True, 'x == ((x - 1) + 1)')
+    ])
+    def test_check_filter_results(self, to_type: str, value: str, result: bool, eq: str):
+        reason = 'test reason'
+        c_vm = self.setup_method(eq)
+
+        c_vm._filter_results = {
+            Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
+            Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
+        }
+
+        calc_result = c_vm.check_filter_results(to_type, value)
+
+        if result is False:
+            assert calc_result is not None
+            assert calc_result == reason
+        else:
+            assert calc_result is None
+
+    @pytest.mark.parametrize('to_type, value, result, eq', [
+        ('ThinkDifferent', None, False, ''),
+        ('ThinkDifferent', '', False, ''),
+    ])
+    def test_check_filter_results_error(self, to_type: str, value: str, result: bool, eq: str):
+        with pytest.raises(SyntaxError) as resultError:
+            reason = 'test reason'
+            c_vm = self.setup_method(eq)
+
+            c_vm._filter_results = {
+                Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
+                Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
+            }
+
+            c_vm.check_filter_results(to_type, value)
+        assert resultError.match(r"Cannot execute lambda function filter defined for conversion(.*)")
+
+    @pytest.mark.parametrize('to_type, value, result, eq', [
+        ('ThinkDifferent', '1.0', True, 'x == y'),
+        ('ThinkDifferent', '1.0', True, '(()'),
+        ('ThinkDifferent', '1.0', True, '())'),
+        ('ThinkDifferent', '1.0', True, '('),
+        ('ThinkDifferent', '1.0', True, ')'),
+        ('ThinkDifferent', '1.0', True, 'input()')
+    ])
+    def test_check_filter_results_error2(self, to_type: str, value: str, result: bool, eq: str):
+        with pytest.raises(ValueError) as resultError:
+            reason = 'test reason'
+            c_vm = self.setup_method(eq)
+
+            c_vm._filter_results = {
+                Test_Conversion_VM.from_type: {"eq": eq, "ID": None, "reason": reason},
+                Test_Conversion_VM.to_type: {"eq": eq, "ID": None, "reason": reason}
+            }
+
+            c_vm.check_filter_results(to_type, value)
+        assert resultError.match(r"Conversion function for special cases is not valid")
