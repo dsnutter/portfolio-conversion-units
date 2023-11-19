@@ -1,9 +1,11 @@
-import pytest, uuid
+import pytest
+import uuid
 from ..View_Model.Conversion_VM import Conversion_VM
 from ..Model.Conversion import Conversion
 from ..helpers.Enums import BackendTypes
 from ..di.Configurations import Configurations
 from ..helpers.functions import Functions
+
 
 class Test_Conversion_VM:
 
@@ -205,7 +207,6 @@ class Test_Conversion_VM:
 
         assert resultError.match(f"could not convert string to float: '{converted}'")
 
-
     def test_get_conversion_single(self):
         eq = 'x + 1'
         c_vm = self.setup_method(eq)
@@ -229,7 +230,7 @@ class Test_Conversion_VM:
             eq = 'x + 1'
             c_vm = self.setup_method(eq)
 
-            conversion = c_vm.get_conversion_single(from_type, to_type)
+            c_vm.get_conversion_single(from_type, to_type)
 
         assert resultError.match(f"{from_type}")
 
@@ -242,7 +243,6 @@ class Test_Conversion_VM:
             eq = 'x + 1'
             c_vm = self.setup_method(eq)
 
-            conversion = c_vm.get_conversion_single(from_type, to_type)
+            c_vm.get_conversion_single(from_type, to_type)
 
         assert resultError.match(f"{to_type}")
-

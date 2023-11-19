@@ -22,7 +22,7 @@ class Response_Input_View:
         menu_hashmap = {}
         for question_type in config.types:
             menu_hashmap[question_type[0].lower()] = {
-                'text': question_question_type,
+                'text': question_type,
                 'execute': lambda t, c, r: Response_Input_View.wire_input_responses(t, config),
                 'context': question_type
             }

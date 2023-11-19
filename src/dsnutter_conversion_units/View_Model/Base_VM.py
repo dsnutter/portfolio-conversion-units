@@ -32,5 +32,4 @@ class Base_VM(Base_Abstract):
 
     def add(self, hashmap: dict):
         raise NotImplementedError()
-    
     """
