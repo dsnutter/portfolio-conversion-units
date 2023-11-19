@@ -11,7 +11,7 @@ class Data_Responses(Data_Abstract):
         super().__init__()
         self._storage = {}
 
-    def add(self, type: str, hashmap: dict, persist: bool = True):
+    def add(self, question_type: str, hashmap: dict, persist: bool = True):
         raise NotImplementedError()
 
     def get(self, ID: str):

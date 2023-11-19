@@ -28,7 +28,7 @@ class Container(containers.DeclarativeContainer):
 
     conversions_vm = providers.Factory(
         Conversion_VM.Conversion_VM,
-        type=config_conversions.item,
+        question_type=config_conversions.item,
         backend_type=config_conversions.file_type,
         config=settings.main_configurations,
         factory=conversion_factory.provider
@@ -36,12 +36,12 @@ class Container(containers.DeclarativeContainer):
 
     repsonses_factory = providers.Factory(Response.Response)
     repsonses_data_csv = providers.Singleton(Data_Responses_CSV,
-                                             type=BasicTypes.Response,
+                                             question_type=BasicTypes.Response,
                                              filename=settings.responses_filename)
 
     reponses_vm = providers.Factory(
         Response_VM.Response_VM,
-        type=config_responses.item,
+        question_type=config_responses.item,
         backend_type=config_responses.file_type,
         config=settings.main_configurations,
         factory=repsonses_factory.provider,
