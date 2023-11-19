@@ -3,3 +3,6 @@ volume,ABC123,23,23,Cups,Liters,GradeTypes.INCORRECT,2023-11-19 03:21 PM,4590655
 volume,ABC123,123.3333333,677.777,Liters,Cubic_feet,GradeTypes.INCORRECT,2023-11-19 03:22 PM,8ab3f16e-4636-4c78-bf10-4daf62a0754d
 temperature,ABC123,0.000000,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-19 03:22 PM,cd777bf3-e3ea-4c06-b2ce-33858db2aab2
 temperature,ABC123,56,56,Celsius,Kelvin,GradeTypes.INCORRECT,2023-11-19 03:23 PM,8a71ad7e-3a2a-484b-9c38-49d180a39d91
+temperature,ABC123,0,32,Farenheit,Celsius,GradeTypes.CORRECT,2023-11-19 04:38 PM,0638cead-9871-4cd2-8461-c844cf4db956
+temperature,ASDASD,32,23,Asdasd,Celsius,GradeTypes.INVALID,2023-11-19 04:39 PM,db3017e6-4daa-41de-9745-00284fd987ca
+volume,ASD123,56,34,Cups,Liters,GradeTypes.INCORRECT,2023-11-19 04:40 PM,71550d37-7707-462f-8c56-8263c8fe4ccb
