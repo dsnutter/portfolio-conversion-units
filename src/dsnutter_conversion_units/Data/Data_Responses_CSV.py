@@ -7,22 +7,22 @@ from ..Model import Response
 
 class Data_Responses_CSV(Data_Responses):
 
-    def __init__(self, type: BasicTypes, filename: str) -> None:
+    def __init__(self, question_type: BasicTypes, filename: str) -> None:
         super().__init__()
-        self._type = type
+        self._question_type = question_type
         self._backend_type = BackendTypes.CSV
         self._filename = filename
 
-    def add(self, type: str, hashmap: dict, persist: bool = True):
+    def add(self, question_type: str, hashmap: dict, persist: bool = True):
         if hashmap['student_id'] not in self._storage:
             self._storage[hashmap['student_id']] = []
         self._storage[hashmap['student_id']].append(hashmap['obj'])
         if persist:
-            Data_Functions.append_responses_dict_to_file({type: hashmap['obj'].to_dict()}, self._filename, self._backend_type)
+            Data_Functions.append_responses_dict_to_file(
+                {question_type: hashmap['obj'].to_dict()}, self._filename, self._backend_type)
 
-    def add_with_student_id(self, type: str, student_id: str, obj: Response.Response, persist: bool = True):
-        self.add(type, {'obj': obj, 'student_id': student_id}, persist)
-
+    def add_with_student_id(self, question_type: str, student_id: str, obj: Response.Response, persist: bool = True):
+        self.add(question_type, {'obj': obj, 'student_id': student_id}, persist)
 
     def get_by_student_id(self, student_id: str):
         return self._storage[student_id]

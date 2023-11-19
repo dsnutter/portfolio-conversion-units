@@ -12,17 +12,17 @@ class DI_Wireup:
         self._config = config
         self._stop = False
 
-    def wire_up(self, type: str, modules: list):
+    def wire_up(self, question_type: str, modules: list):
 
-        if type not in self._containers:
-            self._containers[type] = {}
+        if question_type not in self._containers:
+            self._containers[question_type] = {}
 
         # setups up injection of temperature/responses conversion Models derived from JSON files
-        self._containers[type] = Container(config_conversions={'item': type, 'file_type': self._file_type},
-                                           config_responses={'item': type, 'file_type': self._file_type})
+        self._containers[question_type] = Container(config_conversions={'item': question_type, 'file_type': self._file_type},
+                                                    config_responses={'item': question_type, 'file_type': self._file_type})
 
         # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
-        self._containers[type].wire(modules=modules)
+        self._containers[question_type].wire(modules=modules)
 
     @property
     def types(self):

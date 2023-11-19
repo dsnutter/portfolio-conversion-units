@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from ..View_Model.Conversion_VM import Conversion_VM
 from ..Model.Conversion import Conversion
 from ..helpers.Enums import BackendTypes
@@ -40,7 +41,7 @@ class Test_Conversion_VM:
                 ]}}
 
         c_vm = Conversion_VM(Test_Conversion_VM.type, BackendTypes.JSON, config, Conversion)
-        
+
         return c_vm
 
     @pytest.mark.parametrize('fn, value, converted',
@@ -160,7 +161,7 @@ class Test_Conversion_VM:
             # could be dangerous in terms of security since we are using eval()?
             fn = "input()"
 
-            c_vm =self.setup_method(fn)
+            c_vm = self.setup_method(fn)
 
             result, result1 = c_vm.convert_input(32, Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
@@ -179,10 +180,10 @@ class Test_Conversion_VM:
             "Cannot execute lambda function defined for conversion from ThinkDifferent to Kelvin: unmatched '\\)")
 
     @pytest.mark.parametrize('fn, value, converted', [
-                                 # incorrect
-                                 ("x + 1", 'dog', '6.5'),
-                                 ("x + 1", 'cat', 'dog')
-                             ])
+        # incorrect
+        ("x + 1", 'dog', '6.5'),
+        ("x + 1", 'cat', 'dog')
+    ])
     def test_convert_incorrect(self, fn: str, value: float, converted: float):
         with pytest.raises(ValueError) as resultError:
 
@@ -191,13 +192,12 @@ class Test_Conversion_VM:
             result, result1 = c_vm.convert_input(str(value), Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
 
         assert resultError.match(
-f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM.from_type} to {Test_Conversion_VM.to_type}: could not convert string to float: '{value}'")
-
+            f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM.from_type} to {Test_Conversion_VM.to_type}: could not convert string to float: '{value}'")
 
     @pytest.mark.parametrize('fn, value, converted', [
-                                # this will pass a conversion test but not a response test
-                                 ("x + 1", '6.5', 'cat')
-                             ])
+        # this will pass a conversion test but not a response test
+        ("x + 1", '6.5', 'cat')
+    ])
     def test_convert_invalid_converted(self, fn: str, value: float, converted: float):
         with pytest.raises(ValueError) as resultError:
             c_vm = self.setup_method(fn)
@@ -206,3 +206,43 @@ f"Cannot execute lambda function defined for conversion from {Test_Conversion_VM
             assert Functions.round_float_decimal_places(result, 1) == Functions.round_float_decimal_places(str(converted), 1)
 
         assert resultError.match(f"could not convert string to float: '{converted}'")
+
+    def test_get_conversion_single(self):
+        eq = 'x + 1'
+        c_vm = self.setup_method(eq)
+
+        conversion = c_vm.get_conversion_single(Test_Conversion_VM.from_type, Test_Conversion_VM.to_type)
+
+        assert conversion.to_type == Test_Conversion_VM.to_type
+        assert conversion.from_type == Test_Conversion_VM.from_type
+        assert conversion.equation == eq
+        assert uuid.UUID(conversion.id).version == 4
+        assert callable(conversion.equation_lambda)
+
+    @pytest.mark.parametrize('from_type, to_type', [
+        ('', ''),
+        (None, None),
+        (None, 'Celsius'),
+        ('', 'Celsius')
+    ])
+    def test_get_conversion_single_error_from_type(self, from_type, to_type):
+        with pytest.raises(KeyError) as resultError:
+            eq = 'x + 1'
+            c_vm = self.setup_method(eq)
+
+            c_vm.get_conversion_single(from_type, to_type)
+
+        assert resultError.match(f"{from_type}")
+
+    @pytest.mark.parametrize('from_type, to_type', [
+        ('ThinkDifferent', None),
+        ('ThinkDifferent', ''),
+    ])
+    def test_get_conversion_single_error_to_type(self, from_type, to_type):
+        with pytest.raises(KeyError) as resultError:
+            eq = 'x + 1'
+            c_vm = self.setup_method(eq)
+
+            c_vm.get_conversion_single(from_type, to_type)
+
+        assert resultError.match(f"{to_type}")

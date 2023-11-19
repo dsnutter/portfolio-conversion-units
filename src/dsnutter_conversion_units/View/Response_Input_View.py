@@ -18,13 +18,13 @@ class Response_Input_View:
         Response_Input_View.Entry_Response_Type()
 
     def Entry_Response_Type(config: DI_Wireup.DI_Wireup):
-        title = '** Please choose a response type **'
+        title = '** Please choose a response question_type **'
         menu_hashmap = {}
-        for type in config.types:
-            menu_hashmap[type[0].lower()] = {
-                'text': type,
+        for question_type in config.types:
+            menu_hashmap[question_type[0].lower()] = {
+                'text': question_type,
                 'execute': lambda t, c, r: Response_Input_View.wire_input_responses(t, config),
-                'context': type
+                'context': question_type
             }
         menu_hashmap['b'] = {
             'text': 'Back',
@@ -37,38 +37,38 @@ class Response_Input_View:
         while View_Functions.execute_menu(config, title, menu_hashmap, ['b', 'q'], None, None) and not config.halt:
             pass
 
-    def wire_input_responses(type: list, config: DI_Wireup.DI_Wireup):
+    def wire_input_responses(question_type: list, config: DI_Wireup.DI_Wireup):
         modules = [Response_Input_View.Entry_Of_Multi_Reponse_DI]
 
-        config.wire_up(type, modules)
-        Response_Input_View.Entry_Of_Multi_Reponse_DI(config, type)
+        config.wire_up(question_type, modules)
+        Response_Input_View.Entry_Of_Multi_Reponse_DI(config, question_type)
 
     @inject
-    def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, type: str,
+    def Entry_Of_Multi_Reponse_DI(wire: DI_Wireup.DI_Wireup, question_type: str,
                                   r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                   c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
         # to hook up calculations
         r_vm._convert_input = c_vm.convert_input
 
-        Response_Input_View.Entry_Of_Multi_Reponse(wire, type, r_vm, c_vm)
+        Response_Input_View.Entry_Of_Multi_Reponse(wire, question_type, r_vm, c_vm)
 
-    def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, type: str,
+    def Entry_Of_Multi_Reponse(wire: DI_Wireup.DI_Wireup, question_type: str,
                                r_vm: Response_VM.Response_VM,
                                c_vm: Conversion_VM.Conversion_VM):
 
-        title = f'** Student {type.capitalize()} Units Conversion Application **'
+        title = f'** Student {question_type.capitalize()} Units Conversion Application **'
         menu_hashmap = {
             # display conversions
             'l': {
-                'text': f'List all possible conversion types for {type.capitalize()}',
+                'text': f'List all possible conversion question_types for {question_type.capitalize()}',
                 'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
-                'context': type
+                'context': question_type
             },
             # enter responses
             'e': {
                 'text': 'Enter repsonse',
                 'execute': lambda t, c, r: Response_Input_View.Entry_Of_Single_Reponse(t, r, c),
-                'context': type
+                'context': question_type
             },
             # quit application
             'b': {
@@ -84,12 +84,12 @@ class Response_Input_View:
             pass
 
     @inject
-    def Entry_Of_Single_Reponse_DI(type: str,
+    def Entry_Of_Single_Reponse_DI(question_type: str,
                                    r_vm: Response_VM.Response_VM = Provide(Container.Container.reponses_vm),
                                    c_vm: Conversion_VM.Conversion_VM = Provide(Container.Container.conversions_vm)):
-        Response_Input_View.Entry_Of_Single_Reponse_NonDI(type, r_vm, c_vm)
+        Response_Input_View.Entry_Of_Single_Reponse_NonDI(question_type, r_vm, c_vm)
 
-    def Entry_Of_Single_Reponse(type: str,
+    def Entry_Of_Single_Reponse(question_type: str,
                                 r_vm: Response_VM.Response_VM,
                                 c_vm: Conversion_VM.Conversion_VM):
         #
@@ -124,9 +124,9 @@ class Response_Input_View:
                 'text': 'target unit of measure',
                 'depends_on_previous': True,
                 'can_override_valid': True,
-                'valid_args': lambda x: f"""An item that is one of ({', '.join(c_vm.all_keys_level2(x)).replace('_', ' ')}).
+                'valid_args': lambda x: f"""An item that is one of ({', '.join(c_vm.all_to_types(x)).replace('_', ' ')}).
 If you chose an invalid input unit of measure, you may not have choices""",
-                'valid': lambda entered, previous: entered in c_vm.all_keys_level2(previous),
+                'valid': lambda entered, previous: entered in c_vm.all_to_types(previous),
                 'convert': lambda x: x.lower().capitalize().replace(' ', '_')
             },
             'response': {
@@ -139,7 +139,7 @@ If you chose an invalid input unit of measure, you may not have choices""",
             }
         }
         r = {}
-        print(f'\n\nFor the reponse to a {type} conversion:')
+        print(f'\n\nFor the reponse to a {question_type} conversion:')
         items = list(template.keys())
         i = 0
         previous = ''

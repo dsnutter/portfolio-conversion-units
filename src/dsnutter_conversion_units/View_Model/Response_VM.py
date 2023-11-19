@@ -14,24 +14,15 @@ from ..helpers.functions import Functions
 
 class Response_VM(Base_VM):
 
-    def __init__(self, type: str, backend_type: BackendTypes, config: Configurations, 
+    def __init__(self, question_type: str, backend_type: BackendTypes, config: Configurations,
                  factory: Callable[..., Response.Response], data: Data_Responses.Data_Responses) -> None:
-        super(Response_VM, self).__init__(type, backend_type, config)
+        super(Response_VM, self).__init__(question_type, backend_type, config)
         self._factory = factory
         self._data = data  # singleton
         self._convert_input = None
 
     def all_keys(self) -> list:
         return self._data.all_keys()
-
-    def all_keys_level2(self, key: str) -> list:
-        raise NotImplementedError()
-
-    def all_to_types(self, from_type: str) -> list:
-        raise NotImplementedError()
-
-    def all_keys_level3(self, key_outer: str, key_inner) -> list:
-        raise NotImplementedError()
 
     def all_students(self) -> list:
         return self.all_keys()
@@ -46,8 +37,7 @@ class Response_VM(Base_VM):
     def get_response(self, from_type: str, to_type: str, student_id: str, timestamp: str) -> Response.Response:
         return self._data.get_response(from_type, to_type, student_id, timestamp)
 
-    # DSN Notes: this needs better test coverage
-    # DSN Notes: this is intended to add multiple items and needs changed
+    # future plans: this was intended to add multiple items and needs changed
     def add(self, hash_key: str, hashmap: dict, persist: bool = True):
         if 'grade' not in hashmap:
             (input_value_rounded, input_value_calculated, grade) = self.grade_input_value(
@@ -84,13 +74,13 @@ class Response_VM(Base_VM):
                             ID=ID,
                             input_value_rounded=input_value_rounded,
                             input_value_calculated=input_value_calculated)
-        self._data.add(self._type, {'obj': obj, 'student_id': student_id}, persist)
+        self._data.add(self._question_type, {'obj': obj, 'student_id': student_id}, persist)
 
         return obj
 
     def execute_load_preexisting(self):
         items = self._data.execute_load_preexisting(self._config.responses_config_file, self._config.file_type)
-        items = items[self._type]
+        items = items[self._question_type]
         for student_id in items.keys():
             for inner in items[student_id]:
                 # do not persist to storage since its already there
@@ -105,14 +95,15 @@ class Response_VM(Base_VM):
         self._c_vm = value
 
     # must set conversion before executing this
-    def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> None:
+    def grade_input_value(self, from_type: str, to_type: str, response: str, input_value: str) -> tuple:
         try:
             if self._convert_input is None:
-                raise ModuleNotFoundError("Please set a conversion view model before calling Response_VM.grade_input_value")
+                raise ModuleNotFoundError(
+                    "Please set a handler for converting input before calling Response_VM.grade_input_value")
             input_value_rounded, input_value_calculated = self._convert_input(input_value, from_type, to_type)
 
             if Functions.round_float_decimal_places(input_value_rounded, 1) == \
-                Functions.round_float_decimal_places(response, 1):
+                    Functions.round_float_decimal_places(response, 1):
                 grade = GradeTypes.CORRECT
             else:
                 grade = GradeTypes.INCORRECT
@@ -120,9 +111,9 @@ class Response_VM(Base_VM):
             grade = GradeTypes.INCORRECT
             input_value_rounded, input_value_calculated = None, None
 
-        if from_type not in self._config.conversions_config[self._type]:
+        if from_type not in self._config.conversions_config[self._question_type]:
             grade = GradeTypes.INVALID
-        elif to_type not in self._config.conversions_config[self._type][from_type]:
+        elif to_type not in self._config.conversions_config[self._question_type][from_type]:
             grade = GradeTypes.INVALID
 
         return (input_value_rounded, input_value_calculated, grade)
@@ -130,10 +121,10 @@ class Response_VM(Base_VM):
     def save(self):
         raise NotImplementedError()
 
-    def to_dataframe_all(self, for_display = False):
+    def to_dataframe_all(self, for_display=False):
         return self._data.to_dataframe_all(for_display)
 
     def __str__(self) -> str:
-        result = 'Response View Model: {}\n'.format(self._type)
+        result = 'Response View Model: {}\n'.format(self._question_type)
         result = 'Response View Model: {}\n'.format(self._storage)
         return result

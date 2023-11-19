@@ -66,7 +66,7 @@ class Response_Output_View:
     def PDF_Summary_DI():
         pass
 
-    # possible future if integrated with SQLAlchemy library with SQLite or some other SQL: 
+    # possible future if integrated with SQLAlchemy library with SQLite or some other SQL:
     # graph of statistics of reponses such as a bar graph of incorrect, invalid, correct
     @inject
     def Display_Graph_DI():
