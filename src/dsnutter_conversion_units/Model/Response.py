@@ -7,18 +7,6 @@ class Response(Base_Model):
 
     date_format = '%Y-%m-%d %I:%M %p'
 
-    """
-    def __init__(self, hashmap: dict) -> None:
-        self._response = hashmap['response']
-        self._student_id = hashmap['student_id'].upper()
-        self._input_value = hashmap['input_value']
-        self._from_type = hashmap['from_type']
-        self._to_type = hashmap['to_type']
-        self._grade = hashmap['grade']
-        self._timestamp = hashmap['timestamp']
-        self._id = hashmap['ID']
-    """
-
     def __init__(self, student_id: str, response: str, input_value: str, from_type: str,
                  to_type: str, timestamp: str, grade: GradeTypes, ID: str,
                  input_value_rounded: float = None, input_value_calculated: float = None,

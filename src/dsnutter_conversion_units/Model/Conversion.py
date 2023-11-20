@@ -32,11 +32,6 @@ class Conversion(Base_Model):
     def equation(self):
         return self._equation
 
-    # @equation.setter
-    # def equation(self, value):
-    #      self._equation = value
-    #      self._equation_lambda = Conversion.get_lambda(value)
-
     @property
     def equation_lambda(self):
         return self._equation_lambda
