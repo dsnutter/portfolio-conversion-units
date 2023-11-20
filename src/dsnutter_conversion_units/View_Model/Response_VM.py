@@ -9,7 +9,7 @@ from ..Data import Data_Responses
 from .Conversion_VM import Conversion_VM
 from ..helpers.functions import Functions
 
-# controls operations on the reponse Models, and persistance
+# controls operations on the response Models, and persistance
 
 
 class Response_VM(Base_VM):
