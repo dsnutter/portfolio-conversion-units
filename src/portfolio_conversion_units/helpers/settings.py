@@ -1,9 +1,9 @@
 from ..di.Configurations import Configurations
 from .Enums import BackendTypes
 
-conversions_filename = 'dsnutter_conversion_units/configuration/conversions_config.csv'
-responses_filename = 'dsnutter_conversion_units/configuration/responses_config.csv'
-conversions_filter_filename = 'dsnutter_conversion_units/configuration/conversions_filter.csv'
+conversions_filename = 'portfolio_conversion_units/configuration/conversions_config.csv'
+responses_filename = 'portfolio_conversion_units/configuration/responses_config.csv'
+conversions_filter_filename = 'portfolio_conversion_units/configuration/conversions_filter.csv'
 
 file_type = BackendTypes.CSV
 

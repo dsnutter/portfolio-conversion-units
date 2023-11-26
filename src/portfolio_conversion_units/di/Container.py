@@ -14,10 +14,10 @@ from ..helpers import settings
 class Container(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
-        modules=['dsnutter_conversion_units.View.Conversion_View',
-                 'dsnutter_conversion_units.View.Response_Input_View',
-                 'dsnutter_conversion_units.View.Response_Output_View',
-                 'dsnutter_conversion_units.View.Main_View'
+        modules=['portfolio_conversion_units.View.Conversion_View',
+                 'portfolio_conversion_units.View.Response_Input_View',
+                 'portfolio_conversion_units.View.Response_Output_View',
+                 'portfolio_conversion_units.View.Main_View'
                  ]
     )
 
