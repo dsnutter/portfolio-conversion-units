@@ -10,7 +10,6 @@ class DI_Wireup:
         self._containers = {}
         self._file_type = file_type
         self._config = config
-        self._stop = False
 
     def wire_up(self, question_type: str, modules: list):
 
@@ -27,11 +26,3 @@ class DI_Wireup:
     @property
     def types(self):
         return self._config.types
-
-    @property
-    def halt(self):
-        return self._stop
-
-    @halt.setter
-    def halt(self, value):
-        self._stop = value

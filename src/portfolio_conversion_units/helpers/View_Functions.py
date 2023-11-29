@@ -30,7 +30,7 @@ class View_Functions:
                 menu_hashmap[choice]['execute'](context, c_vm, r_vm)
         if choice.lower() in quit_cmd:
             if choice.lower() == 'q':
-                config.halt = True
+                exit(0)
             # false since we dont want to execute the menu any longer
             return False
         else:

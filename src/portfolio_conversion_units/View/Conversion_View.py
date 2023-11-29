@@ -10,7 +10,7 @@ class Conversion_View:
 
     def All_Possible_Types(r_vm: Response_VM.Response_VM, c_vm: Conversion_VM.Conversion_VM) -> None:
         items = c_vm.all_keys()
-        print(f'All the possible conversion question_types for {c_vm.current_type.capitalize()}:')
+        print(f'All the possible conversion question types for {c_vm.current_type.capitalize()}:')
         for from_type in items:
             Conversion_View.List_Specific_From_Types(from_type, r_vm, c_vm)
 
