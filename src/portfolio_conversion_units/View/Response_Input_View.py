@@ -18,7 +18,7 @@ class Response_Input_View:
         Response_Input_View.Entry_Response_Type()
 
     def Entry_Response_Type(config: DI_Wireup.DI_Wireup):
-        title = '** Please choose a response question_type **'
+        title = '** Please choose a response question type **'
         menu_hashmap = {}
         for question_type in config.types:
             menu_hashmap[question_type[0].lower()] = {
@@ -34,7 +34,7 @@ class Response_Input_View:
             'text': 'Quit',
             'execute': ''
         }
-        while View_Functions.execute_menu(config, title, menu_hashmap, ['b', 'q'], None, None) and not config.halt:
+        while View_Functions.execute_menu(config, title, menu_hashmap, ['b', 'q'], None, None):
             pass
 
     def wire_input_responses(question_type: list, config: DI_Wireup.DI_Wireup):
@@ -80,7 +80,7 @@ class Response_Input_View:
                 'execute': ''
             }
         }
-        while View_Functions.execute_menu(wire, title, menu_hashmap, ['b', 'q'], c_vm, r_vm) and not wire.halt:
+        while View_Functions.execute_menu(wire, title, menu_hashmap, ['b', 'q'], c_vm, r_vm):
             pass
 
     @inject

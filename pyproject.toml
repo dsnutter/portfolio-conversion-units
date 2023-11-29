@@ -28,7 +28,7 @@ classifiers = [
 dynamic = ["dependencies"]
 
 [project.scripts]
-portfolio-conversion-units = "portfolio_conversion_units.__main__:main"
+portfolio-conversion-units = "portfolio_conversion_units.__main__:run_as_app"
 
 [tool.setuptools.dynamic]
 dependencies = {file = "../requirements.txt"}

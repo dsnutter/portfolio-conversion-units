@@ -32,7 +32,7 @@ class Main_View:
             }
         }
         # print(r_vm)
-        while View_Functions.execute_menu(wire, title, menu_hashmap, ['q'], None, None) and not wire.halt:
+        while View_Functions.execute_menu(wire, title, menu_hashmap, ['q'], None, None):
             pass
 
     def wire_display_responses(types: list, config: DI_Wireup.DI_Wireup):
