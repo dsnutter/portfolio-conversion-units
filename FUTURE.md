@@ -1,8 +1,7 @@
 
 # Potential thoughts for future
-* get the program fully working as a python module executable
 * integrate a relational db as module with the data layer already written. SQLite may be appropriate for a command line program, could use a library like SQLAlchemy so that the project is not dependent on one type of SQL db
-    * we could also do graph and statistics more easily if it was relational db based
+    * I could also do graph and statistics more easily if it was relational db based
 * graphs and statistics could be built with numpy / pandas with dataframe integration
     * maybe store response data in dataframe instead of the dictionary structure currently using
 * jinja2 and a simple css template for HTML output that the teacher could more easily modify
@@ -19,7 +18,7 @@
 * For the equations
     * add some operations from the math library, so math and sciences teachers in higher grades could use the software
     * Multivariable equations for math teachers. Would need to decide the max number of variables and rewrite the equations for evaluation. There would be a single result with these equations
-        * for this could send in a list into the lambda we are using for evaluation of the equations
+        * for this could send in a list into the lambda I am using for evaluation of the equations
     * One other thing the teachers have not considered is for math teachers in the lower grades asking if 5 > 4 for instance, or 1 <= 2 to be evaluated
 * equations evaluated from a google query "1 cubic inches = ? liters" and scrape the result. Surely there is an API for this?
 * Up / down arrows or tabs select specific inputs or auto-complete the input() calls for conversion units and student IDs
