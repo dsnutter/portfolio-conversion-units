@@ -35,3 +35,10 @@ dependencies = {file = "../requirements.txt"}
 
 [project.urls]
 Repository = "https://github.com/dsnutter/portfolio-conversion-units"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.csv", "*.json"]
+
