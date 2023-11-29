@@ -60,7 +60,7 @@ class Response_Input_View:
         menu_hashmap = {
             # display conversions
             'l': {
-                'text': f'List all possible conversion question_types for {question_type.capitalize()}',
+                'text': f'List all possible conversion question types for {question_type.capitalize()}',
                 'execute': lambda t, c, r: Conversion_View.Conversion_View.List_Possible_Conversion_Type(t, r, c),
                 'context': question_type
             },
