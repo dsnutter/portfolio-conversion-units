@@ -1,0 +1,200 @@
+{
+    "temperature": {
+        "Farenheit": {
+            "Celsius": {
+                "eq": "(x-32.0) * (5.0/9.0)",
+                "ID": ""
+            },
+            "Kelvin": {
+                "eq": "((x-32.0) * (5/9)) + 273.15",
+                "ID": ""
+            },
+            "Rankine": {
+                "eq": "x + 459.67",
+                "ID": ""
+            }
+        },
+        "Celsius": {
+            "Farenheit": {
+                "eq": "(x * (9/5)) + 32.0",
+                "ID": ""
+            },
+            "Kelvin": {
+                "eq": "x + 273.15",
+                "ID": ""
+            },
+            "Rankine": {
+                "eq": "(x + 273.15) * 9/5",
+                "ID": ""
+            }
+        },
+        "Kelvin": {
+            "Farenheit": {
+                "eq": "((x-273.15) * (9/5)) + 32.0",
+                "ID": ""
+            },
+            "Celsius": {
+                "eq": "x - 273.150",
+                "ID": ""
+            },
+            "Rankine": {
+                "eq": "x * 9/5",
+                "ID": ""
+            }
+        },
+        "Rankine": {
+            "Farenheit": {
+                "eq": "x - 459.67",
+                "ID": ""
+            },
+            "Celsius": {
+                "eq": "(x * 5/9) - 273.15",
+                "ID": ""
+            },
+            "Kelvin": {
+                "eq": "x * 5/9",
+                "ID": ""
+            }
+        },
+        "ThinkDifferent": {
+            "Kelvin": {
+                "eq": "x + 1",
+                "ID": ""
+            }
+        }
+    },
+    "volume": {
+        "Liters": {
+            "Tablespoons": {
+                "eq": "x * (67.0 + 2/3)",
+                "ID": ""
+            },
+            "Cubic_inches": {
+                "eq": "x * 61.023744",
+                "ID": ""
+            },
+            "Cups": {
+                "eq": "x * 4.2267528377",
+                "ID": ""
+            },
+            "Cubic_feet": {
+                "eq": "x / 28.317",
+                "ID": ""
+            },
+            "Gallons": {
+                "eq": "x / 3.785",
+                "ID": ""
+            }
+        },
+        "Tablespoons": {
+            "Liters": {
+                "eq": "x / (67.0 + 2/3)",
+                "ID": ""
+            },
+            "Cubic_inches": {
+                "eq": "x * 0.902344",
+                "ID": ""
+            },
+            "Cups": {
+                "eq": "x * (1/16)",
+                "ID": ""
+            },
+            "Cubic_feet": {
+                "eq": "x / 1915",
+                "ID": ""
+            },
+            "Gallons": {
+                "eq": "x / 256",
+                "ID": ""
+            }
+        },
+        "Cubic_inches": {
+            "Liters": {
+                "eq": "x / 61.023744",
+                "ID": ""
+            },
+            "Tablespoons": {
+                "eq": "x /  0.902344",
+                "ID": ""
+            },
+            "Cups": {
+                "eq": "x / 14.438",
+                "ID": ""
+            },
+            "Cubic_feet": {
+                "eq": "x / 1728",
+                "ID": ""
+            },
+            "Gallons": {
+                "eq": "x / 231",
+                "ID": ""
+            }
+        },
+        "Cups": {
+            "Liters": {
+                "eq": "x / 4.2267528377",
+                "ID": ""
+            },
+            "Tablespoons": {
+                "eq": "x / (1/16)",
+                "ID": ""
+            },
+            "Cubic_inches": {
+                "eq": "x * 14.438",
+                "ID": ""
+            },
+            "Cubic_feet": {
+                "eq": "x / 119.7",
+                "ID": ""
+            },
+            "Gallons": {
+                "eq": "x * 0.0625",
+                "ID": ""
+            }
+        },
+        "Cubic_feet": {
+            "Liters": {
+                "eq": "x / 0.035315",
+                "ID": ""
+            },
+            "Tablespoons": {
+                "eq": "x * 1915.01",
+                "ID": ""
+            },
+            "Cubic_inches": {
+                "eq": "x * 1728",
+                "ID": ""
+            },
+            "Cups": {
+                "eq": "x * 119.688",
+                "ID": ""
+            },
+            "Gallons": {
+                "eq": "x * 7.480519",
+                "ID": ""
+            }
+        },
+        "Gallons": {
+            "Liters": {
+                "eq": "x / 0.264172",
+                "ID": ""
+            },
+            "Tablespoons": {
+                "eq": "x * 256",
+                "ID": ""
+            },
+            "Cubic_inches": {
+                "eq": "x / 0.004329",
+                "ID": ""
+            },
+            "Cups": {
+                "eq": "x / 0.0625",
+                "ID": ""
+            },
+            "Cubic_feet": {
+                "eq": "x / 7.480519",
+                "ID": ""
+            }
+        }
+    }
+}

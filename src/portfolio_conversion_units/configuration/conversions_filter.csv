@@ -1,0 +1,11 @@
+Type,To,equation,Reason,ID
+temperature,Farenheit,x > -459.67,temperatures cannot be less than or equal to absolute zero for Farenheit,
+temperature,Celsius,x > -273,temperatures cannot be less than or equal to than absolute zero for Celsius,
+temperature,Kelvin,x > 0,temperatures cannot be less than or equal to than absolute zero for Kelvin,
+temperature,Rankine,x > 0,temperatures cannot be less than or equal to than absolute zero for Rankine,
+volume,Liters,x > 0,negative volumes can not occur for Liters,
+volume,Tablespoons,x > 0,negative volumes can not occur for Tablespoons,
+volume,Cubic_inches,x > 0,negative volumes can not occur for Cubic inches,
+volume,Cups,x > 0,negative volumes can not occur for Cups,
+volume,Cubic_feet,x > 0,negative volumes can not occur for Cubic feet,
+volume,Gallons,x > 0,negative volumes can not occur for Gallons,

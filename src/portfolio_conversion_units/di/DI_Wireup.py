@@ -1,0 +1,28 @@
+from .Container import Container
+from .Configurations import Configurations
+
+# this was put in a separate file due to circular dependencies
+
+
+class DI_Wireup:
+
+    def __init__(self, file_type: str, config: Configurations) -> None:
+        self._containers = {}
+        self._file_type = file_type
+        self._config = config
+
+    def wire_up(self, question_type: str, modules: list):
+
+        if question_type not in self._containers:
+            self._containers[question_type] = {}
+
+        # setups up injection of temperature/responses conversion Models derived from JSON files
+        self._containers[question_type] = Container(config_conversions={'item': question_type, 'file_type': self._file_type},
+                                                    config_responses={'item': question_type, 'file_type': self._file_type})
+
+        # wires the views to the Models, and depenency injection auto-creates the Models when they are neededd
+        self._containers[question_type].wire(modules=modules)
+
+    @property
+    def types(self):
+        return self._config.types

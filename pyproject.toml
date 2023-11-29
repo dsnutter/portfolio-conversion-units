@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[options]
+package_dir="src"
+
+[project]
+requires-python = "==3.11.0"
+name = "portfolio-conversion-units"
+version = "0.1.0"
+description = "A command line package for converting between units of measurement."
+readme = {file = "README.md", content-type = "text/markdown; charset=UTF-8"}
+authors = [{name = "DS Nutter"}]
+license = {text = "Proprietary"}
+keywords = ["conversion units", "units", "conversion", "portfolio"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Utilities"
+]
+dynamic = ["dependencies"]
+
+[project.scripts]
+portfolio-conversion-units = "portfolio_conversion_units.__main__:run_as_app"
+
+[tool.setuptools.dynamic]
+dependencies = {file = "../requirements.txt"}
+
+[project.urls]
+Repository = "https://github.com/dsnutter/portfolio-conversion-units"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.csv", "*.json"]
+

@@ -1,0 +1,3 @@
+Type,From,To,equation,ID
+temperature,Farenheit,Celsius,x + 1
+temperature,Farenheit,Kelvin,x + 2,
